@@ -15,7 +15,7 @@
   body{margin:0;background:linear-gradient(180deg,#0b1020 0%,#0f1530 100%);color:var(--text);font:16px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 
   /* Header not sticky */
-  header{position:static;background:rgba(11,16,32,.9);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
+  header{position:static;background:rgba(11,16,32,0.9);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
 
   .wrap{max-width:1200px;margin:auto;padding:18px}
   h1{margin:6px 0 0;font-weight:700;font-size:1.35rem}
@@ -28,9 +28,11 @@
     width:100%;height:auto;object-fit:cover;border-radius:10px;border:1px solid var(--border);
     background:#0d1533;display:block;max-height:300px; /* keeps workspace big */
   }
+  /* Bigger client logo (requested) */
   #clientLogo{
-    position:absolute;right:12px;top:12px;max-width:140px;max-height:90px;display:none;
-    background:#fff;border-radius:10px;padding:6px;border:1px solid var(--border)
+    position:absolute;right:12px;top:12px;
+    max-width:240px;max-height:160px;display:none;
+    background:#fff;border-radius:50px;padding:20px;border:5px solid var(--border)
   }
 
   .grid{display:grid;gap:16px}
@@ -81,6 +83,39 @@
   .no-print{ }
   .print-only{ display:none; }
 
+  /* Front matter helpers */
+  .frontmatter h1{font-size:1.15rem;margin:.2rem 0 10px}
+  .frontmatter h2{margin:14px 0 8px;font-size:1.02rem}
+  .frontmatter textarea{min-height:90px}
+  .fixed-block{
+    white-space:pre-wrap;
+    background:#0d1533;border:1px solid var(--border);border-radius:10px;
+    padding:10px 12px;color:var(--text);margin:0 0 10px;
+  }
+  .img-frame{
+    background:#0d1533;border:1px dashed var(--border);border-radius:12px;
+    padding:10px;display:flex;align-items:center;justify-content:center;
+    min-height:140px
+  }
+  .report-wide-img{
+    width:100%;
+    max-width:9in;              /* 9 inches wide */
+    height:3in;                 /* 3 inches tall */
+    object-fit:contain;
+    border-radius:10px;border:1px solid var(--border);
+    background:#0d1533;
+    display:none;
+  }
+
+  /* Uncertainty table */
+  .unc-controls{justify-content:flex-end;margin-top:8px;gap:8px}
+  .unc-note{margin:0;color:var(--muted)}
+  .unc-subhdr{
+    font-size:.78rem;
+    color:var(--muted);
+    font-weight:500;
+  }
+
   /* ===== Print (PDF): clear white & readable ===== */
   @media print {
     *{ color:#000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -88,27 +123,19 @@
     header{ position:static !important; background:#fff !important; border:none !important; }
     .wrap{ max-width:100%; padding:0 16px; }
     section.card{ background:#fff !important; border:none; border-radius:0; padding:8px 0 }
-/* Hide interactive UI in print, but KEEP factor unit + value visible */
-.chips, .subtitle, .no-print, button, input[type=file], input[type=color],
-/* hide only buttons inside factor rows, not inputs/selects */
-.factor-row button,
-/* keep the library rows; hide the add-factor form & activity form */
-#factorForm, #itemForm { 
-  display: none !important; 
-}
 
-    /* Hide interactive UI; keep chart visible */
+    /* Hide interactive UI in print, but KEEP factor unit + value visible */
     .chips, .subtitle, .no-print, button, input[type=file], input[type=color],
-    .factor-row button, .factor-row input[aria-label="Value"], .factor-row select,
-    #factorForm, #itemForm { display:none !important; }
+    .factor-row button,
+    #factorForm, #itemForm {
+      display: none !important;
+    }
 
-    /* Hide interactive metadata card in print to avoid duplication */
     section[aria-labelledby="meta-h"] { display:none !important; }
 
-    /* Strong, black table text; EF column emphasized */
     thead th{ position:static; background:#fff !important; }
     th, td{ border-bottom:1px solid #000 !important; color:#000 !important; font-size:11pt; line-height:1.35; }
-    td:nth-child(5), th:nth-child(5){ font-weight:700; } /* EF column */
+    td:nth-child(5), th:nth-child(5){ font-weight:700; }
     tbody tr:hover{ background:transparent !important; }
 
     .print-only { display:block !important; }
@@ -117,30 +144,38 @@
     .tile{ background:#fff; border:1px solid #000 }
     .tile .val{ font-weight:700; }
     th.actions, td.actions{ display:none !important; }
+
+    textarea, input, select{
+      background:#fff !important;
+      border:1px solid #000 !important;
+      color:#000 !important;
+      box-shadow:none !important;
+    }
+    .fixed-block, .img-frame{
+      background:#fff !important;
+      border:1px solid #000 !important;
+    }
+    .report-wide-img{display:block !important;border:1px solid #000 !important;background:#fff !important}
   }
 
-  /* Final override (defeat any cached sticky rule) */
   body > header { position: static !important; top: auto !important; }
-/* Emission Factor Library: readable black-on-white fields in print */
-#factorList input,
-#factorList select {
-  background: #fff !important;
-  color: #000 !important;
-  border: 1px solid #000 !important;
-  box-shadow: none !important;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
 
-/* Slight emphasis on the factor name; comfortable size/spacing */
-#factorList input[aria-label="Name"] { font-weight: 700 !important; }
-#factorList .factor-row input,
-#factorList .factor-row select {
-  padding: 6px 8px !important;
-  font-size: 11pt !important;
-  line-height: 1.3 !important;
-}
-
+  #factorList input,
+  #factorList select {
+    background: #fff !important;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  #factorList input[aria-label="Name"] { font-weight: 700 !important; }
+  #factorList .factor-row input,
+  #factorList .factor-row select {
+    padding: 6px 8px !important;
+    font-size: 11pt !important;
+    line-height: 1.3 !important;
+  }
 </style>
 </head>
 <body>
@@ -193,6 +228,77 @@
 </section>
 
 <main class="wrap" role="main">
+
+  <!-- =========================
+       REPORT FRONT MATTER
+       (Inserted strictly BEFORE “Organization & Inventory Metadata”)
+       ========================= -->
+  <section class="card frontmatter" id="reportFrontMatter" aria-label="Report Front Matter">
+    <h1>Report Front Matter</h1>
+
+    <h2>1. Report Contents</h2>
+    <textarea id="reportContents" rows="4">[To be completed manually]</textarea>
+
+    <h2>2. Abbreviations</h2>
+    <textarea id="abbreviations" rows="4">[To be completed manually]</textarea>
+
+    <h2>3. Chairman Statement</h2>
+    <textarea id="chairmanStatement" rows="4">[To be completed manually]</textarea>
+
+    <h2>4. Executive Summary</h2>
+    <textarea id="executiveSummary" rows="4">[To be completed manually]</textarea>
+
+    <h2>5. Company Profile</h2>
+    <textarea id="companyProfile" rows="4">[To be completed manually]</textarea>
+
+    <h2>6. Strategic Alignment</h2>
+    <textarea id="strategicAlignment" rows="4">[To be completed manually]</textarea>
+
+    <h2>7. Report Objectives &amp; Intended Users</h2>
+    <textarea id="reportObjectives" rows="4">[To be completed manually]</textarea>
+
+    <h2>8. Methodology</h2>
+    <div class="fixed-block">The basic formula applied throughout this inventory:
+GHG Emissions = Σ (Activity Data × Emission Factor × GWP)</div>
+    <textarea id="methodologyMore" rows="4">[To be completed manually]</textarea>
+
+    <h2>9. Assumptions and Limitations</h2>
+    <textarea id="assumptionsLimitations" rows="4">[To be completed manually]</textarea>
+
+    <h2>10. Principles</h2>
+    <pre class="fixed-block" style="margin:0">• Completeness: Inclusion of all significant GHG emissions and removals.
+• Consistency: Uniform application of assumptions, methods, and data throughout the study.
+• Coherence: Use of internationally recognized methodologies for comparability.
+• Accuracy: Ensuring the quantification of GHG emissions is accurate, verifiable, and transparent.
+• Transparency: Clear presentation of methodologies, assumptions, and data source</pre>
+
+    <h2>11. Report Plan</h2>
+    <!-- Report Plan Image: required size 3 inches × 9 inches -->
+    <div class="img-frame">
+      <img id="reportPlanImg" class="report-wide-img" alt="Report Plan Image (uploaded)">
+      <div id="reportPlanPlaceholder" class="muted" style="text-align:center">
+        [To be completed manually]<br><span class="small">(Upload image below)</span>
+      </div>
+    </div>
+    <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
+      <input id="reportPlanUpload" type="file" accept="image/*" style="max-width:620px" />
+      <button type="button" id="removeReportPlan" class="ghost">Remove image</button>
+    </div>
+
+    <h2>12. Process or Plant Flow Diagram</h2>
+    <!-- Process or Plant Flow Diagram: required size 3 inches × 9 inches -->
+    <div class="img-frame">
+      <img id="processFlowImg" class="report-wide-img" alt="Process or Plant Flow Diagram (uploaded)">
+      <div id="processFlowPlaceholder" class="muted" style="text-align:center">
+        [To be completed manually]<br><span class="small">(Upload image below)</span>
+      </div>
+    </div>
+    <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
+      <input id="processFlowUpload" type="file" accept="image/*" style="max-width:620px" />
+      <button type="button" id="removeProcessFlow" class="ghost">Remove image</button>
+    </div>
+  </section>
+
   <!-- ORG METADATA (interactive; hidden in print to avoid duplication) -->
   <section class="card" aria-labelledby="meta-h">
     <h2 id="meta-h">Organization & Inventory Metadata</h2>
@@ -240,7 +346,7 @@
       </div>
       <div>
         <label for="method">Method notes (market/location-based, refrigerants, etc.)</label>
-        <textarea id="method" rows="3" placeholder="e.g., Scope 2 market-based with supplier certificates; Scope 3 categories included…"></textarea>
+        <textarea id="method" rows="3" placeholder="e.g. Scope 2 market-based with supplier certificates; Scope 3 categories included…"></textarea>
       </div>
     </div>
   </section>
@@ -279,12 +385,12 @@
         <label><input type="checkbox" id="c_assess_uncertainty"> Assess uncertainty</label>
       </div>
       <div>
-        <h3 class="small" style="margin:0 0 6px">5 — Report</h3>
-        <label><input type="checkbox" id="c_rpt_org_info"> Organization info</label><br>
+        <h3 class="small" style="margin:0 0 6px">5 — Reporting</h3>
+        <label><input type="checkbox" id="c_rpt_org_info"> Organization information</label><br>
         <label><input type="checkbox" id="c_rpt_boundaries"> Boundaries</label><br>
-        <label><input type="checkbox" id="c_rpt_direct_indirect"> Direct and indirect emissions</label><br>
+        <label><input type="checkbox" id="c_rpt_direct_indirect"> Direct/Indirect emissions</label><br>
         <label><input type="checkbox" id="c_rpt_base_year"> Base year</label><br>
-        <label><input type="checkbox" id="c_rpt_methods"> Methods used</label><br>
+        <label><input type="checkbox" id="c_rpt_methods"> Methods</label><br>
         <label><input type="checkbox" id="c_rpt_uncertainty"> Uncertainty</label><br>
         <label><input type="checkbox" id="c_rpt_verification"> Verification (Optional)</label><br>
         <label><input type="checkbox" id="c_rpt_internal_review"> internal review</label>
@@ -327,7 +433,7 @@
       <div class="row">
         <div>
           <label for="activity">Activity amount</label>
-          <input id="activity" type="number" step="any" min="0" placeholder="e.g., 12,345" required />
+          <input id="activity" type="number" step="any" min="0" placeholder="e.g. 12,345" required />
         </div>
         <div>
           <label for="unit">Activity unit</label>
@@ -341,32 +447,35 @@
           </select>
         </div>
       </div>
+
       <div class="row">
         <div>
           <label for="factorSelect">Emission factor (library)</label>
-          <select id="factorSelect"></select>
-        </div>
-        <div>
-          <label for="ef">Or custom EF (kg CO₂e per activity unit)</label>
-          <input id="ef" type="number" step="any" min="0" placeholder="e.g., 0.233" />
-        </div>
-      </div>
-      <div class="row3">
-        <div>
-          <label for="gas">Gas (for documentation)</label>
-          <select id="gas">
-            <option>CO2e</option><option>CO2</option><option>CH4</option><option>N2O</option><option>Blend/Refrigerant</option><option>Other</option>
+          <select id="factorSelect">
+            <option value="">— Select factor —</option>
           </select>
         </div>
         <div>
-          <label for="gwp">GWP100 (if not CO₂e)</label>
-          <input id="gwp" type="number" step="any" min="0" placeholder="e.g., 27.2 for CH4" />
+          <label for="ef">Or custom EF (kgCO₂e per unit)</label>
+          <input id="ef" type="number" step="any" min="0" placeholder="Leave blank if using library" />
+        </div>
+      </div>
+
+      <div class="row3">
+        <div>
+          <label for="gas">Gas (optional)</label>
+          <input id="gas" placeholder="e.g. CO2e, CH4, N2O" />
+        </div>
+        <div>
+          <label for="gwp">GWP (optional)</label>
+          <input id="gwp" type="number" step="any" min="0" placeholder="e.g. 27.2 for CH4" />
         </div>
         <div>
           <label for="year">Data year</label>
           <input id="year" type="number" min="1990" max="2100" placeholder="2024" />
         </div>
       </div>
+
       <div>
         <label for="source">Data / factor source</label>
         <input id="source" placeholder="Supplier invoice, DEFRA 2024 table, EPA, IPCC…" />
@@ -418,61 +527,113 @@
     </div>
   </section>
 
+  <!-- UNCERTAINTY ASSESSMENT -->
+  <section class="card" id="uncertaintySection" aria-labelledby="unc-h">
+    <h2 id="unc-h">UNCERTAINTY ASSESSMENT</h2>
+    <p class="unc-note small">
+      Enter <strong>U activity</strong> and <strong>U emission factor</strong> as <strong>percent values</strong> (example: type <strong>5</strong> to represent <strong>5%</strong>). Emissions are manual input, or you can load calculated emissions from Activity Lines.
+    </p>
+
+    <div class="inline unc-controls no-print">
+      <button type="button" id="uncSync" class="ghost">Sync activities from Activity Lines</button>
+      <button type="button" id="uncLoadEmissions" class="ghost">Load calculated emissions</button>
+      <button type="button" id="uncAddRow">+ Add blank row</button>
+    </div>
+
+    <table aria-describedby="unc-h">
+      <thead>
+        <tr>
+          <th>Activity / Emission Source</th>
+          <th class="right">Emissions<br><span class="unc-subhdr">t CO₂e</span></th>
+          <th class="right">U activity<br><span class="unc-subhdr">%</span></th>
+          <th class="right">U emission factor<br><span class="unc-subhdr">%</span></th>
+          <th class="right">Ua2</th>
+          <th class="right">Uef2</th>
+          <th class="right">ua2 + uef2</th>
+          <th class="right">sqr u absolute 2</th>
+          <th class="right">Emiss * UNCER.</th>
+          <th class="right">(Emiss * UNCER.)^2</th>
+          <th class="right no-print">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="uncBody"></tbody>
+    </table>
+
+    <div class="sep"></div>
+
+    <div class="grid grid-3" style="gap:12px">
+      <div class="tile">
+        <div class="muted small">Total emissions (tCO₂e)</div>
+        <div id="uncTotalEmissions" class="val">0.000</div>
+      </div>
+      <div class="tile">
+        <div class="muted small">Total absolute uncertainty (RSS)</div>
+        <div id="uncTotalAbs" class="val">0.000</div>
+      </div>
+      <div class="tile">
+        <div class="muted small">Total uncertainty (%)</div>
+        <div id="uncTotalPct" class="val">0.00%</div>
+      </div>
+    </div>
+  </section>
+
   <!-- EMISSION FACTOR LIBRARY -->
   <section class="card" aria-labelledby="ef-h">
     <h2 id="ef-h">Emission Factor Library</h2>
     <p class="small">Import JSON or CSV/TSV with columns: <em>Description</em>, <em>Emission factor</em>, <em>Unit</em>, <em>EF-Source</em>, optional <em>Gas</em>, <em>GWP</em>, <em>Year</em>. EFs are in kg CO₂e per unit.</p>
+
+    <div class="inline no-print" style="justify-content:flex-end;gap:8px">
+      <button type="button" class="ghost" id="exportFactors">Export factors JSON</button>
+      <label class="sr-only" for="importFactors">Import factors</label>
+      <input id="importFactors" type="file" accept=".json,.csv,.tsv,text/csv,text/tab-separated-values,application/json" style="max-width:360px" />
+    </div>
+
     <div id="factorList" class="grid" style="gap:12px"></div>
     <div class="sep"></div>
+
     <form id="factorForm" class="factor-row" autocomplete="off" aria-label="Add emission factor">
-      <input id="f_name" placeholder="Name (e.g., Grid electricity, country…)" required />
+      <input id="f_name" placeholder="Name (e.g. Grid electricity, country…)" required />
       <select id="f_unit">
         <option>kWh</option><option>MWh</option><option>MMBtu</option>
         <option>litre</option><option>gallon</option><option>kg</option><option>tonne</option>
         <option>km</option><option>mile</option><option>m3</option><option>unit</option>
       </select>
-      <input id="f_value" type="number" step="any" min="0" placeholder="EF value (kgCO₂e/u)" required />
-      <input id="f_gas" placeholder="Gas / mix" />
-      <input id="f_gwp" type="number" step="any" min="0" placeholder="GWP100 basis" />
-      <input id="f_source" placeholder="Source" />
+      <input id="f_value" type="number" step="any" min="0" placeholder="EF value" required />
+      <input id="f_gas" placeholder="Gas (optional)" />
+      <input id="f_gwp" type="text" placeholder="GWP (optional)" />
+      <input id="f_source" placeholder="EF source" />
       <input id="f_year" type="number" min="1990" max="2100" placeholder="Year" />
-      <button type="submit">+ Add Factor</button>
-      <button type="button" class="ghost" id="exportFactors">Export Factors</button>
-      <label for="importFactors" class="sr-only">Import factors JSON/CSV</label>
-      <input type="file" id="importFactors" accept=".json,.csv,.tsv,text/csv,application/json,text/plain" />
+      <button type="submit">+ Add</button>
     </form>
-    <div class="chips"><span class="chip">Units must match your activity</span><span class="chip">EFs in kgCO₂e per unit</span></div>
   </section>
 
-  <footer class="wrap" style="margin: 24px auto">
-    <div class="small"><strong>Important:</strong> Replace examples with verified factors; document sources & assumptions. ✔️</div>
+  <footer class="small" style="margin:16px 0 30px">
+    <div class="muted">Tip: Your data is stored locally in this browser (autosave). Export CSV/JSON to share or archive.</div>
   </footer>
 </main>
 
 <script>
-/* ========= State ========= */
-const storageKey = 'cf_iso14064_v1';
+/* ========= Defaults ========= */
 const defaultFactors = [
-  // Existing examples
-  { id: uid(), name:'Electricity – generic grid', unit:'kWh', value:0.233, gas:'CO2e', gwp:'', source:'Example', year:2024 },
-  { id: uid(), name:'Natural gas combustion', unit:'kWh', value:0.184, gas:'CO2e', gwp:'', source:'Example', year:2024 },
-  { id: uid(), name:'Diesel fuel (stationary/mobile)', unit:'litre', value:2.68, gas:'CO2e', gwp:'', source:'Example', year:2024 },
-
-  // Egypt / requested
-  { id: uid(), name:'Electricity – Egypt grid', unit:'kWh', value:0.49, gas:'CO2e', gwp:'', source:'User-provided', year:2024 },
-  { id: uid(), name:'Natural Gas (Egypt) – combustion', unit:'MMBtu', value:53.060, gas:'CO2', gwp:'', source:'User-provided', year:2024 },
-  { id: uid(), name:'Refrigerant R-22', unit:'kg', value:1960, gas:'Blend/Refrigerant', gwp:'', source:'User-provided', year:2024 },
-  { id: uid(), name:'Refrigerant R-134', unit:'kg', value:1530, gas:'Blend/Refrigerant', gwp:'', source:'User-provided', year:2024 },
-  { id: uid(), name:'Water (supply/treatment)', unit:'m3', value:0.395, gas:'CO2e', gwp:'', source:'User-provided', year:2024 }
+  { id:'ef_grid_kwh', name:'Grid electricity (example)', unit:'kWh', value:0.5, gas:'', gwp:'', source:'[Example]', year:'' },
+  { id:'ef_diesel_l', name:'Diesel (example)', unit:'litre', value:2.68, gas:'', gwp:'', source:'[Example]', year:'' },
+  { id:'ef_ng_mmbtu', name:'Natural gas (example)', unit:'MMBtu', value:53.06, gas:'', gwp:'', source:'[Example]', year:'' }
 ];
 
+/* ========= State ========= */
+const storageKey = 'iso14064_ghg_platform_v1';
 let state = {
   meta: {
-    orgName:'', orgDesc:'', period:'', baseYear:'', boundary:'equity',
-    verification:'None', preparedBy:'', notes:'', method:'',
-    logoDataUrl:''
+    orgName:'', orgDesc:'', period:'', baseYear:'',
+    boundary:'equity', verification:'None',
+    preparedBy:'', notes:'', method:'',
+    logoDataUrl:'',
+    reportContents:'', abbreviations:'', chairmanStatement:'', executiveSummary:'',
+    companyProfile:'', strategicAlignment:'', reportObjectives:'',
+    methodologyMore:'', assumptionsLimitations:'',
+    reportPlanDataUrl:'', processFlowDataUrl:''
   },
-  checklist:{
+  checklist: {
     c_org_bound:false, c_rep_bound:false, c_list_sources:false, c_all_ghg:false,
     c_collect_activity:false, c_apply_ef:false, c_convert_co2e:false, c_base_year:false,
     c_imported_energy:false, c_transport:false, c_products_services:false,
@@ -482,7 +643,8 @@ let state = {
     c_rpt_verification:false, c_rpt_internal_review:false
   },
   items: [],
-  factors: defaultFactors
+  factors: defaultFactors,
+  uncertaintyRows: []
 };
 
 /* ========= Utilities ========= */
@@ -497,14 +659,21 @@ function load(){
 }
 function resetAll(){
   if(!confirm('Clear all items and metadata? This cannot be undone.')) return;
-  state.items = []; save(); render();
+  state.items = [];
+  state.uncertaintyRows = [];
+  save(); render();
 }
 
 /* ========= Metadata ========= */
-const metaIds = ['orgName','orgDesc','period','baseYear','boundary','verification','preparedBy','notes','method'];
+const metaIds = [
+  'orgName','orgDesc','period','baseYear','boundary','verification','preparedBy','notes','method',
+  'reportContents','abbreviations','chairmanStatement','executiveSummary','companyProfile','strategicAlignment',
+  'reportObjectives','methodologyMore','assumptionsLimitations'
+];
 function bindMeta(){
   metaIds.forEach(id=>{
     const el = document.getElementById(id);
+    if(!el) return;
     el.value = state.meta[id] || '';
     el.addEventListener('input', ()=>{ state.meta[id] = el.value; save(); });
   });
@@ -523,6 +692,7 @@ const checkIds = [
 function bindChecklist(){
   checkIds.forEach(id=>{
     const el = document.getElementById(id);
+    if(!el) return;
     el.checked = !!state.checklist[id];
     el.addEventListener('change', ()=>{ state.checklist[id] = el.checked; save(); });
   });
@@ -541,7 +711,7 @@ function renderLogo(){
 }
 function setupLogoUpload(){
   const up = document.getElementById('logoUpload');
-  up.addEventListener('change', async (e)=>{
+  up.addEventListener('change', (e)=>{
     const file = e.target.files && e.target.files[0];
     if(!file) return;
     if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
@@ -551,7 +721,7 @@ function setupLogoUpload(){
       save(); renderLogo();
     };
     reader.readAsDataURL(file);
-    e.target.value = ''; // reset
+    e.target.value = '';
   });
   document.getElementById('removeLogo').addEventListener('click', ()=>{
     state.meta.logoDataUrl = '';
@@ -559,7 +729,76 @@ function setupLogoUpload(){
   });
 }
 
+/* ========= Report Plan + Process Flow Images ========= */
+function renderReportImages(){
+  const rpImg = document.getElementById('reportPlanImg');
+  const rpPh = document.getElementById('reportPlanPlaceholder');
+  if(state.meta.reportPlanDataUrl){
+    rpImg.src = state.meta.reportPlanDataUrl;
+    rpImg.style.display = 'block';
+    rpPh.style.display = 'none';
+  }else{
+    rpImg.removeAttribute('src');
+    rpImg.style.display = 'none';
+    rpPh.style.display = 'block';
+  }
+
+  const pfImg = document.getElementById('processFlowImg');
+  const pfPh = document.getElementById('processFlowPlaceholder');
+  if(state.meta.processFlowDataUrl){
+    pfImg.src = state.meta.processFlowDataUrl;
+    pfImg.style.display = 'block';
+    pfPh.style.display = 'none';
+  }else{
+    pfImg.removeAttribute('src');
+    pfImg.style.display = 'none';
+    pfPh.style.display = 'block';
+  }
+}
+function setupReportImagesUpload(){
+  const rpUp = document.getElementById('reportPlanUpload');
+  const pfUp = document.getElementById('processFlowUpload');
+
+  rpUp.addEventListener('change', (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
+    const reader = new FileReader();
+    reader.onload = ()=>{ state.meta.reportPlanDataUrl = reader.result; save(); renderReportImages(); };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  });
+  pfUp.addEventListener('change', (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
+    const reader = new FileReader();
+    reader.onload = ()=>{ state.meta.processFlowDataUrl = reader.result; save(); renderReportImages(); };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('removeReportPlan').addEventListener('click', ()=>{
+    state.meta.reportPlanDataUrl = '';
+    save(); renderReportImages();
+  });
+  document.getElementById('removeProcessFlow').addEventListener('click', ()=>{
+    state.meta.processFlowDataUrl = '';
+    save(); renderReportImages();
+  });
+}
+
 /* ========= Factors ========= */
+function unitsOptions(selected){
+  const units = ['kWh','MWh','MMBtu','litre','gallon','kg','tonne','km','mile','m3','unit'];
+  return units.map(u => `<option ${u===selected?'selected':''}>${u}</option>`).join('');
+}
+function renderFactorSelect(){
+  const sel = document.getElementById('factorSelect');
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">— Select factor —</option>` + state.factors.map(f => `<option value="${f.id}">${escapeHTML(f.name)} [${escapeHTML(f.unit)}]</option>`).join('');
+  sel.value = cur;
+}
 function renderFactors(){
   const list = document.getElementById('factorList');
   list.innerHTML = '';
@@ -579,47 +818,39 @@ function renderFactors(){
       <input aria-label="Source" value="${escapeHTML(f.source||'')}" />
       <input aria-label="Year" type="number" min="1990" max="2100" value="${escapeHTML(f.year||'')}" />
       <button data-id="${f.id}" class="ghost">Delete</button>
-      <button data-id="${f.id}" class="">Save</button>
+      <button data-id="${f.id}">Save</button>
     `;
     const [nameEl, unitEl, valEl, gasEl, gwpEl, srcEl, yearEl, delBtn, saveBtn] = row.children;
-    delBtn.addEventListener('click', ()=>{ 
-      if(confirm('Delete factor?')){ state.factors = state.factors.filter(x=>x.id!==f.id); save(); render(); }
+
+    delBtn.addEventListener('click', ()=>{
+      state.factors = state.factors.filter(x=>x.id!==f.id);
+      save(); render();
     });
     saveBtn.addEventListener('click', ()=>{
-      Object.assign(f, {
-        name: nameEl.value.trim(),
-        unit: unitEl.value,
-        value: ensureNumber(valEl.value),
-        gas: gasEl.value.trim(),
-        gwp: gwpEl.value.trim(),
-        source: srcEl.value.trim(),
-        year: yearEl.value.trim()
-      });
+      f.name = nameEl.value.trim() || 'Unnamed factor';
+      f.unit = unitEl.value;
+      f.value = ensureNumber(valEl.value);
+      f.gas = gasEl.value.trim();
+      f.gwp = gwpEl.value.trim();
+      f.source = srcEl.value.trim();
+      f.year = yearEl.value.trim();
       save(); renderFactorSelect(); toast('Factor saved');
     });
+
     list.appendChild(row);
   });
   renderFactorSelect();
 }
-function unitsOptions(sel){
-  const units = ['kWh','MWh','MMBtu','litre','gallon','kg','tonne','km','mile','m3','unit'];
-  return units.map(u=>`<option ${u===sel?'selected':''}>${u}</option>`).join('');
-}
-function renderFactorSelect(){
-  const sel = document.getElementById('factorSelect');
-  sel.innerHTML = `<option value="">— choose a factor —</option>` +
-    state.factors.map(f=>`<option value="${f.id}">${escapeHTML(f.name)}  •  ${f.value} kgCO₂e/${f.unit}</option>`).join('');
-}
 function addFactor(e){
   e.preventDefault();
-  const name = getVal('f_name').trim();
-  const unit = getVal('f_unit');
-  const value = ensureNumber(getVal('f_value'));
-  const gas = getVal('f_gas').trim();
-  const gwp = getVal('f_gwp').trim();
-  const source = getVal('f_source').trim();
-  const year = getVal('f_year').trim();
-  if(!name || value<0){ return alert('Please provide a valid factor name and value.'); }
+  const name = document.getElementById('f_name').value.trim();
+  const unit = document.getElementById('f_unit').value;
+  const value = ensureNumber(document.getElementById('f_value').value);
+  const gas = document.getElementById('f_gas').value.trim();
+  const gwp = document.getElementById('f_gwp').value.trim();
+  const source = document.getElementById('f_source').value.trim();
+  const year = document.getElementById('f_year').value.trim();
+  if(!name || !isFinite(value) || value < 0) return alert('Please provide a valid factor name and non-negative value.');
   state.factors.push({ id: uid(), name, unit, value, gas, gwp, source, year });
   save(); render(); clearFactorForm();
 }
@@ -627,8 +858,6 @@ function clearFactorForm(){
   ['f_name','f_value','f_gas','f_gwp','f_source','f_year'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f_unit').value='kWh';
 }
-
-/* === Import: JSON array or {factors:[]} or CSV/TSV with headers === */
 async function importFactorsFile(e){
   const file = e.target.files[0];
   if(!file) return;
@@ -641,7 +870,7 @@ async function importFactorsFile(e){
       if(!parsed) throw new Error('JSON must be an array of factors or { "factors": [...] }');
       parsed = parsed.map(toFactorShapeFromJSON);
     }else{
-      parsed = parseDelimitedToFactors(text); // CSV/TSV
+      parsed = parseDelimitedToFactors(text);
     }
     const cleaned = parsed.map(f => ({
       id: uid(),
@@ -657,7 +886,7 @@ async function importFactorsFile(e){
     state.factors = cleaned; save(); render();
     toast(`Imported ${cleaned.length} factors`);
   }catch(err){
-    alert('Import failed: ' + err.message + '\nTip: CSV needs headers: Description, Emission factor, Unit, EF-Source, (Gas, GWP, Year)');
+    alert('Import failed: ' + err.message);
   }finally{ e.target.value = ''; }
 }
 function toFactorShapeFromJSON(x){
@@ -688,7 +917,7 @@ function parseDelimitedToFactors(text){
   const pos = {};
   for(const key in map){ pos[key] = header.findIndex(h => map[key].includes(h)); }
   if(pos.description<0 || pos.value<0 || pos.unit<0 || pos.source<0){
-    throw new Error('Missing required headers. Needed: Description, Emission factor, Unit, EF-Source.');
+    throw new Error('Missing required headers.');
   }
   const rows = [];
   for(let i=1;i<lines.length;i++){
@@ -709,7 +938,7 @@ function parseDelimitedToFactors(text){
 function exportFactors(){ download('emission_factors.json', JSON.stringify(state.factors,null,2)); }
 
 /* ========= Items ========= */
-const defaultGWP = { 'CH4': 27.2, 'N2O': 273 }; // handy defaults
+const defaultGWP = { 'CH4': 27.2, 'N2O': 273 };
 
 function addItem(e){
   e.preventDefault();
@@ -728,14 +957,13 @@ function addItem(e){
 
   if(!category || activity<=0) return alert('Please provide category and positive activity amount.');
 
-  // Base EF (before GWP) — unchanged calculation
   let efBase = 0, efName = 'Custom';
   if(customEF){
     efBase = ensureNumber(customEF);
   }else if(factorId){
     const f = state.factors.find(x=>x.id===factorId);
     if(!f) return alert('Selected factor not found.');
-    unit = f.unit; setVal('unit', f.unit); // sync unit with factor
+    unit = f.unit; setVal('unit', f.unit);
     efBase = ensureNumber(f.value);
     efName = f.name;
     if(!getVal('gas') && f.gas){ setVal('gas', f.gas); }
@@ -745,11 +973,10 @@ function addItem(e){
     return alert('Choose a factor from the library or enter a custom EF.');
   }
 
-  // Apply GWP if needed — unchanged calculation
   const needsGWP = (gas && gas.toUpperCase() !== 'CO2E');
   const multiplier = (needsGWP && isFinite(gwpNum) && gwpNum > 0) ? gwpNum : 1;
-  const efEffective = efBase * multiplier;           // kg CO2e per unit
-  const emissionsKg = activity * efEffective;        // kg CO2e
+  const efEffective = efBase * multiplier;
+  const emissionsKg = activity * efEffective;
 
   const item = {
     id: uid(), scope, category, activity, unit,
@@ -817,6 +1044,7 @@ function drawChart(vals){
   const c = document.getElementById('chart'); const ctx = c.getContext('2d');
   const w = c.width = c.clientWidth * devicePixelRatio;
   const h = c.height = c.clientHeight * devicePixelRatio;
+  ctx.setTransform(1,0,0,1,0,0);
   ctx.scale(devicePixelRatio, devicePixelRatio);
   ctx.fillStyle = '#0d1533'; ctx.fillRect(0,0,w,h);
   const pad = 28; const areaW = c.clientWidth - pad*2; const areaH = c.clientHeight - pad*2;
@@ -838,6 +1066,196 @@ function drawChart(vals){
     ctx.fillText(labels[i], x+barW/2-8, pad+areaH+16);
     ctx.fillText(v.toFixed(2)+' t', x+barW/2-18, y-6);
   });
+}
+
+/* ========= Uncertainty Assessment (updated to match your example) ========= */
+function ensureUncertaintyArray(){
+  if(!Array.isArray(state.uncertaintyRows)) state.uncertaintyRows = [];
+}
+function syncUncertaintyFromItems(){
+  ensureUncertaintyArray();
+  const existingByItem = new Map(state.uncertaintyRows.filter(r=>r.itemId).map(r=>[r.itemId, r]));
+  const next = [];
+
+  state.items.forEach(it=>{
+    const name = `Scope ${it.scope} — ${it.category}`;
+    const existing = existingByItem.get(it.id);
+    if(existing){
+      existing.activity = name;
+      next.push(existing);
+    }else{
+      next.push({
+        id: uid(),
+        itemId: it.id,
+        activity: name,
+        emissions: '',   // manual (or load)
+        ua: '',          // manual (%)
+        uef: ''          // manual (%)
+      });
+    }
+  });
+
+  state.uncertaintyRows.filter(r=>!r.itemId).forEach(r=>next.push(r));
+  state.uncertaintyRows = next;
+  save();
+  renderUncertainty();
+}
+function loadCalculatedEmissionsIntoUncertainty(){
+  ensureUncertaintyArray();
+  const byId = new Map(state.items.map(it=>[it.id, it]));
+  state.uncertaintyRows.forEach(r=>{
+    if(!r.itemId) return;
+    const it = byId.get(r.itemId);
+    if(!it) return;
+    r.emissions = String(toTonnes(it.emissionsKg));
+  });
+  save();
+  renderUncertainty();
+}
+function addBlankUncertaintyRow(){
+  ensureUncertaintyArray();
+  state.uncertaintyRows.push({
+    id: uid(),
+    itemId: '',
+    activity: '',
+    emissions: '',
+    ua: '',
+    uef: ''
+  });
+  save();
+  renderUncertainty();
+}
+function removeUncertaintyRow(id){
+  state.uncertaintyRows = state.uncertaintyRows.filter(r=>r.id!==id);
+  save();
+  renderUncertainty();
+}
+
+/*
+  Inputs:
+   - Emissions in tCO2e (manual or loaded)
+   - Ua entered as percent number (e.g. 1 means 1%)
+   - Uef entered as percent number (e.g. 5 means 5%)
+
+  Calculations (Excel-equivalent):
+   uaDec = Ua/100
+   uefDec = Uef/100
+   ua2Dec = (uaDec)^2
+   uef2Dec = (uefDec)^2
+   sumDec = ua2Dec + uef2Dec
+   sqrtDec = SQRT(sumDec)
+   absUnc = Emissions * sqrtDec
+   absUnc2 = (absUnc)^2
+
+  Display to match your screenshot:
+   - Ua, Uef shown as "X%"
+   - Ua2, Uef2, sum shown as percent (ua2Dec*100, etc.)
+   - sqrt shown as percent (sqrtDec*100)
+*/
+function computeUncRow(r){
+  const emissions = Number(r.emissions);
+  const uaPct = Number(r.ua);
+  const uefPct = Number(r.uef);
+
+  const hasEm = isFinite(emissions);
+  const hasUa = isFinite(uaPct);
+  const hasUef = isFinite(uefPct);
+
+  const uaDec = hasUa ? (uaPct/100) : NaN;
+  const uefDec = hasUef ? (uefPct/100) : NaN;
+
+  const ua2Dec = isFinite(uaDec) ? uaDec*uaDec : NaN;
+  const uef2Dec = isFinite(uefDec) ? uefDec*uefDec : NaN;
+
+  const sumDec = (isFinite(ua2Dec) && isFinite(uef2Dec)) ? (ua2Dec + uef2Dec) : NaN;
+  const sqrtDec = isFinite(sumDec) ? Math.sqrt(sumDec) : NaN;
+
+  const absUnc = (hasEm && isFinite(sqrtDec)) ? (emissions * sqrtDec) : NaN;
+  const absUnc2 = isFinite(absUnc) ? absUnc*absUnc : NaN;
+
+  return { emissions, uaPct, uefPct, uaDec, uefDec, ua2Dec, uef2Dec, sumDec, sqrtDec, absUnc, absUnc2 };
+}
+function pctFromDec(dec, decimals){
+  if(!isFinite(dec)) return '';
+  return (dec*100).toFixed(decimals) + '%';
+}
+function pctFromPctInput(pct, decimals){
+  if(!isFinite(pct)) return '';
+  return Number(pct).toFixed(decimals) + '%';
+}
+function renderUncertainty(){
+  ensureUncertaintyArray();
+  const tbody = document.getElementById('uncBody');
+  tbody.innerHTML = '';
+
+  if(!state.uncertaintyRows.length){
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = 11;
+    td.className = 'muted';
+    td.textContent = 'No uncertainty rows yet — click “Sync activities from Activity Lines” or “Add blank row”.';
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    updateUncertaintyTotals();
+    return;
+  }
+
+  state.uncertaintyRows.forEach((r)=>{
+    const c = computeUncRow(r);
+    const tr = document.createElement('tr');
+
+    // Display like the example:
+    // Ua2 and Uef2 as percent values (e.g., 0.01% and 0.25000%)
+    const ua2Pct = pctFromDec(c.ua2Dec, 5);
+    const uef2Pct = pctFromDec(c.uef2Dec, 5);
+    const sumPct = pctFromDec(c.sumDec, 5);
+    const sqrtPct = pctFromDec(c.sqrtDec, 2);
+
+    tr.innerHTML = `
+      <td>
+        <input data-unc-id="${r.id}" data-unc-field="activity" placeholder="(manual)" value="${escapeHTML(r.activity||'')}" />
+      </td>
+      <td class="right">
+        <input data-unc-id="${r.id}" data-unc-field="emissions" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.emissions||'')}" />
+      </td>
+      <td class="right">
+        <input data-unc-id="${r.id}" data-unc-field="ua" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.ua||'')}" />
+      </td>
+      <td class="right">
+        <input data-unc-id="${r.id}" data-unc-field="uef" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.uef||'')}" />
+      </td>
+      <td class="right">${ua2Pct}</td>
+      <td class="right">${uef2Pct}</td>
+      <td class="right">${sumPct}</td>
+      <td class="right">${sqrtPct}</td>
+      <td class="right">${isFinite(c.absUnc) ? fmt(c.absUnc, 3) : ''}</td>
+      <td class="right">${isFinite(c.absUnc2) ? fmt(c.absUnc2, 1) : ''}</td>
+      <td class="right no-print">
+        <button class="danger" type="button" data-unc-del="${r.id}">Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updateUncertaintyTotals();
+}
+function updateUncertaintyTotals(){
+  ensureUncertaintyArray();
+  let totalEm = 0;
+  let sumAbs2 = 0;
+
+  state.uncertaintyRows.forEach(r=>{
+    const c = computeUncRow(r);
+    if(isFinite(c.emissions)) totalEm += c.emissions;
+    if(isFinite(c.absUnc2)) sumAbs2 += c.absUnc2;
+  });
+
+  const totalAbs = Math.sqrt(sumAbs2);
+  const pct = (totalEm>0 && isFinite(totalAbs)) ? (totalAbs/totalEm*100) : 0;
+
+  setText('uncTotalEmissions', fmt(totalEm,3));
+  setText('uncTotalAbs', fmt(totalAbs,3));
+  setText('uncTotalPct', (totalEm>0 ? pct.toFixed(2)+'%' : '0.00%'));
 }
 
 /* ========= Export ========= */
@@ -862,7 +1280,7 @@ function exportCSV(){
   download('inventory.csv', csv);
 }
 function exportJSON(){
-  const payload = { meta: state.meta, checklist: state.checklist, items: state.items, totals: getTotalsSnapshot(), factors: state.factors };
+  const payload = { meta: state.meta, checklist: state.checklist, items: state.items, totals: getTotalsSnapshot(), factors: state.factors, uncertaintyRows: state.uncertaintyRows };
   download('inventory.json', JSON.stringify(payload,null,2));
 }
 function getTotalsSnapshot(){
@@ -871,9 +1289,9 @@ function getTotalsSnapshot(){
 }
 
 /* ========= Helpers ========= */
-function setText(id, txt){ document.getElementById(id).textContent = txt; }
-function setVal(id, val){ document.getElementById(id).value = val; }
-function getVal(id){ return document.getElementById(id).value; }
+function setText(id, txt){ const el = document.getElementById(id); if(el) el.textContent = txt; }
+function setVal(id, val){ const el = document.getElementById(id); if(el) el.value = val; }
+function getVal(id){ const el = document.getElementById(id); return el ? el.value : ''; }
 function csvCell(x){
   if(x===null||x===undefined) return '';
   const s = String(x);
@@ -901,8 +1319,8 @@ function onFactorSelectChange(){
   const id = getVal('factorSelect'); const efInput = document.getElementById('ef');
   if(!id){ efInput.value=''; return; }
   const f = state.factors.find(x=>x.id===id); if(!f) return;
-  efInput.value = f.value;            // auto-fill EF
-  setVal('unit', f.unit);             // sync unit
+  efInput.value = f.value;
+  setVal('unit', f.unit);
   if(f.gas){ setVal('gas', f.gas); }
   const gwpNum = Number(f.gwp); if(isFinite(gwpNum) && gwpNum>0){ setVal('gwp', String(gwpNum)); }
 }
@@ -948,15 +1366,42 @@ function attachEvents(){
   document.getElementById('factorSelect').addEventListener('change', onFactorSelectChange);
   document.getElementById('gas').addEventListener('change', onGasChange);
 
-  setupLogoUpload();  // logo
+  setupLogoUpload();
+  setupReportImagesUpload();
+
+  // Uncertainty
+  document.getElementById('uncSync').addEventListener('click', syncUncertaintyFromItems);
+  document.getElementById('uncLoadEmissions').addEventListener('click', loadCalculatedEmissionsIntoUncertainty);
+  document.getElementById('uncAddRow').addEventListener('click', addBlankUncertaintyRow);
+
+  document.getElementById('uncBody').addEventListener('input', (e)=>{
+    const t = e.target;
+    const id = t.getAttribute('data-unc-id');
+    const field = t.getAttribute('data-unc-field');
+    if(!id || !field) return;
+    const row = state.uncertaintyRows.find(r=>r.id===id);
+    if(!row) return;
+    row[field] = t.value;
+    save();
+    renderUncertainty();
+  });
+  document.getElementById('uncBody').addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-unc-del]');
+    if(!btn) return;
+    removeUncertaintyRow(btn.getAttribute('data-unc-del'));
+  });
 }
-function render(){ bindMeta(); bindChecklist(); renderLogo(); renderItems(); renderFactors(); totals(); }
+function render(){
+  bindMeta();
+  bindChecklist();
+  renderLogo();
+  renderReportImages();
+  renderItems();
+  renderFactors();
+  totals();
+  renderUncertainty();
+}
 (function boot(){ load(); attachEvents(); render(); })();
 </script>
 </body>
 </html>
-
-
-
-
-
