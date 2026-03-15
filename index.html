@@ -2,148 +2,430 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ISO 14064 Carbon Footprint Calculator and Reporting platform by MOHAMED ABD ELSALAM EL SEUOFY</title>
-<meta name="description" content="ISO 14064 carbon footprint calculator (Scopes 1–3) with emission factor library, M.ABD ELSALAM, and reporting." />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ISO 14064 Carbon Footprint Calculator & Reporting Platform — Dr. Mohamed Abd Elsalam El Seuofy</title>
+<meta name="description" content="ISO 14064 carbon footprint calculator (Scopes 1–3) with emission factor library, uncertainty assessment, JSON import/export, and reporting." />
+
 <style>
   :root{
-    --bg:#0b1020; --panel:#121a33; --muted:#7d8ab0;
-    --pri:#4ea8ff; --pri-2:#8fd3ff; --ok:#38d39f; --warn:#ffcc66; --danger:#ff6b6b;
-    --text:#e9f0ff; --text-2:#c8d2ee; --chip:#1a2447; --border:#223055;
+    --bg0:#070a14;
+    --bg1:#0b1020;
+    --panel:#0f1835;
+    --panel2:#0c1430;
+    --panel3:#0b1229;
+    --text:#e9f0ff;
+    --text2:#c5d2f4;
+    --muted:#7f8db4;
+    --border:#223055;
+    --shadow: 0 16px 40px rgba(0,0,0,.35);
+
+    --pri:#4ea8ff;
+    --pri2:#8fd3ff;
+    --ok:#35d3a0;
+    --warn:#ffcc66;
+    --danger:#ff6b6b;
+
+    --chip:#16224a;
+    --glass: rgba(255,255,255,.05);
+    --glass2: rgba(255,255,255,.08);
   }
+
   *{box-sizing:border-box}
-  body{margin:0;background:linear-gradient(180deg,#0b1020 0%,#0f1530 100%);color:var(--text);font:16px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-
-  /* Header not sticky */
-  header{position:static;background:rgba(11,16,32,0.9);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--border)}
-
-  .wrap{max-width:1200px;margin:auto;padding:18px}
-  h1{margin:6px 0 0;font-weight:700;font-size:1.35rem}
-  .subtitle{margin-top:4px;color:#b7c4ea;font-size:.9rem}
-  .brand{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-
-  /* Cover + client logo */
-  .cover-wrap{position:relative}
-  .cover-wrap img#cover{
-    width:100%;height:auto;object-fit:cover;border-radius:10px;border:1px solid var(--border);
-    background:#0d1533;display:block;max-height:300px; /* keeps workspace big */
-  }
-  /* Bigger client logo (requested) */
-  #clientLogo{
-    position:absolute;right:12px;top:12px;
-    max-width:240px;max-height:160px;display:none;
-    background:#fff;border-radius:50px;padding:20px;border:5px solid var(--border)
+  html,body{height:100%}
+  body{
+    margin:0;
+    color:var(--text);
+    font:16px/1.45 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(900px 500px at 10% 10%, rgba(78,168,255,.20), transparent 55%),
+      radial-gradient(700px 450px at 90% 20%, rgba(53,211,160,.16), transparent 55%),
+      radial-gradient(800px 500px at 50% 120%, rgba(255,204,102,.10), transparent 55%),
+      linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 40%, #0d1430 100%);
+    overflow-x:hidden;
   }
 
-  .grid{display:grid;gap:16px}
-  .grid-2{grid-template-columns:1fr 1fr}
-  .grid-3{grid-template-columns:repeat(3,1fr)}
-  @media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
-
-  section.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px}
-  section.card h2{margin:.2rem 0 8px;font-size:1.1rem}
-  label{font-size:.85rem;color:var(--text-2)}
-  input,select,textarea,button{
-    width:100%;background:#0d1533;border:1px solid var(--border);
-    color:var(--text);padding:10px 12px;border-radius:10px;outline:none
+  /* ===== Header (sticky like the booth model) ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, rgba(7,10,20,.92), rgba(7,10,20,.72));
+    backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid rgba(34,48,85,.75);
   }
-  input::placeholder,textarea::placeholder{color:#98a5cc}
-  select{appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="%23c8d2ee" d="M2 5l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
-  button{cursor:pointer;background:linear-gradient(180deg, #2a62c7, #1b4da6);border-color:#1a3f8f}
-  button.ghost{background:transparent;border-color:var(--border)}
-  button.warn{background:linear-gradient(180deg,#f1b74d,#e49a1a);border-color:#d18b18}
-  button.danger{background:linear-gradient(180deg,#ff7a7a,#ff5a5a);border-color:#e34a4a}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .row3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-  .chip{padding:6px 10px;background:var(--chip);border:1px solid var(--border);border-radius:999px;font-size:.8rem;color:var(--pri-2)}
+  .header-inner{
+    max-width:1400px;
+    margin:auto;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
 
-  table{width:100%;border-collapse:collapse;margin-top:10px}
-  th,td{border-bottom:1px dashed var(--border);padding:10px;text-align:left;vertical-align:middle}
-  thead th{position:sticky;top:0;background:#0e1737;z-index:1}
-  tbody tr:hover{background:#0f1a3e}
-  .right{text-align:right}
+  .brand{
+    display:flex; align-items:center; gap:12px; min-width:260px;
+  }
+  .logoMark{
+    width:44px;height:44px;border-radius:14px;
+    background: radial-gradient(60% 60% at 30% 20%, rgba(143,211,255,.45), rgba(78,168,255,.10)),
+                linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+    border:1px solid rgba(143,211,255,.25);
+    box-shadow: 0 10px 20px rgba(0,0,0,.18);
+    display:grid; place-items:center;
+    position:relative; overflow:hidden;
+    flex:0 0 auto;
+  }
+  .logoMark:after{
+    content:"";
+    position:absolute; inset:-40%;
+    background:conic-gradient(from 180deg, rgba(78,168,255,.0), rgba(78,168,255,.35), rgba(53,211,160,.25), rgba(255,204,102,.15), rgba(78,168,255,.0));
+    animation: spin 10s linear infinite;
+  }
+  .logoMark b{
+    position:relative; z-index:1;
+    font-size:14px; letter-spacing:.06em;
+    color:rgba(233,240,255,.95);
+  }
+  @keyframes spin{ to{ transform:rotate(360deg)} }
+
+  .brandTitle{display:flex; flex-direction:column; line-height:1.1}
+  .brandTitle b{font-size:14px}
+  .brandTitle span{font-size:13px;color:var(--muted)}
+  /* VIP: increase your name font */
+  .brandTitle .name{
+    font-size:16px;
+    font-weight:900;
+    color:rgba(233,240,255,.98);
+    letter-spacing:.01em;
+  }
+
+  .topActions{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end;
+  }
+  button, .btn, input, select, textarea{
+    font:inherit;
+  }
+  .btn{
+    border:1px solid rgba(34,48,85,.9);
+    background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    color:var(--text);
+    padding:9px 10px;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,.18);
+  }
+  .btn:hover{ border-color: rgba(143,211,255,.45); }
+  .btn.primary{
+    background: linear-gradient(180deg, rgba(78,168,255,.95), rgba(27,77,166,.92));
+    border-color: rgba(78,168,255,.35);
+  }
+  .btn.ghost{
+    background: transparent;
+    box-shadow:none;
+  }
+  .btn.warn{
+    background: linear-gradient(180deg, rgba(255,204,102,.95), rgba(228,154,26,.92));
+    border-color: rgba(255,204,102,.35);
+    color:#0b1020;
+  }
+  .btn.danger{
+    background: linear-gradient(180deg, rgba(255,122,122,.95), rgba(255,90,90,.92));
+    border-color: rgba(255,107,107,.35);
+    color:#0b1020;
+  }
+  .btn.small{ padding:7px 9px; border-radius:11px; font-size:12px; }
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:7px 10px; border-radius:999px;
+    border:1px solid rgba(34,48,85,.85);
+    background: rgba(255,255,255,.06);
+    color: var(--text2);
+    font-size:12px;
+  }
+  .sep{opacity:.35}
+
+  /* ===== App layout (sidebar + sheets) ===== */
+  .app{
+    max-width:1400px;
+    margin:auto;
+    display:grid;
+    grid-template-columns: 290px 1fr;
+    gap:14px;
+    padding:14px;
+  }
+  @media (max-width: 980px){
+    .app{ grid-template-columns:1fr; }
+  }
+
+  aside{
+    position:sticky;
+    top:74px;
+    align-self:start;
+    height: calc(100vh - 92px);
+    overflow:auto;
+    padding:12px;
+    border-radius:16px;
+    border:1px solid rgba(34,48,85,.85);
+    background: linear-gradient(180deg, rgba(15,24,53,.82), rgba(11,18,41,.72));
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 980px){
+    aside{ position:relative; top:0; height:auto; }
+  }
+
+  .navTitle{
+    font-size:12px;
+    color:rgba(197,210,244,.75);
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    margin:6px 6px 10px;
+  }
+  .navBtn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.06);
+    color:var(--text);
+    cursor:pointer;
+    margin:7px 0;
+    transition: transform .12s ease, background .18s ease, border-color .18s ease;
+  }
+  .navBtn:hover{ transform: translateY(-1px); border-color: rgba(143,211,255,.28); background: rgba(255,255,255,.085); }
+  .navBtn.active{
+    background: linear-gradient(180deg, rgba(78,168,255,.22), rgba(255,255,255,.07));
+    border-color: rgba(78,168,255,.30);
+  }
+  .navBtn strong{font-size:13px}
+  .navBtn span{font-size:12px;color:rgba(197,210,244,.78)}
+  .qaBox{
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid rgba(34,48,85,.85);
+    background: rgba(255,255,255,.045);
+    color:rgba(233,240,255,.90);
+    font-size:12px;
+    line-height:1.35;
+  }
+  .qaBox b{color:#fff}
+  .tiny{font-size:11px;color:rgba(197,210,244,.78)}
   .muted{color:var(--muted)}
-  .inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:4px 8px; border-radius:999px;
+    border:1px solid rgba(34,48,85,.85);
+    background: rgba(255,255,255,.06);
+    font-weight:800;
+    font-size:11px;
+    white-space:nowrap;
+  }
+  .badge.ok{ color: var(--ok); border-color: rgba(53,211,160,.35); background: rgba(53,211,160,.10);}
+  .badge.warn{ color: var(--warn); border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.10);}
+  .badge.bad{ color: var(--danger); border-color: rgba(255,107,107,.35); background: rgba(255,107,107,.10);}
 
-  .totals{display:flex;gap:16px;flex-wrap:wrap}
-  .tile{background:#0d1533;border:1px solid var(--border);border-radius:12px;padding:12px 14px;min-width:210px}
-  .tile .val{font-weight:700;font-size:1.3rem}
-  .sep{height:1px;background:var(--border);margin:10px 0}
-  .kpi-s1{border-left:4px solid #5ad1a6}
-  .kpi-s2{border-left:4px solid #ffd166}
-  .kpi-s3{border-left:4px solid #73c0ff}
+  main{min-width:0}
+  .card{
+    border-radius:16px;
+    border:1px solid rgba(34,48,85,.85);
+    background: linear-gradient(180deg, rgba(15,24,53,.86), rgba(11,18,41,.72));
+    box-shadow: var(--shadow);
+    padding:14px;
+  }
+  .card + .card{ margin-top:14px; }
 
-  canvas{width:100%;height:240px;background:#0d1533;border:1px solid var(--border);border-radius:10px;display:block}
-  .small{font-size:.82rem}
-  .factor-row{display:grid;grid-template-columns:1.2fr .8fr .8fr .6fr 1fr 1fr .6fr .6fr .6fr auto;gap:8px}
-  .factor-row > *{min-width:0}
-  footer{color:#a7b4db}
-  .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
-  .no-print{ }
-  .print-only{ display:none; }
+  .sectionTitle{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .sectionTitle h2{margin:0;font-size:16px}
+  .sectionTitle .hint{font-size:12px;color:rgba(197,210,244,.72)}
 
-  /* Front matter helpers */
-  .frontmatter h1{font-size:1.15rem;margin:.2rem 0 10px}
-  .frontmatter h2{margin:14px 0 8px;font-size:1.02rem}
-  .frontmatter textarea{min-height:90px}
+  /* ===== Tabs animation ===== */
+  .tab{ display:none; }
+  .tab.active{
+    display:block;
+    animation: tabIn .22s ease both;
+  }
+  @keyframes tabIn{
+    from{ opacity:0; transform: translateY(6px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  /* ===== Inputs / form elements ===== */
+  label{ font-size:.85rem; color: var(--text2); }
+  input,select,textarea{
+    width:100%;
+    background: rgba(13,21,51,.85);
+    border:1px solid rgba(34,48,85,.95);
+    color:var(--text);
+    padding:10px 12px;
+    border-radius:12px;
+    outline:none;
+    box-shadow: 0 10px 25px rgba(0,0,0,.10);
+  }
+  input::placeholder, textarea::placeholder{ color:#98a5cc; }
+  textarea{ min-height: 90px; resize: vertical; }
+  input:focus,select:focus,textarea:focus{
+    border-color: rgba(143,211,255,.55);
+    box-shadow: 0 0 0 4px rgba(78,168,255,.15);
+  }
+  select{
+    appearance:none;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="%23c8d2ee" d="M2 5l5 5 5-5z"/></svg>');
+    background-repeat:no-repeat;
+    background-position:right 12px center;
+    background-size:14px;
+    padding-right:34px;
+  }
+
+  .grid{display:grid; gap:14px}
+  .grid-2{ grid-template-columns: 1fr 1fr; }
+  .grid-3{ grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 980px){
+    .grid-2,.grid-3{ grid-template-columns:1fr; }
+  }
+  .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
+  .row3{display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px}
+  .inline{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+
+  /* ===== Cover + Client logo ===== */
+  .cover-wrap{position:relative; border-radius:16px; overflow:hidden; border:1px solid rgba(34,48,85,.85)}
+  .cover-wrap img#cover{
+    width:100%; height:auto; display:block;
+    max-height:320px; object-fit:cover;
+    background: radial-gradient(80% 120% at 40% 10%, rgba(78,168,255,.20), rgba(13,21,51,.65));
+  }
+  #clientLogo{
+    position:absolute; right:14px; top:14px;
+    max-width:260px; max-height:170px; display:none;
+    background:#fff; border-radius:56px; padding:20px;
+    border:5px solid rgba(34,48,85,.85);
+    box-shadow: 0 18px 40px rgba(0,0,0,.30);
+  }
+
+  /* ===== Tables ===== */
+  .tableWrap{
+    overflow:auto;
+    border:1px solid rgba(34,48,85,.85);
+    border-radius:14px;
+    background: rgba(255,255,255,.03);
+  }
+  table{ width:100%; border-collapse:collapse; min-width: 980px; }
+  th,td{ border-bottom:1px dashed rgba(34,48,85,.90); padding:10px; text-align:left; vertical-align:middle; }
+  thead th{
+    position:sticky; top:0;
+    background: rgba(14,23,55,.92);
+    z-index:2;
+    font-size:12px;
+    color:rgba(233,240,255,.92);
+  }
+  tbody tr:hover{ background: rgba(255,255,255,.04); }
+  .right{text-align:right}
+
+  /* ===== KPI tiles ===== */
+  .kpis{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:12px;
+  }
+  @media (max-width: 1100px){
+    .kpis{ grid-template-columns: 1fr 1fr; }
+  }
+  .tile{
+    border:1px solid rgba(34,48,85,.85);
+    border-radius:16px;
+    padding:12px 14px;
+    background: linear-gradient(180deg, rgba(13,21,51,.85), rgba(255,255,255,.03));
+    box-shadow: 0 12px 30px rgba(0,0,0,.20);
+    min-height:90px;
+    position:relative;
+    overflow:hidden;
+  }
+  .tile:after{
+    content:"";
+    position:absolute; inset:-2px;
+    background: radial-gradient(400px 140px at 20% 0%, rgba(143,211,255,.18), transparent 65%),
+                radial-gradient(400px 140px at 80% 120%, rgba(53,211,160,.14), transparent 65%);
+    pointer-events:none;
+    opacity:.9;
+  }
+  .tile .label{ position:relative; z-index:1; color:rgba(197,210,244,.78); font-size:12px; }
+  .tile .val{ position:relative; z-index:1; font-weight:900; font-size:22px; margin-top:6px; }
+  .tile .sub{ position:relative; z-index:1; color:rgba(197,210,244,.75); font-size:12px; margin-top:2px; }
+  .kpi-s1{ border-left:4px solid rgba(53,211,160,.95); }
+  .kpi-s2{ border-left:4px solid rgba(255,204,102,.95); }
+  .kpi-s3{ border-left:4px solid rgba(115,192,255,.95); }
+
+  canvas{
+    width:100%;
+    height:260px;
+    background: rgba(13,21,51,.80);
+    border:1px solid rgba(34,48,85,.85);
+    border-radius:14px;
+    display:block;
+  }
+
+  /* ===== Front matter helpers ===== */
   .fixed-block{
     white-space:pre-wrap;
-    background:#0d1533;border:1px solid var(--border);border-radius:10px;
-    padding:10px 12px;color:var(--text);margin:0 0 10px;
+    background: rgba(13,21,51,.80);
+    border:1px solid rgba(34,48,85,.85);
+    border-radius:12px;
+    padding:10px 12px;
+    color:var(--text);
+    margin:0 0 10px;
   }
   .img-frame{
-    background:#0d1533;border:1px dashed var(--border);border-radius:12px;
-    padding:10px;display:flex;align-items:center;justify-content:center;
-    min-height:140px
+    background: rgba(13,21,51,.80);
+    border:1px dashed rgba(34,48,85,.95);
+    border-radius:14px;
+    padding:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:140px;
   }
   .report-wide-img{
     width:100%;
-    max-width:9in;              /* 9 inches wide */
-    height:3in;                 /* 3 inches tall */
+    max-width:9in; /* 9 inches wide */
+    height:3in;    /* 3 inches tall */
     object-fit:contain;
-    border-radius:10px;border:1px solid var(--border);
-    background:#0d1533;
+    border-radius:12px;
+    border:1px solid rgba(34,48,85,.85);
+    background: rgba(13,21,51,.80);
     display:none;
   }
 
-  /* Uncertainty table */
-  .unc-controls{justify-content:flex-end;margin-top:8px;gap:8px}
+  /* ===== Uncertainty table notes ===== */
   .unc-note{margin:0;color:var(--muted)}
-  .unc-subhdr{
-    font-size:.78rem;
-    color:var(--muted);
-    font-weight:500;
-  }
+  .unc-subhdr{ font-size:.78rem; color:rgba(197,210,244,.65); font-weight:500; }
 
-  /* ===== Print (PDF): clear white & readable ===== */
+  /* Accessibility */
+  .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+
+  /* ===== Print (PDF): force all tabs visible, clean) ===== */
   @media print {
     *{ color:#000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body{ background:#fff !important; }
-    header{ position:static !important; background:#fff !important; border:none !important; }
-    .wrap{ max-width:100%; padding:0 16px; }
-    section.card{ background:#fff !important; border:none; border-radius:0; padding:8px 0 }
-
-    /* Hide interactive UI in print, but KEEP factor unit + value visible */
-    .chips, .subtitle, .no-print, button, input[type=file], input[type=color],
-    .factor-row button,
-    #factorForm, #itemForm {
-      display: none !important;
-    }
-
-    section[aria-labelledby="meta-h"] { display:none !important; }
-
-    thead th{ position:static; background:#fff !important; }
-    th, td{ border-bottom:1px solid #000 !important; color:#000 !important; font-size:11pt; line-height:1.35; }
-    td:nth-child(5), th:nth-child(5){ font-weight:700; }
+    header, aside{ display:none !important; }
+    .app{ max-width:100%; padding:0 16px; grid-template-columns:1fr !important; }
+    main{ width:100% !important; }
+    .tab{ display:block !important; }
+    .card{ background:#fff !important; border:none !important; border-radius:0 !important; box-shadow:none !important; padding:8px 0 !important; }
+    .cover-wrap{ border:none !important; }
+    #clientLogo{ border:1px solid #000 !important; }
+    thead th{ position:static !important; background:#fff !important; }
+    th, td{ border-bottom:1px solid #000 !important; color:#000 !important; font-size:11pt !important; line-height:1.35 !important; }
     tbody tr:hover{ background:transparent !important; }
 
-    .print-only { display:block !important; }
-    .cover-wrap img#cover{ border:none; }
-    #clientLogo{ border:1px solid #000; }
-    .tile{ background:#fff; border:1px solid #000 }
-    .tile .val{ font-weight:700; }
-    th.actions, td.actions{ display:none !important; }
+    button, .btn, input[type=file], .no-print { display:none !important; }
 
     textarea, input, select{
       background:#fff !important;
@@ -155,464 +437,758 @@
       background:#fff !important;
       border:1px solid #000 !important;
     }
-    .report-wide-img{display:block !important;border:1px solid #000 !important;background:#fff !important}
+    .report-wide-img{ display:block !important; border:1px solid #000 !important; background:#fff !important; }
   }
 
-  body > header { position: static !important; top: auto !important; }
-
-  #factorList input,
-  #factorList select {
-    background: #fff !important;
-    color: #000 !important;
-    border: 1px solid #000 !important;
-    box-shadow: none !important;
+  /* Keep EF inputs printable and readable (like your original) */
+  #factorList input, #factorList select{
+    background:#fff !important;
+    color:#000 !important;
+    border:1px solid #000 !important;
+    box-shadow:none !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  #factorList input[aria-label="Name"] { font-weight: 700 !important; }
-  #factorList .factor-row input,
-  #factorList .factor-row select {
-    padding: 6px 8px !important;
-    font-size: 11pt !important;
-    line-height: 1.3 !important;
-  }
+  #factorList input[aria-label="Name"]{ font-weight:700 !important; }
+
 </style>
 </head>
+
 <body>
+
 <header>
-  <div class="wrap" role="banner" aria-label="Site header" style="text-align:center;">
-    <!-- Cover + client logo -->;
-    <div class="cover-wrap">
-      <img id="cover" src="amoc-cover.png" alt="AMOC Energy cover">
-      <img id="clientLogo" alt="Client logo (uploaded)">
+  <div class="header-inner" role="banner" aria-label="Site header">
+    <div class="brand">
+      <div class="logoMark" aria-hidden="true"><b>ISO</b></div>
+      <div class="brandTitle">
+        <b>ISO 14064 Carbon Footprint Calculator & Reporting Platform</b>
+        <span><span class="name">By Dr. Mohamed Abd Elsalam El Seuofy</span> • Scopes 1–3 • Local autosave • JSON import/export</span>
+      </div>
     </div>
 
-    <h1 style="margin-top:0.5rem;">
-      ISO 14064 Carbon Footprint Calculator and Reporting Platform by MOHAMED ABD ELSALAM EL SEUOFY
-    </h1>
-    <div class="subtitle" style="font-size:1.2rem;">
-      &lt;By Eng.Mohamed Abd Elsalam Seuofy- M: 01503463331- m.seuofy@outlook.com &gt;
-    </div>
+    <div class="topActions">
+      <span class="pill">Scopes 1 · 2 · 3</span>
+      <span class="pill">CSV / JSON</span>
+      <span class="pill">Print / PDF</span>
+      <span class="sep">|</span>
 
-    <div class="chips" style="margin-top:6px">
-      <span class="chip">Scopes 1 · 2 · 3</span>
-      <span class="chip">CSV / JSON Import</span>
-      <span class="chip">Local Autosave</span>
-    </div>
+      <button class="btn small" id="btnImportInventory" type="button" title="Import inventory JSON (restores meta + checklist + items + factors + uncertainty)">Import JSON</button>
+      <button class="btn small" id="exportCSV" type="button">Export CSV</button>
+      <button class="btn small" id="exportJSON" type="button">Export JSON</button>
+      <button class="btn small warn" id="printReport" type="button">Print / PDF</button>
+      <button class="btn small danger" id="clearAll" type="button">Clear all</button>
 
-    <!-- Client logo uploader -->
-    <div class="inline no-print" style="justify-content:center;margin-top:10px">
-      <label for="logoUpload" class="sr-only">Upload client logo</label>
-      <input id="logoUpload" type="file" accept="image/*" style="max-width:620px" />
-      <button type="button" id="removeLogo" class="ghost">Remove logo</button>
+      <input id="importInventory" type="file" accept="application/json,.json" class="sr-only" />
     </div>
   </div>
 </header>
 
-<!-- ===== Print-only snapshot so metadata appears as black text ===== -->
-<section class="card print-only" id="printMetaBlock" style="margin-top:16px">
-  <h2>Organization & Inventory Metadata</h2>
-  <table style="width:100%;border-collapse:collapse">
-    <tbody>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Organization name</th><td id="p_orgName" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Organization Description</th><td id="p_orgDesc" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Reporting period</th><td id="p_period" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Base year</th><td id="p_baseYear" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Organizational boundary</th><td id="p_boundary" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Verification level</th><td id="p_verification" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Prepared by</th><td id="p_preparedBy" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Inventory notes / boundary exclusions</th><td id="p_notes" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-      <tr><th style="text-align:left;padding:6px 8px;border-bottom:1px solid #000">Method notes</th><td id="p_method" style="padding:6px 8px;border-bottom:1px solid #000"></td></tr>
-    </tbody>
-  </table>
-</section>
+<div class="app">
+  <aside>
+    <div class="navTitle">Sheets</div>
 
-<main class="wrap" role="main">
+    <button class="navBtn" data-tab="tab-front">
+      <div><strong>01_Report_Front_Matter</strong><div class="tiny">Cover + report sections</div></div>
+      <span>🧾</span>
+    </button>
 
-  <!-- =========================
-       REPORT FRONT MATTER
-       (Inserted strictly BEFORE “Organization & Inventory Metadata”)
-       ========================= -->
-  <section class="card frontmatter" id="reportFrontMatter" aria-label="Report Front Matter">
-    <h1>Report Front Matter</h1>
+    <button class="navBtn" data-tab="tab-meta">
+      <div><strong>02_Metadata_Checklist</strong><div class="tiny">Organization + ISO checklist</div></div>
+      <span>🏷️</span>
+    </button>
 
-    <h2>1. Report Contents</h2>
-    <textarea id="reportContents" rows="4">[To be completed manually]</textarea>
+    <button class="navBtn" data-tab="tab-items">
+      <div><strong>03_Activity_Lines</strong><div class="tiny">Add + manage lines</div></div>
+      <span>🧮</span>
+    </button>
 
-    <h2>2. Abbreviations</h2>
-    <textarea id="abbreviations" rows="4">[To be completed manually]</textarea>
+    <button class="navBtn" data-tab="tab-dash">
+      <div><strong>04_Totals_Dashboard</strong><div class="tiny">KPIs + charts</div></div>
+      <span>📊</span>
+    </button>
 
-    <h2>3. Chairman Statement</h2>
-    <textarea id="chairmanStatement" rows="4">[To be completed manually]</textarea>
+    <button class="navBtn" data-tab="tab-unc">
+      <div><strong>05_Uncertainty</strong><div class="tiny">RSS uncertainty model</div></div>
+      <span>📐</span>
+    </button>
 
-    <h2>4. Executive Summary</h2>
-    <textarea id="executiveSummary" rows="4">[To be completed manually]</textarea>
+    <button class="navBtn" data-tab="tab-ef">
+      <div><strong>06_EF_Library</strong><div class="tiny">Factors import / edit</div></div>
+      <span>📚</span>
+    </button>
 
-    <h2>5. Company Profile</h2>
-    <textarea id="companyProfile" rows="4">[To be completed manually]</textarea>
+    <button class="navBtn" data-tab="tab-io">
+      <div><strong>07_Import_Export</strong><div class="tiny">Files + backups</div></div>
+      <span>📦</span>
+    </button>
 
-    <h2>6. Strategic Alignment</h2>
-    <textarea id="strategicAlignment" rows="4">[To be completed manually]</textarea>
+    <div class="navTitle" style="margin-top:14px;">Flow (VIP)</div>
+    <div class="qaBox">
+      <b>Keep the same calculations:</b><br>
+      Emissions = Activity × EF (kgCO₂e/unit) × (GWP if gas ≠ CO₂e) → tCO₂e
+      <div class="tiny" style="margin-top:8px;">
+        • Use EF Library or Custom EF<br>
+        • Auto-fill unit/EF from library<br>
+        • Uncertainty uses RSS: √(Ua² + Uef²)
+      </div>
+    </div>
 
-    <h2>7. Report Objectives &amp; Intended Users</h2>
-    <textarea id="reportObjectives" rows="4">[To be completed manually]</textarea>
+    <div class="qaBox" style="margin-top:10px;">
+      <div class="inline" style="justify-content:space-between">
+        <span class="badge ok">Autosave</span>
+        <span class="tiny">localStorage</span>
+      </div>
+      <div class="tiny" style="margin-top:8px;">
+        If you import JSON, the full state is restored (meta + checklist + items + factors + uncertainty).
+      </div>
+    </div>
+  </aside>
 
-    <h2>8. Methodology</h2>
-    <div class="fixed-block">The basic formula applied throughout this inventory:
+  <main role="main">
+
+    <!-- =========================
+         01 — REPORT FRONT MATTER
+         ========================= -->
+    <section id="tab-front" class="tab card" aria-label="Report Front Matter">
+      <div class="sectionTitle">
+        <h2>01_Report_Front_Matter</h2>
+        <div class="hint">Narrative sections + cover + client logo + report images</div>
+      </div>
+
+      <div class="cover-wrap">
+        <img id="cover" src="amoc-cover.png" alt="Cover image (optional)">
+        <img id="clientLogo" alt="Client logo (uploaded)">
+      </div>
+
+      <div class="inline no-print" style="justify-content:flex-end;margin-top:10px">
+        <label for="logoUpload" class="sr-only">Upload client logo</label>
+        <input id="logoUpload" type="file" accept="image/*" style="max-width:520px" />
+        <button type="button" id="removeLogo" class="btn ghost">Remove logo</button>
+      </div>
+
+      <div class="card" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;">
+        <div class="sectionTitle">
+          <h2 style="font-size:14px;margin:0;">Front Matter Sections</h2>
+          <div class="hint">Stored locally; included in JSON export</div>
+        </div>
+
+        <div class="grid grid-2">
+          <div>
+            <label for="reportContents">1. Report Contents</label>
+            <textarea id="reportContents" rows="4">[To be completed manually]</textarea>
+          </div>
+          <div>
+            <label for="abbreviations">2. Abbreviations</label>
+            <textarea id="abbreviations" rows="4">[To be completed manually]</textarea>
+          </div>
+
+          <div>
+            <label for="chairmanStatement">3. Chairman Statement</label>
+            <textarea id="chairmanStatement" rows="4">[To be completed manually]</textarea>
+          </div>
+          <div>
+            <label for="executiveSummary">4. Executive Summary</label>
+            <textarea id="executiveSummary" rows="4">[To be completed manually]</textarea>
+          </div>
+
+          <div>
+            <label for="companyProfile">5. Company Profile</label>
+            <textarea id="companyProfile" rows="4">[To be completed manually]</textarea>
+          </div>
+          <div>
+            <label for="strategicAlignment">6. Strategic Alignment</label>
+            <textarea id="strategicAlignment" rows="4">[To be completed manually]</textarea>
+          </div>
+
+          <div>
+            <label for="reportObjectives">7. Report Objectives &amp; Intended Users</label>
+            <textarea id="reportObjectives" rows="4">[To be completed manually]</textarea>
+          </div>
+
+          <div>
+            <label>8. Methodology</label>
+            <div class="fixed-block">The basic formula applied throughout this inventory:
 GHG Emissions = Σ (Activity Data × Emission Factor × GWP)</div>
-    <textarea id="methodologyMore" rows="4">[To be completed manually]</textarea>
+            <textarea id="methodologyMore" rows="4">[To be completed manually]</textarea>
+          </div>
 
-    <h2>9. Assumptions and Limitations</h2>
-    <textarea id="assumptionsLimitations" rows="4">[To be completed manually]</textarea>
+          <div>
+            <label for="assumptionsLimitations">9. Assumptions and Limitations</label>
+            <textarea id="assumptionsLimitations" rows="4">[To be completed manually]</textarea>
+          </div>
 
-    <h2>10. Principles</h2>
-    <pre class="fixed-block" style="margin:0">• Completeness: Inclusion of all significant GHG emissions and removals.
+          <div>
+            <label>10. Principles</label>
+            <pre class="fixed-block" style="margin:0">• Completeness: Inclusion of all significant GHG emissions and removals.
 • Consistency: Uniform application of assumptions, methods, and data throughout the study.
 • Coherence: Use of internationally recognized methodologies for comparability.
 • Accuracy: Ensuring the quantification of GHG emissions is accurate, verifiable, and transparent.
 • Transparency: Clear presentation of methodologies, assumptions, and data source</pre>
-
-    <h2>11. Report Plan</h2>
-    <!-- Report Plan Image: required size 3 inches × 9 inches -->
-    <div class="img-frame">
-      <img id="reportPlanImg" class="report-wide-img" alt="Report Plan Image (uploaded)">
-      <div id="reportPlanPlaceholder" class="muted" style="text-align:center">
-        [To be completed manually]<br><span class="small">(Upload image below)</span>
-      </div>
-    </div>
-    <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
-      <input id="reportPlanUpload" type="file" accept="image/*" style="max-width:620px" />
-      <button type="button" id="removeReportPlan" class="ghost">Remove image</button>
-    </div>
-
-    <h2>12. Process or Plant Flow Diagram</h2>
-    <!-- Process or Plant Flow Diagram: required size 3 inches × 9 inches -->
-    <div class="img-frame">
-      <img id="processFlowImg" class="report-wide-img" alt="Process or Plant Flow Diagram (uploaded)">
-      <div id="processFlowPlaceholder" class="muted" style="text-align:center">
-        [To be completed manually]<br><span class="small">(Upload image below)</span>
-      </div>
-    </div>
-    <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
-      <input id="processFlowUpload" type="file" accept="image/*" style="max-width:620px" />
-      <button type="button" id="removeProcessFlow" class="ghost">Remove image</button>
-    </div>
-  </section>
-
-  <!-- ORG METADATA (interactive; hidden in print to avoid duplication) -->
-  <section class="card" aria-labelledby="meta-h">
-    <h2 id="meta-h">Organization & Inventory Metadata</h2>
-    <div class="grid grid-3">
-      <div>
-        <label for="orgName">Organization name</label>
-        <input id="orgName" placeholder="Acme Manufacturing Ltd." />
-      </div>
-      <div>
-        <label for="orgDesc">Organization Description</label>
-        <input id="orgDesc" placeholder="Brief description of the organization" />
-      </div>
-      <div>
-        <label for="period">Reporting period (YYYY-MM-DD to YYYY-MM-DD)</label>
-        <input id="period" placeholder="2024-01-01 to 2024-12-31" />
-      </div>
-      <div>
-        <label for="baseYear">Base year</label>
-        <input id="baseYear" type="number" min="1900" max="2100" placeholder="2020" />
-      </div>
-      <div>
-        <label for="boundary">Organizational boundary</label>
-        <select id="boundary">
-          <option value="equity">Equity share</option>
-          <option value="control-financial">Control – Financial</option>
-          <option value="control-operational">Control – Operational</option>
-        </select>
-      </div>
-      <div>
-        <label for="verification">Verification level</label>
-        <select id="verification">
-          <option>None</option><option>Limited / Review</option><option>Reasonable Assurance</option>
-        </select>
-      </div>
-      <div>
-        <label for="preparedBy">Prepared by</label>
-        <input id="preparedBy" placeholder="Name, title" />
-      </div>
-    </div>
-    <div class="sep"></div>
-    <div class="grid grid-2">
-      <div>
-        <label for="notes">Inventory notes / boundary exclusions</label>
-        <textarea id="notes" rows="3" placeholder="Describe methods, exclusions, data sources, assumptions…"></textarea>
-      </div>
-      <div>
-        <label for="method">Method notes (market/location-based, refrigerants, etc.)</label>
-        <textarea id="method" rows="3" placeholder="e.g. Scope 2 market-based with supplier certificates; Scope 3 categories included…"></textarea>
-      </div>
-    </div>
-  </section>
-
-  <!-- ISO 14064-1 CHECKLIST -->
-  <section class="card" aria-labelledby="chk-h">
-    <h2 id="chk-h">ISO 14064-1 Checklist</h2>
-    <div class="grid grid-2" style="gap:18px">
-      <div>
-        <h3 class="small" style="margin:0 0 6px">1 — Define Boundaries</h3>
-        <label><input type="checkbox" id="c_org_bound"> Organizational boundaries (control or equity share)</label><br>
-        <label><input type="checkbox" id="c_rep_bound"> Reporting boundaries (direct & indirect emissions)</label>
-      </div>
-      <div>
-        <h3 class="small" style="margin:0 0 6px">2 — Identify Emissions</h3>
-        <label><input type="checkbox" id="c_list_sources"> List all GHG sources and sinks</label><br>
-        <label><input type="checkbox" id="c_all_ghg"> Include all relevant GHGs (CO₂, CH₄, N₂O, etc.)</label>
-      </div>
-      <div>
-        <h3 class="small" style="margin:0 0 6px">3 — Quantify Emissions</h3>
-        <label><input type="checkbox" id="c_collect_activity"> Collect activity data</label><br>
-        <label><input type="checkbox" id="c_apply_ef"> Apply emission factors</label><br>
-        <label><input type="checkbox" id="c_convert_co2e"> Convert to CO₂e using latest IPCC GWP</label><br>
-        <label><input type="checkbox" id="c_base_year"> Set base year and document it</label>
-      </div>
-      <div>
-        <h3 class="small" style="margin:0 0 6px">3 — Check Indirect Emissions</h3>
-        <label><input type="checkbox" id="c_imported_energy"> Imported energy (electricity, steam)</label><br>
-        <label><input type="checkbox" id="c_transport"> Transport (business travel, commuting)</label><br>
-        <label><input type="checkbox" id="c_products_services"> Products and services (upstream & downstream)</label>
-      </div>
-      <div>
-        <h3 class="small" style="margin:0 0 6px">4 — Manage Quality</h3>
-        <label><input type="checkbox" id="c_keep_records"> Keep records and calculations</label><br>
-        <label><input type="checkbox" id="c_review_accuracy"> Review data accuracy</label><br>
-        <label><input type="checkbox" id="c_assess_uncertainty"> Assess uncertainty</label>
-      </div>
-      <div>
-        <h3 class="small" style="margin:0 0 6px">5 — Reporting</h3>
-        <label><input type="checkbox" id="c_rpt_org_info"> Organization information</label><br>
-        <label><input type="checkbox" id="c_rpt_boundaries"> Boundaries</label><br>
-        <label><input type="checkbox" id="c_rpt_direct_indirect"> Direct/Indirect emissions</label><br>
-        <label><input type="checkbox" id="c_rpt_base_year"> Base year</label><br>
-        <label><input type="checkbox" id="c_rpt_methods"> Methods</label><br>
-        <label><input type="checkbox" id="c_rpt_uncertainty"> Uncertainty</label><br>
-        <label><input type="checkbox" id="c_rpt_verification"> Verification (Optional)</label><br>
-        <label><input type="checkbox" id="c_rpt_internal_review"> internal review</label>
-      </div>
-    </div>
-  </section>
-
-  <!-- ADD LINE ITEM -->
-  <section class="card" aria-labelledby="add-h">
-    <h2 id="add-h">Add Activity Line Item</h2>
-    <form id="itemForm" class="grid grid-3" autocomplete="off">
-      <div>
-        <label for="scope">Scope</label>
-        <select id="scope" required>
-          <option value="1">Scope 1 – Direct</option>
-          <option value="2">Scope 2 – Energy Indirect</option>
-          <option value="3">Scope 3 – Other Indirect</option>
-        </select>
-      </div>
-      <div>
-        <label for="category">Category</label>
-        <input id="category" list="categoryOptions" placeholder="Type or pick…" required />
-        <datalist id="categoryOptions">
-          <option value="Heating oil (process heat)">
-          <option value="Natural gas">
-          <option value="Leakage refrigerants">
-          <option value="Flare">
-          <option value="Diesel vehicles">
-          <option value="Gasoline vehicles">
-          <option value="Electricity consumption, electricity mix">
-          <option value="Purchased media">
-          <option value="Purchased goods and services">
-          <option value="Paper">
-          <option value="Water consumption">
-          <option value="Waste">
-          <option value="Recycled waste">
-          <option value="Non-recycled waste">
-        </datalist>
-      </div>
-      <div class="row">
-        <div>
-          <label for="activity">Activity amount</label>
-          <input id="activity" type="number" step="any" min="0" placeholder="e.g. 12,345" required />
+          </div>
         </div>
-        <div>
-          <label for="unit">Activity unit</label>
-          <select id="unit" required>
-            <option>kWh</option><option>MWh</option>
-            <option>MMBtu</option>
-            <option>litre</option><option>gallon</option>
-            <option>kg</option><option>tonne</option>
-            <option>km</option><option>mile</option>
-            <option>m3</option><option>unit</option>
-          </select>
+
+        <div class="grid grid-2" style="margin-top:14px;">
+          <div>
+            <label>11. Report Plan (3 in × 9 in)</label>
+            <div class="img-frame">
+              <img id="reportPlanImg" class="report-wide-img" alt="Report Plan Image (uploaded)">
+              <div id="reportPlanPlaceholder" class="muted" style="text-align:center">
+                [To be completed manually]<br><span class="tiny">(Upload image below)</span>
+              </div>
+            </div>
+            <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
+              <input id="reportPlanUpload" type="file" accept="image/*" style="max-width:520px" />
+              <button type="button" id="removeReportPlan" class="btn ghost">Remove image</button>
+            </div>
+          </div>
+
+          <div>
+            <label>12. Process / Plant Flow Diagram (3 in × 9 in)</label>
+            <div class="img-frame">
+              <img id="processFlowImg" class="report-wide-img" alt="Process or Plant Flow Diagram (uploaded)">
+              <div id="processFlowPlaceholder" class="muted" style="text-align:center">
+                [To be completed manually]<br><span class="tiny">(Upload image below)</span>
+              </div>
+            </div>
+            <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
+              <input id="processFlowUpload" type="file" accept="image/*" style="max-width:520px" />
+              <button type="button" id="removeProcessFlow" class="btn ghost">Remove image</button>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="row">
-        <div>
-          <label for="factorSelect">Emission factor (library)</label>
-          <select id="factorSelect">
-            <option value="">— Select factor —</option>
-          </select>
+    <!-- =========================
+         02 — METADATA + CHECKLIST
+         ========================= -->
+    <section id="tab-meta" class="tab card" aria-label="Metadata and checklist">
+      <div class="sectionTitle">
+        <h2>02_Metadata_Checklist</h2>
+        <div class="hint">Organization & inventory metadata + ISO 14064-1 checklist</div>
+      </div>
+
+      <section class="card" id="printMetaBlock" style="box-shadow:none;background:rgba(255,255,255,.03);">
+        <h2 style="margin:.2rem 0 10px;font-size:14px">Organization & Inventory Metadata (Print snapshot)</h2>
+        <div class="tiny">This block auto-populates before printing for clean PDF output.</div>
+        <div class="tableWrap" style="margin-top:10px">
+          <table style="min-width: 760px;">
+            <tbody>
+              <tr><th style="width:280px">Organization name</th><td id="p_orgName"></td></tr>
+              <tr><th>Organization Description</th><td id="p_orgDesc"></td></tr>
+              <tr><th>Reporting period</th><td id="p_period"></td></tr>
+              <tr><th>Base year</th><td id="p_baseYear"></td></tr>
+              <tr><th>Organizational boundary</th><td id="p_boundary"></td></tr>
+              <tr><th>Verification level</th><td id="p_verification"></td></tr>
+              <tr><th>Prepared by</th><td id="p_preparedBy"></td></tr>
+              <tr><th>Inventory notes / boundary exclusions</th><td id="p_notes"></td></tr>
+              <tr><th>Method notes</th><td id="p_method"></td></tr>
+            </tbody>
+          </table>
         </div>
-        <div>
-          <label for="ef">Or custom EF (kgCO₂e per unit)</label>
-          <input id="ef" type="number" step="any" min="0" placeholder="Leave blank if using library" />
+      </section>
+
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;" aria-labelledby="meta-h">
+        <div class="sectionTitle">
+          <h2 id="meta-h" style="font-size:14px;margin:0;">Organization & Inventory Metadata</h2>
+          <div class="hint">Saved locally; exported to JSON</div>
+        </div>
+
+        <div class="grid grid-3">
+          <div>
+            <label for="orgName">Organization name</label>
+            <input id="orgName" placeholder="Acme Manufacturing Ltd." />
+          </div>
+          <div>
+            <label for="orgDesc">Organization Description</label>
+            <input id="orgDesc" placeholder="Brief description of the organization" />
+          </div>
+          <div>
+            <label for="period">Reporting period (YYYY-MM-DD to YYYY-MM-DD)</label>
+            <input id="period" placeholder="2024-01-01 to 2024-12-31" />
+          </div>
+          <div>
+            <label for="baseYear">Base year</label>
+            <input id="baseYear" type="number" min="1900" max="2100" placeholder="2020" />
+          </div>
+          <div>
+            <label for="boundary">Organizational boundary</label>
+            <select id="boundary">
+              <option value="equity">Equity share</option>
+              <option value="control-financial">Control – Financial</option>
+              <option value="control-operational">Control – Operational</option>
+            </select>
+          </div>
+          <div>
+            <label for="verification">Verification level</label>
+            <select id="verification">
+              <option>None</option><option>Limited / Review</option><option>Reasonable Assurance</option>
+            </select>
+          </div>
+          <div>
+            <label for="preparedBy">Prepared by</label>
+            <input id="preparedBy" placeholder="Name, title" />
+          </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:12px">
+          <div>
+            <label for="notes">Inventory notes / boundary exclusions</label>
+            <textarea id="notes" rows="3" placeholder="Describe methods, exclusions, data sources, assumptions…"></textarea>
+          </div>
+          <div>
+            <label for="method">Method notes (market/location-based, refrigerants, etc.)</label>
+            <textarea id="method" rows="3" placeholder="e.g. Scope 2 market-based with supplier certificates; Scope 3 categories included…"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;" aria-labelledby="chk-h">
+        <div class="sectionTitle">
+          <h2 id="chk-h" style="font-size:14px;margin:0;">ISO 14064-1 Checklist</h2>
+          <div class="hint">Completion tracking (saved + exported)</div>
+        </div>
+
+        <div class="grid grid-2" style="gap:18px">
+          <div>
+            <h3 class="tiny" style="margin:0 0 6px">1 — Define Boundaries</h3>
+            <label><input type="checkbox" id="c_org_bound"> Organizational boundaries (control or equity share)</label><br>
+            <label><input type="checkbox" id="c_rep_bound"> Reporting boundaries (direct & indirect emissions)</label>
+          </div>
+          <div>
+            <h3 class="tiny" style="margin:0 0 6px">2 — Identify Emissions</h3>
+            <label><input type="checkbox" id="c_list_sources"> List all GHG sources and sinks</label><br>
+            <label><input type="checkbox" id="c_all_ghg"> Include all relevant GHGs (CO₂, CH₄, N₂O, etc.)</label>
+          </div>
+          <div>
+            <h3 class="tiny" style="margin:0 0 6px">3 — Quantify Emissions</h3>
+            <label><input type="checkbox" id="c_collect_activity"> Collect activity data</label><br>
+            <label><input type="checkbox" id="c_apply_ef"> Apply emission factors</label><br>
+            <label><input type="checkbox" id="c_convert_co2e"> Convert to CO₂e using latest IPCC GWP</label><br>
+            <label><input type="checkbox" id="c_base_year"> Set base year and document it</label>
+          </div>
+          <div>
+            <h3 class="tiny" style="margin:0 0 6px">3 — Check Indirect Emissions</h3>
+            <label><input type="checkbox" id="c_imported_energy"> Imported energy (electricity, steam)</label><br>
+            <label><input type="checkbox" id="c_transport"> Transport (business travel, commuting)</label><br>
+            <label><input type="checkbox" id="c_products_services"> Products and services (upstream & downstream)</label>
+          </div>
+          <div>
+            <h3 class="tiny" style="margin:0 0 6px">4 — Manage Quality</h3>
+            <label><input type="checkbox" id="c_keep_records"> Keep records and calculations</label><br>
+            <label><input type="checkbox" id="c_review_accuracy"> Review data accuracy</label><br>
+            <label><input type="checkbox" id="c_assess_uncertainty"> Assess uncertainty</label>
+          </div>
+          <div>
+            <h3 class="tiny" style="margin:0 0 6px">5 — Reporting</h3>
+            <label><input type="checkbox" id="c_rpt_org_info"> Organization information</label><br>
+            <label><input type="checkbox" id="c_rpt_boundaries"> Boundaries</label><br>
+            <label><input type="checkbox" id="c_rpt_direct_indirect"> Direct/Indirect emissions</label><br>
+            <label><input type="checkbox" id="c_rpt_base_year"> Base year</label><br>
+            <label><input type="checkbox" id="c_rpt_methods"> Methods</label><br>
+            <label><input type="checkbox" id="c_rpt_uncertainty"> Uncertainty</label><br>
+            <label><input type="checkbox" id="c_rpt_verification"> Verification (Optional)</label><br>
+            <label><input type="checkbox" id="c_rpt_internal_review"> Internal review</label>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- =========================
+         03 — ACTIVITY LINES
+         ========================= -->
+    <section id="tab-items" class="tab card" aria-label="Activity Lines">
+      <div class="sectionTitle">
+        <h2>03_Activity_Lines</h2>
+        <div class="hint">Add activity data + select EF (library) + compute emissions instantly</div>
+      </div>
+
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03);" aria-labelledby="add-h">
+        <div class="sectionTitle">
+          <h2 id="add-h" style="font-size:14px;margin:0;">Add Activity Line Item</h2>
+          <div class="hint">Emissions = Activity × EF × (GWP if gas ≠ CO₂e)</div>
+        </div>
+
+        <form id="itemForm" class="grid grid-3" autocomplete="off">
+          <div>
+            <label for="scope">Scope</label>
+            <select id="scope" required>
+              <option value="1">Scope 1 – Direct</option>
+              <option value="2">Scope 2 – Energy Indirect</option>
+              <option value="3">Scope 3 – Other Indirect</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="category">Category</label>
+            <input id="category" list="categoryOptions" placeholder="Type or pick…" required />
+            <datalist id="categoryOptions">
+              <option value="Heating oil (process heat)"></option>
+              <option value="Natural gas"></option>
+              <option value="Leakage refrigerants"></option>
+              <option value="Flare"></option>
+              <option value="Diesel vehicles"></option>
+              <option value="Gasoline vehicles"></option>
+              <option value="Electricity consumption, electricity mix"></option>
+              <option value="Purchased media"></option>
+              <option value="Purchased goods and services"></option>
+              <option value="Paper"></option>
+              <option value="Water consumption"></option>
+              <option value="Waste"></option>
+              <option value="Recycled waste"></option>
+              <option value="Non-recycled waste"></option>
+            </datalist>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="activity">Activity amount</label>
+              <input id="activity" type="number" step="any" min="0" placeholder="e.g. 12,345" required />
+            </div>
+            <div>
+              <label for="unit">Activity unit</label>
+              <select id="unit" required>
+                <option>kWh</option><option>MWh</option><option>MMBtu</option>
+                <option>litre</option><option>gallon</option>
+                <option>kg</option><option>tonne</option>
+                <option>km</option><option>mile</option>
+                <option>m3</option><option>unit</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="factorSelect">Emission factor (library)</label>
+              <select id="factorSelect">
+                <option value="">— Select factor —</option>
+              </select>
+              <div class="tiny" style="margin-top:6px;">Selecting a factor auto-fills unit + EF (+ gas/GWP if stored).</div>
+            </div>
+            <div>
+              <label for="ef">Or custom EF (kgCO₂e per unit)</label>
+              <input id="ef" type="number" step="any" min="0" placeholder="Leave blank if using library" />
+            </div>
+          </div>
+
+          <div class="row3">
+            <div>
+              <label for="gas">Gas (optional)</label>
+              <input id="gas" placeholder="e.g. CO2e, CH4, N2O" />
+            </div>
+            <div>
+              <label for="gwp">GWP (optional)</label>
+              <input id="gwp" type="number" step="any" min="0" placeholder="e.g. 27.2 for CH4" />
+            </div>
+            <div>
+              <label for="year">Data year</label>
+              <input id="year" type="number" min="1990" max="2100" placeholder="2024" />
+            </div>
+          </div>
+
+          <div>
+            <label for="source">Data / factor source</label>
+            <input id="source" placeholder="Supplier invoice, DEFRA 2024 table, EPA, IPCC…" />
+          </div>
+          <div>
+            <label for="itemNotes">Notes</label>
+            <input id="itemNotes" placeholder="Any assumptions or conversions" />
+          </div>
+
+          <div class="inline" style="align-items:flex-end; justify-content:flex-end;">
+            <button type="submit" id="addBtn" class="btn primary">+ Add line item</button>
+            <button type="button" class="btn ghost" id="resetForm">Clear form</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;" aria-labelledby="tbl-h">
+        <div class="sectionTitle">
+          <h2 id="tbl-h" style="font-size:14px;margin:0;">Activity Lines</h2>
+          <div class="hint">Emissions shown in tCO₂e</div>
+        </div>
+        <div class="tiny muted">Emissions = Activity × EF (kg CO₂e per unit) × (GWP if gas ≠ CO₂e) → tCO₂e</div>
+
+        <div class="tableWrap" style="margin-top:10px;">
+          <table aria-describedby="tbl-h">
+            <thead>
+              <tr>
+                <th>Scope</th><th>Category</th><th class="right">Activity</th><th>Unit</th>
+                <th class="right">EF (kgCO₂e/u)</th><th class="right">Emissions (tCO₂e)</th>
+                <th>Year</th><th>Source</th><th>Notes</th><th class="right actions no-print">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+
+        <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
+          <button class="btn ghost" id="btnGoTotals" type="button">Go to Dashboard</button>
+        </div>
+      </section>
+    </section>
+
+    <!-- =========================
+         04 — TOTALS DASHBOARD
+         ========================= -->
+    <section id="tab-dash" class="tab card" aria-label="Totals Dashboard">
+      <div class="sectionTitle">
+        <h2>04_Totals_Dashboard</h2>
+        <div class="hint">Live totals by scope + charts</div>
+      </div>
+
+      <div class="kpis">
+        <div class="tile kpi-s1">
+          <div class="label">Scope 1</div>
+          <div id="tS1" class="val">0.000 tCO₂e</div>
+          <div class="sub">Direct emissions</div>
+        </div>
+        <div class="tile kpi-s2">
+          <div class="label">Scope 2</div>
+          <div id="tS2" class="val">0.000 tCO₂e</div>
+          <div class="sub">Energy indirect</div>
+        </div>
+        <div class="tile kpi-s3">
+          <div class="label">Scope 3</div>
+          <div id="tS3" class="val">0.000 tCO₂e</div>
+          <div class="sub">Other indirect</div>
+        </div>
+        <div class="tile">
+          <div class="label">Grand total</div>
+          <div id="tAll" class="val">0.000 tCO₂e</div>
+          <div class="sub">Scopes 1+2+3</div>
         </div>
       </div>
 
-      <div class="row3">
-        <div>
-          <label for="gas">Gas (optional)</label>
-          <input id="gas" placeholder="e.g. CO2e, CH4, N2O" />
+      <div class="grid grid-2" style="margin-top:14px;">
+        <div class="card" style="box-shadow:none;background:rgba(255,255,255,.03);">
+          <div class="sectionTitle">
+            <h2 style="font-size:14px;margin:0;">Emissions by Scope (Bar)</h2>
+            <div class="hint">Canvas render</div>
+          </div>
+          <canvas id="chart" aria-label="Emissions by scope bar chart" role="img"></canvas>
         </div>
-        <div>
-          <label for="gwp">GWP (optional)</label>
-          <input id="gwp" type="number" step="any" min="0" placeholder="e.g. 27.2 for CH4" />
+
+        <div class="card" style="box-shadow:none;background:rgba(255,255,255,.03);">
+          <div class="sectionTitle">
+            <h2 style="font-size:14px;margin:0;">Scope Share (Donut)</h2>
+            <div class="hint">Quick visual</div>
+          </div>
+          <canvas id="donut" aria-label="Emissions share donut chart" role="img"></canvas>
+          <div class="tiny" id="donutNote" style="margin-top:8px;"></div>
         </div>
-        <div>
-          <label for="year">Data year</label>
-          <input id="year" type="number" min="1990" max="2100" placeholder="2024" />
+      </div>
+    </section>
+
+    <!-- =========================
+         05 — UNCERTAINTY
+         ========================= -->
+    <section id="tab-unc" class="tab card" aria-label="Uncertainty Assessment">
+      <div class="sectionTitle">
+        <h2>05_Uncertainty</h2>
+        <div class="hint">Uncertainty Assessment (RSS) with sync from Activity Lines</div>
+      </div>
+
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03);" aria-labelledby="unc-h">
+        <h2 id="unc-h" style="margin:.2rem 0 10px;font-size:14px">UNCERTAINTY ASSESSMENT</h2>
+        <p class="unc-note tiny">
+          Enter <strong>U activity</strong> and <strong>U emission factor</strong> as <strong>percent values</strong> (example: type <strong>5</strong> to represent <strong>5%</strong>).
+          Emissions are manual input, or you can load calculated emissions from Activity Lines.
+        </p>
+
+        <div class="inline no-print" style="justify-content:flex-end;margin-top:10px;gap:8px">
+          <button type="button" id="uncSync" class="btn ghost">Sync activities from Activity Lines</button>
+          <button type="button" id="uncLoadEmissions" class="btn ghost">Load calculated emissions</button>
+          <button type="button" id="uncAddRow" class="btn primary">+ Add blank row</button>
         </div>
+
+        <div class="tableWrap" style="margin-top:10px;">
+          <table aria-describedby="unc-h">
+            <thead>
+              <tr>
+                <th>Activity / Emission Source</th>
+                <th class="right">Emissions<br><span class="unc-subhdr">t CO₂e</span></th>
+                <th class="right">U activity<br><span class="unc-subhdr">%</span></th>
+                <th class="right">U emission factor<br><span class="unc-subhdr">%</span></th>
+                <th class="right">Ua2</th>
+                <th class="right">Uef2</th>
+                <th class="right">ua2 + uef2</th>
+                <th class="right">sqr u absolute 2</th>
+                <th class="right">Emiss * UNCER.</th>
+                <th class="right">(Emiss * UNCER.)^2</th>
+                <th class="right no-print">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="uncBody"></tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-3" style="gap:12px;margin-top:12px">
+          <div class="tile">
+            <div class="label">Total emissions</div>
+            <div id="uncTotalEmissions" class="val">0.000</div>
+            <div class="sub">tCO₂e</div>
+          </div>
+          <div class="tile">
+            <div class="label">Total absolute uncertainty (RSS)</div>
+            <div id="uncTotalAbs" class="val">0.000</div>
+            <div class="sub">tCO₂e</div>
+          </div>
+          <div class="tile">
+            <div class="label">Total uncertainty (%)</div>
+            <div id="uncTotalPct" class="val">0.00%</div>
+            <div class="sub">Abs / Total</div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <!-- =========================
+         06 — EMISSION FACTOR LIBRARY
+         ========================= -->
+    <section id="tab-ef" class="tab card" aria-label="Emission Factor Library">
+      <div class="sectionTitle">
+        <h2>06_EF_Library</h2>
+        <div class="hint">Import factors + edit library (keeps your calculation flow)</div>
       </div>
 
-      <div>
-        <label for="source">Data / factor source</label>
-        <input id="source" placeholder="Supplier invoice, DEFRA 2024 table, EPA, IPCC…" />
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03);" aria-labelledby="ef-h">
+        <h2 id="ef-h" style="margin:.2rem 0 10px;font-size:14px">Emission Factor Library</h2>
+        <p class="tiny">Import JSON or CSV/TSV with columns: <em>Description</em>, <em>Emission factor</em>, <em>Unit</em>, <em>EF-Source</em>, optional <em>Gas</em>, <em>GWP</em>, <em>Year</em>. EFs are in kg CO₂e per unit.</p>
+
+        <div class="inline no-print" style="justify-content:flex-end;gap:8px">
+          <button type="button" class="btn ghost" id="exportFactors">Export factors JSON</button>
+          <label class="sr-only" for="importFactors">Import factors</label>
+          <input id="importFactors" type="file" accept=".json,.csv,.tsv,text/csv,text/tab-separated-values,application/json" style="max-width:420px" />
+        </div>
+
+        <div id="factorList" class="grid" style="gap:12px;margin-top:12px"></div>
+
+        <div class="card no-print" style="box-shadow:none;background:rgba(255,255,255,.02); margin-top:12px;">
+          <div class="sectionTitle">
+            <h2 style="font-size:14px;margin:0;">Add Emission Factor</h2>
+            <div class="hint">Stored in factors library (kgCO₂e per unit)</div>
+          </div>
+
+          <form id="factorForm" class="grid grid-3" autocomplete="off" aria-label="Add emission factor">
+            <div>
+              <label for="f_name">Name</label>
+              <input id="f_name" placeholder="Name (e.g. Grid electricity, country…)" required />
+            </div>
+            <div>
+              <label for="f_unit">Unit</label>
+              <select id="f_unit">
+                <option>kWh</option><option>MWh</option><option>MMBtu</option>
+                <option>litre</option><option>gallon</option><option>kg</option><option>tonne</option>
+                <option>km</option><option>mile</option><option>m3</option><option>unit</option>
+              </select>
+            </div>
+            <div>
+              <label for="f_value">EF value (kgCO₂e/u)</label>
+              <input id="f_value" type="number" step="any" min="0" placeholder="EF value" required />
+            </div>
+
+            <div>
+              <label for="f_gas">Gas (optional)</label>
+              <input id="f_gas" placeholder="Gas (optional)" />
+            </div>
+            <div>
+              <label for="f_gwp">GWP (optional)</label>
+              <input id="f_gwp" type="text" placeholder="GWP (optional)" />
+            </div>
+            <div>
+              <label for="f_year">Year</label>
+              <input id="f_year" type="number" min="1990" max="2100" placeholder="Year" />
+            </div>
+
+            <div class="grid" style="grid-column:1/-1; gap:10px;">
+              <div>
+                <label for="f_source">EF source</label>
+                <input id="f_source" placeholder="EF source" />
+              </div>
+              <div class="inline" style="justify-content:flex-end;">
+                <button type="submit" class="btn primary">+ Add</button>
+                <button type="button" class="btn ghost" id="btnClearFactorForm">Clear</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </section>
+
+    <!-- =========================
+         07 — IMPORT / EXPORT
+         ========================= -->
+    <section id="tab-io" class="tab card" aria-label="Import Export">
+      <div class="sectionTitle">
+        <h2>07_Import_Export</h2>
+        <div class="hint">Backups + restore (JSON) + quick actions</div>
       </div>
-      <div>
-        <label for="itemNotes">Notes</label>
-        <input id="itemNotes" placeholder="Any assumptions or conversions" />
+
+      <div class="grid grid-2">
+        <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03);">
+          <div class="sectionTitle">
+            <h2 style="font-size:14px;margin:0;">Inventory JSON</h2>
+            <div class="hint">Import restores everything</div>
+          </div>
+
+          <div class="inline no-print" style="justify-content:flex-start; gap:8px;">
+            <button class="btn primary" type="button" id="btnImportInventory2">Import JSON</button>
+            <button class="btn" type="button" id="btnExportJSON2">Export JSON</button>
+          </div>
+
+          <div class="tiny" style="margin-top:10px;">
+            Supported shapes:
+            <div class="fixed-block" style="margin-top:8px;">{ "meta":{...}, "checklist":{...}, "items":[...], "factors":[...], "uncertaintyRows":[...] }</div>
+          </div>
+        </section>
+
+        <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03);">
+          <div class="sectionTitle">
+            <h2 style="font-size:14px;margin:0;">Quick Tools</h2>
+            <div class="hint">Exports + print</div>
+          </div>
+
+          <div class="inline no-print" style="justify-content:flex-start;gap:8px;">
+            <button class="btn" type="button" id="btnExportCSV2">Export CSV</button>
+            <button class="btn warn" type="button" id="btnPrint2">Print / PDF</button>
+            <button class="btn danger" type="button" id="btnClear2">Clear all</button>
+          </div>
+
+          <div class="tiny" style="margin-top:10px;">
+            Tip: Import JSON is the safest way to move projects between devices without losing factors or uncertainty rows.
+          </div>
+        </section>
       </div>
-      <div class="inline" style="align-items:flex-end">
-        <button type="submit" id="addBtn">+ Add line item</button>
-        <button type="button" class="ghost" id="resetForm">Clear form</button>
-      </div>
-    </form>
-  </section>
 
-  <!-- LINE ITEMS TABLE -->
-  <section class="card" aria-labelledby="tbl-h">
-    <h2 id="tbl-h">Activity Lines</h2>
-    <div class="small muted">Emissions = Activity × EF (kg CO₂e per unit) × (GWP if gas ≠ CO₂e) → tCO₂e</div>
-    <table aria-describedby="tbl-h">
-      <thead>
-        <tr>
-          <th>Scope</th><th>Category</th><th class="right">Activity</th><th>Unit</th>
-          <th class="right">EF (kgCO₂e/u)</th><th class="right">Emissions (tCO₂e)</th>
-          <th>Year</th><th>Source</th><th>Notes</th><th class="right actions no-print">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="itemsBody"></tbody>
-    </table>
-    <div class="inline" style="justify-content:flex-end;margin-top:10px;gap:8px">
-      <button class="ghost" id="clearAll">Clear all items</button>
-      <button id="exportCSV">Export CSV</button>
-      <button id="exportJSON">Export JSON</button>
-      <button class="warn" id="printReport">Print / PDF</button>
-    </div>
-  </section>
+      <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;">
+        <div class="sectionTitle">
+          <h2 style="font-size:14px;margin:0;">Notes</h2>
+          <div class="hint">Local autosave</div>
+        </div>
+        <div class="fixed-block" style="margin:0">
+Your data is stored locally in this browser (autosave).
+Use Export JSON for a full backup.
+Use Import JSON to restore the full project state.
+        </div>
+      </section>
+    </section>
 
-  <!-- TOTALS + BAR CHART -->
-  <section class="card" aria-labelledby="t-h">
-    <h2 id="t-h">Totals</h2>
-    <div class="totals">
-      <div class="tile kpi-s1"><div class="muted">Scope 1</div><div id="tS1" class="val">0.000 tCO₂e</div></div>
-      <div class="tile kpi-s2"><div class="muted">Scope 2</div><div id="tS2" class="val">0.000 tCO₂e</div></div>
-      <div class="tile kpi-s3"><div class="muted">Scope 3</div><div id="tS3" class="val">0.000 tCO₂e</div></div>
-      <div class="tile"><div class="muted">Grand total</div><div id="tAll" class="val">0.000 tCO₂e</div></div>
-    </div>
-    <div style="margin-top:12px">
-      <canvas id="chart" aria-label="Emissions by scope bar chart" role="img"></canvas>
-    </div>
-  </section>
+    <footer class="tiny" style="margin:16px 0 30px; color:rgba(197,210,244,.70);">
+      Tip: Your data is stored locally in this browser (autosave). Export CSV/JSON to share or archive.
+    </footer>
 
-  <!-- UNCERTAINTY ASSESSMENT -->
-  <section class="card" id="uncertaintySection" aria-labelledby="unc-h">
-    <h2 id="unc-h">UNCERTAINTY ASSESSMENT</h2>
-    <p class="unc-note small">
-      Enter <strong>U activity</strong> and <strong>U emission factor</strong> as <strong>percent values</strong> (example: type <strong>5</strong> to represent <strong>5%</strong>). Emissions are manual input, or you can load calculated emissions from Activity Lines.
-    </p>
-
-    <div class="inline unc-controls no-print">
-      <button type="button" id="uncSync" class="ghost">Sync activities from Activity Lines</button>
-      <button type="button" id="uncLoadEmissions" class="ghost">Load calculated emissions</button>
-      <button type="button" id="uncAddRow">+ Add blank row</button>
-    </div>
-
-    <table aria-describedby="unc-h">
-      <thead>
-        <tr>
-          <th>Activity / Emission Source</th>
-          <th class="right">Emissions<br><span class="unc-subhdr">t CO₂e</span></th>
-          <th class="right">U activity<br><span class="unc-subhdr">%</span></th>
-          <th class="right">U emission factor<br><span class="unc-subhdr">%</span></th>
-          <th class="right">Ua2</th>
-          <th class="right">Uef2</th>
-          <th class="right">ua2 + uef2</th>
-          <th class="right">sqr u absolute 2</th>
-          <th class="right">Emiss * UNCER.</th>
-          <th class="right">(Emiss * UNCER.)^2</th>
-          <th class="right no-print">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="uncBody"></tbody>
-    </table>
-
-    <div class="sep"></div>
-
-    <div class="grid grid-3" style="gap:12px">
-      <div class="tile">
-        <div class="muted small">Total emissions (tCO₂e)</div>
-        <div id="uncTotalEmissions" class="val">0.000</div>
-      </div>
-      <div class="tile">
-        <div class="muted small">Total absolute uncertainty (RSS)</div>
-        <div id="uncTotalAbs" class="val">0.000</div>
-      </div>
-      <div class="tile">
-        <div class="muted small">Total uncertainty (%)</div>
-        <div id="uncTotalPct" class="val">0.00%</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EMISSION FACTOR LIBRARY -->
-  <section class="card" aria-labelledby="ef-h">
-    <h2 id="ef-h">Emission Factor Library</h2>
-    <p class="small">Import JSON or CSV/TSV with columns: <em>Description</em>, <em>Emission factor</em>, <em>Unit</em>, <em>EF-Source</em>, optional <em>Gas</em>, <em>GWP</em>, <em>Year</em>. EFs are in kg CO₂e per unit.</p>
-
-    <div class="inline no-print" style="justify-content:flex-end;gap:8px">
-      <button type="button" class="ghost" id="exportFactors">Export factors JSON</button>
-      <label class="sr-only" for="importFactors">Import factors</label>
-      <input id="importFactors" type="file" accept=".json,.csv,.tsv,text/csv,text/tab-separated-values,application/json" style="max-width:360px" />
-    </div>
-
-    <div id="factorList" class="grid" style="gap:12px"></div>
-    <div class="sep"></div>
-
-    <form id="factorForm" class="factor-row" autocomplete="off" aria-label="Add emission factor">
-      <input id="f_name" placeholder="Name (e.g. Grid electricity, country…)" required />
-      <select id="f_unit">
-        <option>kWh</option><option>MWh</option><option>MMBtu</option>
-        <option>litre</option><option>gallon</option><option>kg</option><option>tonne</option>
-        <option>km</option><option>mile</option><option>m3</option><option>unit</option>
-      </select>
-      <input id="f_value" type="number" step="any" min="0" placeholder="EF value" required />
-      <input id="f_gas" placeholder="Gas (optional)" />
-      <input id="f_gwp" type="text" placeholder="GWP (optional)" />
-      <input id="f_source" placeholder="EF source" />
-      <input id="f_year" type="number" min="1990" max="2100" placeholder="Year" />
-      <button type="submit">+ Add</button>
-    </form>
-  </section>
-
-  <footer class="small" style="margin:16px 0 30px">
-    <div class="muted">Tip: Your data is stored locally in this browser (autosave). Export CSV/JSON to share or archive.</div>
-  </footer>
-</main>
+  </main>
+</div>
 
 <script>
+/* ============================================================
+   ISO 14064 Platform — Sheets UI + JSON Import (VIP)
+   ✔️ Kept original calculation logic
+   ✔️ Charts fixed (draw only when visible + reliable canvas sizing)
+   ✔️ Import robust (BOM / code fences)
+   ============================================================ */
+
 /* ========= Defaults ========= */
 const defaultFactors = [
   { id:'ef_grid_kwh', name:'Grid electricity (example)', unit:'kWh', value:0.5, gas:'', gwp:'', source:'[Example]', year:'' },
@@ -621,8 +1197,9 @@ const defaultFactors = [
 ];
 
 /* ========= State ========= */
-const storageKey = 'iso14064_ghg_platform_v1';
+const storageKey = 'iso14064_ghg_platform_v2_sheets';
 let state = {
+  ui: { activeTab: 'tab-front' },
   meta: {
     orgName:'', orgDesc:'', period:'', baseYear:'',
     boundary:'equity', verification:'None',
@@ -652,34 +1229,78 @@ function uid(){ return Math.random().toString(36).slice(2,9); }
 function fmt(n, d=3){ const x = Number(n||0); return x.toLocaleString(undefined,{maximumFractionDigits:d, minimumFractionDigits:d}); }
 function toTonnes(kg){ return (Number(kg)||0)/1000; }
 function ensureNumber(x){ const n = Number(x); return isFinite(n) ? n : 0; }
+function escapeHTML(s=''){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+function csvCell(x){
+  if(x===null||x===undefined) return '';
+  const s = String(x);
+  if(/[",\n]/.test(s)) return `"${s.replace(/"/g,'""')}"`;
+  return s;
+}
+function download(filename, content){
+  const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+}
+function toast(msg){
+  const el = document.createElement('div');
+  el.textContent = msg;
+  Object.assign(el.style,{
+    position:'fixed',bottom:'18px',left:'50%',transform:'translateX(-50%)',
+    background:'rgba(22,34,74,.95)',border:'1px solid rgba(34,48,85,.95)',
+    padding:'10px 14px',borderRadius:'12px',color:'#e9f0ff',zIndex:9999,
+    boxShadow:'0 14px 34px rgba(0,0,0,.35)'
+  });
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1600);
+}
+
+/* ========= Persistence ========= */
 function save(){ localStorage.setItem(storageKey, JSON.stringify(state)); }
 function load(){
   const raw = localStorage.getItem(storageKey);
-  if(raw){ try{ state = { ...state, ...JSON.parse(raw) }; }catch(e){} }
+  if(!raw) return;
+  try{
+    const parsed = JSON.parse(raw);
+    state = normalizeImportedState(parsed, { keepUI:true });
+  }catch(e){}
 }
 function resetAll(){
   if(!confirm('Clear all items and metadata? This cannot be undone.')) return;
   state.items = [];
   state.uncertaintyRows = [];
-  save(); render();
+  save(); renderAll(); toast('Cleared items + uncertainty');
 }
 
-/* ========= Metadata ========= */
+/* ========= Sheet Navigation ========= */
+const navBtns = [...document.querySelectorAll('.navBtn')];
+const tabs = [...document.querySelectorAll('.tab')];
+
+function redrawDashboardCharts(){
+  requestAnimationFrame(() => requestAnimationFrame(() => totals({ drawCharts: true })));
+}
+
+function setActiveTab(id){
+  state.ui.activeTab = id;
+  save();
+  renderTabs();
+  if (id === 'tab-dash') redrawDashboardCharts();
+}
+function renderTabs(){
+  tabs.forEach(t => t.classList.toggle('active', t.id === state.ui.activeTab));
+  navBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-tab') === state.ui.activeTab));
+  if(location.hash.replace('#','') !== state.ui.activeTab){
+    history.replaceState(null,'', '#' + state.ui.activeTab);
+  }
+}
+
+/* ========= Metadata binding (bind once) ========= */
 const metaIds = [
   'orgName','orgDesc','period','baseYear','boundary','verification','preparedBy','notes','method',
   'reportContents','abbreviations','chairmanStatement','executiveSummary','companyProfile','strategicAlignment',
   'reportObjectives','methodologyMore','assumptionsLimitations'
 ];
-function bindMeta(){
-  metaIds.forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.value = state.meta[id] || '';
-    el.addEventListener('input', ()=>{ state.meta[id] = el.value; save(); });
-  });
-}
-
-/* ========= Checklist ========= */
 const checkIds = [
   'c_org_bound','c_rep_bound','c_list_sources','c_all_ghg',
   'c_collect_activity','c_apply_ef','c_convert_co2e','c_base_year',
@@ -689,12 +1310,29 @@ const checkIds = [
   'c_rpt_base_year','c_rpt_methods','c_rpt_uncertainty',
   'c_rpt_verification','c_rpt_internal_review'
 ];
-function bindChecklist(){
+
+function bindMetaOnce(){
+  metaIds.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el || el.dataset.bound) return;
+    el.value = state.meta[id] || '';
+    el.addEventListener('input', ()=>{
+      state.meta[id] = el.value;
+      save();
+    });
+    el.dataset.bound = '1';
+  });
+}
+function bindChecklistOnce(){
   checkIds.forEach(id=>{
     const el = document.getElementById(id);
-    if(!el) return;
+    if(!el || el.dataset.bound) return;
     el.checked = !!state.checklist[id];
-    el.addEventListener('change', ()=>{ state.checklist[id] = el.checked; save(); });
+    el.addEventListener('change', ()=>{
+      state.checklist[id] = el.checked;
+      save();
+    });
+    el.dataset.bound = '1';
   });
 }
 
@@ -718,14 +1356,14 @@ function setupLogoUpload(){
     const reader = new FileReader();
     reader.onload = () => {
       state.meta.logoDataUrl = reader.result;
-      save(); renderLogo();
+      save(); renderLogo(); toast('Logo updated');
     };
     reader.readAsDataURL(file);
     e.target.value = '';
   });
   document.getElementById('removeLogo').addEventListener('click', ()=>{
     state.meta.logoDataUrl = '';
-    save(); renderLogo();
+    save(); renderLogo(); toast('Logo removed');
   });
 }
 
@@ -764,27 +1402,28 @@ function setupReportImagesUpload(){
     if(!file) return;
     if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
     const reader = new FileReader();
-    reader.onload = ()=>{ state.meta.reportPlanDataUrl = reader.result; save(); renderReportImages(); };
+    reader.onload = ()=>{ state.meta.reportPlanDataUrl = reader.result; save(); renderReportImages(); toast('Report plan image updated'); };
     reader.readAsDataURL(file);
     e.target.value = '';
   });
+
   pfUp.addEventListener('change', (e)=>{
     const file = e.target.files && e.target.files[0];
     if(!file) return;
     if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
     const reader = new FileReader();
-    reader.onload = ()=>{ state.meta.processFlowDataUrl = reader.result; save(); renderReportImages(); };
+    reader.onload = ()=>{ state.meta.processFlowDataUrl = reader.result; save(); renderReportImages(); toast('Process flow image updated'); };
     reader.readAsDataURL(file);
     e.target.value = '';
   });
 
   document.getElementById('removeReportPlan').addEventListener('click', ()=>{
     state.meta.reportPlanDataUrl = '';
-    save(); renderReportImages();
+    save(); renderReportImages(); toast('Report plan image removed');
   });
   document.getElementById('removeProcessFlow').addEventListener('click', ()=>{
     state.meta.processFlowDataUrl = '';
-    save(); renderReportImages();
+    save(); renderReportImages(); toast('Process flow image removed');
   });
 }
 
@@ -803,44 +1442,93 @@ function renderFactors(){
   const list = document.getElementById('factorList');
   list.innerHTML = '';
   if(!state.factors.length){
-    const p = document.createElement('p'); p.className='small muted'; p.textContent='No factors yet. Import or add one below.';
+    const p = document.createElement('p'); p.className='tiny muted'; p.textContent='No factors yet. Import or add one below.';
     list.appendChild(p); renderFactorSelect(); return;
   }
+
   state.factors.forEach(f=>{
     const row = document.createElement('div');
-    row.className = 'factor-row';
+    row.className = 'grid';
+    row.style.gap = '10px';
+    row.style.padding = '12px';
+    row.style.border = '1px solid rgba(34,48,85,.85)';
+    row.style.borderRadius = '14px';
+    row.style.background = 'rgba(13,21,51,.55)';
+
     row.innerHTML = `
-      <input aria-label="Name" value="${escapeHTML(f.name)}" />
-      <select aria-label="Unit">${unitsOptions(f.unit)}</select>
-      <input aria-label="Value" type="number" step="any" min="0" value="${f.value}" />
-      <input aria-label="Gas" value="${escapeHTML(f.gas||'')}" />
-      <input aria-label="GWP" type="text" value="${escapeHTML(f.gwp||'')}" />
-      <input aria-label="Source" value="${escapeHTML(f.source||'')}" />
-      <input aria-label="Year" type="number" min="1990" max="2100" value="${escapeHTML(f.year||'')}" />
-      <button data-id="${f.id}" class="ghost">Delete</button>
-      <button data-id="${f.id}">Save</button>
+      <div class="grid grid-3" style="gap:10px;">
+        <div>
+          <label class="tiny">Name</label>
+          <input aria-label="Name" value="${escapeHTML(f.name)}" />
+        </div>
+        <div>
+          <label class="tiny">Unit</label>
+          <select aria-label="Unit">${unitsOptions(f.unit)}</select>
+        </div>
+        <div>
+          <label class="tiny">EF value (kgCO₂e/u)</label>
+          <input aria-label="Value" type="number" step="any" min="0" value="${f.value}" />
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="gap:10px;">
+        <div>
+          <label class="tiny">Gas</label>
+          <input aria-label="Gas" value="${escapeHTML(f.gas||'')}" placeholder="optional" />
+        </div>
+        <div>
+          <label class="tiny">GWP</label>
+          <input aria-label="GWP" type="text" value="${escapeHTML(f.gwp||'')}" placeholder="optional" />
+        </div>
+        <div>
+          <label class="tiny">Year</label>
+          <input aria-label="Year" type="number" min="1990" max="2100" value="${escapeHTML(f.year||'')}" />
+        </div>
+      </div>
+
+      <div class="grid" style="gap:10px;">
+        <div>
+          <label class="tiny">Source</label>
+          <input aria-label="Source" value="${escapeHTML(f.source||'')}" placeholder="reference / URL / dataset" />
+        </div>
+        <div class="inline no-print" style="justify-content:flex-end;">
+          <button data-id="${f.id}" class="btn ghost" type="button">Delete</button>
+          <button data-id="${f.id}" class="btn primary" type="button">Save</button>
+        </div>
+      </div>
     `;
-    const [nameEl, unitEl, valEl, gasEl, gwpEl, srcEl, yearEl, delBtn, saveBtn] = row.children;
+
+    const inputs = row.querySelectorAll('input,select');
+    const [nameEl, unitEl, valEl, gasEl, gwpEl, yearEl, srcEl] = inputs;
+
+    const buttons = row.querySelectorAll('button');
+    const delBtn = buttons[0];
+    const saveBtn = buttons[1];
 
     delBtn.addEventListener('click', ()=>{
       state.factors = state.factors.filter(x=>x.id!==f.id);
-      save(); render();
+      save(); renderFactors(); renderFactorSelect(); toast('Factor deleted');
     });
+
     saveBtn.addEventListener('click', ()=>{
       f.name = nameEl.value.trim() || 'Unnamed factor';
       f.unit = unitEl.value;
       f.value = ensureNumber(valEl.value);
       f.gas = gasEl.value.trim();
       f.gwp = gwpEl.value.trim();
-      f.source = srcEl.value.trim();
       f.year = yearEl.value.trim();
-      save(); renderFactorSelect(); toast('Factor saved');
+      f.source = srcEl.value.trim();
+      save();
+      renderFactorSelect();
+      toast('Factor saved');
     });
 
     list.appendChild(row);
   });
+
   renderFactorSelect();
 }
+
 function addFactor(e){
   e.preventDefault();
   const name = document.getElementById('f_name').value.trim();
@@ -852,42 +1540,11 @@ function addFactor(e){
   const year = document.getElementById('f_year').value.trim();
   if(!name || !isFinite(value) || value < 0) return alert('Please provide a valid factor name and non-negative value.');
   state.factors.push({ id: uid(), name, unit, value, gas, gwp, source, year });
-  save(); render(); clearFactorForm();
+  save(); renderFactors(); renderFactorSelect(); clearFactorForm(); toast('Factor added');
 }
 function clearFactorForm(){
   ['f_name','f_value','f_gas','f_gwp','f_source','f_year'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f_unit').value='kWh';
-}
-async function importFactorsFile(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const text = await file.text();
-  try{
-    let parsed;
-    if(file.type.includes('json') || text.trim().startsWith('[') || text.trim().startsWith('{')){
-      const obj = JSON.parse(text);
-      parsed = Array.isArray(obj) ? obj : (Array.isArray(obj.factors) ? obj.factors : null);
-      if(!parsed) throw new Error('JSON must be an array of factors or { "factors": [...] }');
-      parsed = parsed.map(toFactorShapeFromJSON);
-    }else{
-      parsed = parseDelimitedToFactors(text);
-    }
-    const cleaned = parsed.map(f => ({
-      id: uid(),
-      name: String(f.name || '').trim() || 'Unnamed factor',
-      unit: String(f.unit || '').trim() || 'unit',
-      value: ensureNumber(f.value),
-      gas:  (f.gas??'').toString(),
-      gwp:  (f.gwp??'').toString(),
-      source:(f.source??'').toString(),
-      year:  (f.year??'').toString()
-    })).filter(f => isFinite(f.value) && f.value >= 0);
-    if(!cleaned.length) throw new Error('No valid factors found.');
-    state.factors = cleaned; save(); render();
-    toast(`Imported ${cleaned.length} factors`);
-  }catch(err){
-    alert('Import failed: ' + err.message);
-  }finally{ e.target.value = ''; }
 }
 function toFactorShapeFromJSON(x){
   return {
@@ -935,10 +1592,63 @@ function parseDelimitedToFactors(text){
   }
   return rows;
 }
+async function importFactorsFile(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const text = await file.text();
+  try{
+    let parsed;
+    if(file.type.includes('json') || text.trim().startsWith('[') || text.trim().startsWith('{')){
+      const obj = JSON.parse(text.replace(/^\uFEFF/,'').trim());
+      parsed = Array.isArray(obj) ? obj : (Array.isArray(obj.factors) ? obj.factors : null);
+      if(!parsed) throw new Error('JSON must be an array of factors or { "factors": [...] }');
+      parsed = parsed.map(toFactorShapeFromJSON);
+    }else{
+      parsed = parseDelimitedToFactors(text);
+    }
+    const cleaned = parsed.map(f => ({
+      id: uid(),
+      name: String(f.name || '').trim() || 'Unnamed factor',
+      unit: String(f.unit || '').trim() || 'unit',
+      value: ensureNumber(f.value),
+      gas:  (f.gas??'').toString(),
+      gwp:  (f.gwp??'').toString(),
+      source:(f.source??'').toString(),
+      year:  (f.year??'').toString()
+    })).filter(f => isFinite(f.value) && f.value >= 0);
+
+    if(!cleaned.length) throw new Error('No valid factors found.');
+    state.factors = cleaned;
+    save();
+    renderFactors();
+    renderFactorSelect();
+    toast(`Imported ${cleaned.length} factors`);
+  }catch(err){
+    alert('Import failed: ' + err.message);
+  }finally{ e.target.value = ''; }
+}
 function exportFactors(){ download('emission_factors.json', JSON.stringify(state.factors,null,2)); }
 
-/* ========= Items ========= */
+/* ========= Items (VIP: keep original calculation flow) ========= */
 const defaultGWP = { 'CH4': 27.2, 'N2O': 273 };
+
+function onFactorSelectChange(){
+  const id = getVal('factorSelect');
+  const efInput = document.getElementById('ef');
+  if(!id){ efInput.value=''; return; }
+  const f = state.factors.find(x=>x.id===id); if(!f) return;
+  efInput.value = f.value;
+  setVal('unit', f.unit);
+  if(f.gas && !getVal('gas')) setVal('gas', f.gas);
+  const gwpNum = Number(f.gwp);
+  if(isFinite(gwpNum) && gwpNum>0 && !getVal('gwp')) setVal('gwp', String(gwpNum));
+}
+function onGasChange(){
+  const gas = (getVal('gas')||'').toUpperCase();
+  if(defaultGWP[gas] && !getVal('gwp')){
+    setVal('gwp', String(defaultGWP[gas]));
+  }
+}
 
 function addItem(e){
   e.preventDefault();
@@ -984,19 +1694,33 @@ function addItem(e){
     emissionsKg, gas, gwp: gwpRaw, year, source, notes
   };
   state.items.push(item);
-  save(); render();
+  save();
+  renderItems();
+  totals();            // auto draws charts only if dashboard active
+  renderUncertainty(); // keep sync behavior
   document.getElementById('itemForm').reset();
   document.getElementById('factorSelect').value='';
+  toast('Line item added ✔️');
 }
-function deleteItem(id){ state.items = state.items.filter(x=>x.id!==id); save(); render(); }
+function deleteItem(id){
+  state.items = state.items.filter(x=>x.id!==id);
+  save(); renderItems(); totals(); renderUncertainty();
+  toast('Line removed');
+}
 function editItem(id){
   const it = state.items.find(x=>x.id===id); if(!it) return;
   setVal('scope', it.scope); setVal('category', it.category); setVal('activity', it.activity);
   setVal('unit', it.unit); setVal('ef', it.efBase); setVal('gas', it.gas); setVal('gwp', it.gwp);
   setVal('year', it.year||''); setVal('source', it.source||''); setVal('itemNotes', it.notes||'');
   document.getElementById('factorSelect').value='';
-  state.items = state.items.filter(x=>x.id!==it.id); save(); render(); toast('Line loaded into form for editing');
+  state.items = state.items.filter(x=>x.id!==it.id);
+  save(); renderItems(); totals(); renderUncertainty();
+  toast('Loaded for editing (old row removed)');
+  setActiveTab('tab-items');
 }
+window.deleteItem = deleteItem;
+window.editItem = editItem;
+
 function renderItems(){
   const tbody = document.getElementById('itemsBody'); tbody.innerHTML='';
   if(!state.items.length){
@@ -1009,66 +1733,206 @@ function renderItems(){
     const efLabel = gwpApplied
       ? `${fmt(it.ef,3)} (GWP×${Number(it.gwp).toFixed(2)})`
       : fmt(it.ef,3);
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>Scope ${it.scope}</td>
+      <td>Scope ${escapeHTML(it.scope)}</td>
       <td>${escapeHTML(it.category)}</td>
       <td class="right">${fmt(it.activity, 3)}</td>
-      <td>${it.unit}</td>
+      <td>${escapeHTML(it.unit)}</td>
       <td class="right" title="Base EF: ${fmt(it.efBase,3)}; Gas: ${escapeHTML(it.gas||'')}; GWP: ${escapeHTML(it.gwp||'')}">${efLabel}</td>
       <td class="right">${fmt(toTonnes(it.emissionsKg), 3)}</td>
       <td>${escapeHTML(it.year||'')}</td>
       <td>${escapeHTML(it.source||it.efName||'')}</td>
       <td>${escapeHTML(it.notes||'')}</td>
       <td class="right actions no-print">
-        <button class="ghost" onclick="editItem('${it.id}')">Edit</button>
-        <button class="danger" onclick="deleteItem('${it.id}')">Delete</button>
+        <button class="btn ghost small" onclick="editItem('${it.id}')" type="button">Edit</button>
+        <button class="btn danger small" onclick="deleteItem('${it.id}')" type="button">Delete</button>
       </td>`;
     tbody.appendChild(tr);
   });
 }
 
-/* ========= Totals + Chart ========= */
-function totals(){
-  const s1 = state.items.filter(x=>x.scope==='1').reduce((a,b)=>a+b.emissionsKg,0);
-  const s2 = state.items.filter(x=>x.scope==='2').reduce((a,b)=>a+b.emissionsKg,0);
-  const s3 = state.items.filter(x=>x.scope==='3').reduce((a,b)=>a+b.emissionsKg,0);
-  const all = s1+s2+s3;
+/* ========= Charts helpers ========= */
+function getCanvasCSSSize(canvas) {
+  const cw = canvas?.clientWidth || 0;
+  const ch = canvas?.clientHeight || 0;
+  if (cw > 0 && ch > 0) return { w: cw, h: ch };
+  const cs = canvas ? getComputedStyle(canvas) : null;
+  const w = cs ? (parseFloat(cs.width) || 0) : 0;
+  const h = cs ? (parseFloat(cs.height) || 0) : 0;
+  return { w, h };
+}
+function canvasHasSize(canvas) {
+  const { w, h } = getCanvasCSSSize(canvas);
+  return w > 10 && h > 10;
+}
+
+/* ========= Totals + Charts ========= */
+function totals(opts = {}) {
+  const drawCharts = (opts.drawCharts !== undefined) ? !!opts.drawCharts : (state?.ui?.activeTab === 'tab-dash');
+
+  const s1 = state.items.filter(x => x.scope === '1').reduce((a, b) => a + (b.emissionsKg || 0), 0);
+  const s2 = state.items.filter(x => x.scope === '2').reduce((a, b) => a + (b.emissionsKg || 0), 0);
+  const s3 = state.items.filter(x => x.scope === '3').reduce((a, b) => a + (b.emissionsKg || 0), 0);
+  const all = s1 + s2 + s3;
+
   setText('tS1', `${fmt(toTonnes(s1))} tCO₂e`);
   setText('tS2', `${fmt(toTonnes(s2))} tCO₂e`);
   setText('tS3', `${fmt(toTonnes(s3))} tCO₂e`);
   setText('tAll', `${fmt(toTonnes(all))} tCO₂e`);
-  drawChart([toTonnes(s1), toTonnes(s2), toTonnes(s3)]);
-}
-function drawChart(vals){
-  const c = document.getElementById('chart'); const ctx = c.getContext('2d');
-  const w = c.width = c.clientWidth * devicePixelRatio;
-  const h = c.height = c.clientHeight * devicePixelRatio;
-  ctx.setTransform(1,0,0,1,0,0);
-  ctx.scale(devicePixelRatio, devicePixelRatio);
-  ctx.fillStyle = '#0d1533'; ctx.fillRect(0,0,w,h);
-  const pad = 28; const areaW = c.clientWidth - pad*2; const areaH = c.clientHeight - pad*2;
-  const max = Math.max(1, ...vals) * 1.15;
-  ctx.strokeStyle='#223055'; ctx.lineWidth=1;
-  for(let i=0;i<=4;i++){
-    const y = pad + areaH - (i/4)*areaH;
-    ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(pad+areaW,y); ctx.stroke();
-    ctx.fillStyle='#7d8ab0'; ctx.font='12px system-ui'; ctx.fillText((max*i/4).toFixed(1), 4, y+4);
+
+  if (drawCharts) {
+    drawChart([toTonnes(s1), toTonnes(s2), toTonnes(s3)]);
+    drawDonut([toTonnes(s1), toTonnes(s2), toTonnes(s3)]);
   }
-  const colors = ['#5ad1a6','#ffd166','#73c0ff']; const labels = ['S1','S2','S3'];
-  const barW = areaW/6;
-  vals.forEach((v,i)=>{
-    const x = pad + barW*(1 + i*2);
-    const hBar = (v/max)*areaH;
+}
+
+function drawChart(vals) {
+  const c = document.getElementById('chart');
+  if (!canvasHasSize(c)) return;
+
+  const ctx = c.getContext('2d');
+  const { w: cssW, h: cssH } = getCanvasCSSSize(c);
+  if (cssW <= 10 || cssH <= 10) return;
+
+  c.width = Math.max(1, Math.round(cssW * devicePixelRatio));
+  c.height = Math.max(1, Math.round(cssH * devicePixelRatio));
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  ctx.fillStyle = 'rgba(13,21,51,.92)';
+  ctx.fillRect(0, 0, cssW, cssH);
+
+  const pad = 28;
+  const areaW = Math.max(10, cssW - pad * 2);
+  const areaH = Math.max(10, cssH - pad * 2);
+  const max = Math.max(1e-9, ...vals, 1) * 1.15;
+
+  ctx.strokeStyle = 'rgba(34,48,85,.85)';
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 4; i++) {
+    const y = pad + areaH - (i / 4) * areaH;
+    ctx.beginPath();
+    ctx.moveTo(pad, y);
+    ctx.lineTo(pad + areaW, y);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(197,210,244,.80)';
+    ctx.font = '12px system-ui';
+    ctx.fillText((max * i / 4).toFixed(2), 6, y + 4);
+  }
+
+  const colors = ['rgba(53,211,160,.95)', 'rgba(255,204,102,.95)', 'rgba(115,192,255,.95)'];
+  const labels = ['S1', 'S2', 'S3'];
+  const barW = areaW / 6;
+
+  vals.forEach((v, i) => {
+    const x = pad + barW * (1 + i * 2);
+    const hBar = (v / max) * areaH;
     const y = pad + areaH - hBar;
-    ctx.fillStyle = colors[i]; ctx.fillRect(x, y, barW, hBar);
-    ctx.fillStyle = '#c8d2ee'; ctx.font='12px system-ui';
-    ctx.fillText(labels[i], x+barW/2-8, pad+areaH+16);
-    ctx.fillText(v.toFixed(2)+' t', x+barW/2-18, y-6);
+
+    ctx.fillStyle = 'rgba(255,255,255,.06)';
+    ctx.fillRect(x - 2, y - 2, barW + 4, hBar + 4);
+
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(x, y, barW, hBar);
+
+    ctx.fillStyle = 'rgba(233,240,255,.92)';
+    ctx.font = '12px system-ui';
+    ctx.fillText(labels[i], x + barW / 2 - 10, pad + areaH + 16);
+    ctx.fillText(v.toFixed(3) + ' t', x + barW / 2 - 24, Math.max(12, y - 8));
   });
 }
 
-/* ========= Uncertainty Assessment (updated to match your example) ========= */
+function drawDonut(vals) {
+  const c = document.getElementById('donut');
+  if (!canvasHasSize(c)) return;
+
+  const ctx = c.getContext('2d');
+  const { w: cssW, h: cssH } = getCanvasCSSSize(c);
+  if (cssW <= 10 || cssH <= 10) return;
+
+  c.width = Math.max(1, Math.round(cssW * devicePixelRatio));
+  c.height = Math.max(1, Math.round(cssH * devicePixelRatio));
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  ctx.fillStyle = 'rgba(13,21,51,.92)';
+  ctx.fillRect(0, 0, cssW, cssH);
+
+  const total = vals.reduce((a, b) => a + b, 0);
+  const note = document.getElementById('donutNote');
+
+  const cx = cssW / 2;
+  const cy = cssH / 2;
+
+  let r = Math.min(cssW, cssH) * 0.30;
+  r = Math.max(14, r);
+
+  let ring = 22;
+  ring = Math.min(r * 0.60, ring);
+  ring = Math.max(6, ring);
+
+  if (!total) {
+    if (note) note.textContent = 'No emissions yet — add activity lines to see scope shares.';
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(34,48,85,.85)';
+    ctx.lineWidth = ring;
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+    return;
+  }
+
+  const colors = ['rgba(53,211,160,.95)', 'rgba(255,204,102,.95)', 'rgba(115,192,255,.95)'];
+  const labels = ['Scope 1', 'Scope 2', 'Scope 3'];
+
+  let a0 = -Math.PI / 2;
+  for (let i = 0; i < 3; i++) {
+    const frac = vals[i] / total;
+    const a1 = a0 + frac * Math.PI * 2;
+    ctx.beginPath();
+    ctx.strokeStyle = colors[i];
+    ctx.lineWidth = ring;
+    ctx.lineCap = 'butt';
+    ctx.arc(cx, cy, r, a0, a1);
+    ctx.stroke();
+    a0 = a1;
+  }
+
+  const innerR = Math.max(2, r - ring / 2);
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(13,21,51,.92)';
+  ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(233,240,255,.95)';
+  ctx.font = '800 18px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('Total', cx, cy - 6);
+  ctx.font = '900 18px system-ui';
+  ctx.fillText(fmt(total, 3) + ' t', cx, cy + 16);
+
+  // legend
+  let y = 16;
+  ctx.textAlign = 'left';
+  ctx.font = '12px system-ui';
+  for (let i = 0; i < 3; i++) {
+    const pct = (vals[i] / total * 100);
+    ctx.fillStyle = colors[i];
+    ctx.fillRect(16, y, 10, 10);
+    ctx.fillStyle = 'rgba(197,210,244,.92)';
+    ctx.fillText(`${labels[i]}: ${pct.toFixed(1)}%`, 32, y + 10);
+    y += 18;
+  }
+
+  if (note) note.textContent = 'Scope shares are based on total emissions (tCO₂e).';
+}
+
+/* ========= Uncertainty (kept logic) ========= */
 function ensureUncertaintyArray(){
   if(!Array.isArray(state.uncertaintyRows)) state.uncertaintyRows = [];
 }
@@ -1084,14 +1948,7 @@ function syncUncertaintyFromItems(){
       existing.activity = name;
       next.push(existing);
     }else{
-      next.push({
-        id: uid(),
-        itemId: it.id,
-        activity: name,
-        emissions: '',   // manual (or load)
-        ua: '',          // manual (%)
-        uef: ''          // manual (%)
-      });
+      next.push({ id: uid(), itemId: it.id, activity: name, emissions:'', ua:'', uef:'' });
     }
   });
 
@@ -1099,6 +1956,7 @@ function syncUncertaintyFromItems(){
   state.uncertaintyRows = next;
   save();
   renderUncertainty();
+  toast('Uncertainty synced');
 }
 function loadCalculatedEmissionsIntoUncertainty(){
   ensureUncertaintyArray();
@@ -1111,17 +1969,11 @@ function loadCalculatedEmissionsIntoUncertainty(){
   });
   save();
   renderUncertainty();
+  toast('Loaded emissions into uncertainty');
 }
 function addBlankUncertaintyRow(){
   ensureUncertaintyArray();
-  state.uncertaintyRows.push({
-    id: uid(),
-    itemId: '',
-    activity: '',
-    emissions: '',
-    ua: '',
-    uef: ''
-  });
+  state.uncertaintyRows.push({ id: uid(), itemId:'', activity:'', emissions:'', ua:'', uef:'' });
   save();
   renderUncertainty();
 }
@@ -1131,27 +1983,6 @@ function removeUncertaintyRow(id){
   renderUncertainty();
 }
 
-/*
-  Inputs:
-   - Emissions in tCO2e (manual or loaded)
-   - Ua entered as percent number (e.g. 1 means 1%)
-   - Uef entered as percent number (e.g. 5 means 5%)
-
-  Calculations (Excel-equivalent):
-   uaDec = Ua/100
-   uefDec = Uef/100
-   ua2Dec = (uaDec)^2
-   uef2Dec = (uefDec)^2
-   sumDec = ua2Dec + uef2Dec
-   sqrtDec = SQRT(sumDec)
-   absUnc = Emissions * sqrtDec
-   absUnc2 = (absUnc)^2
-
-  Display to match your screenshot:
-   - Ua, Uef shown as "X%"
-   - Ua2, Uef2, sum shown as percent (ua2Dec*100, etc.)
-   - sqrt shown as percent (sqrtDec*100)
-*/
 function computeUncRow(r){
   const emissions = Number(r.emissions);
   const uaPct = Number(r.ua);
@@ -1173,19 +2004,16 @@ function computeUncRow(r){
   const absUnc = (hasEm && isFinite(sqrtDec)) ? (emissions * sqrtDec) : NaN;
   const absUnc2 = isFinite(absUnc) ? absUnc*absUnc : NaN;
 
-  return { emissions, uaPct, uefPct, uaDec, uefDec, ua2Dec, uef2Dec, sumDec, sqrtDec, absUnc, absUnc2 };
+  return { emissions, ua2Dec, uef2Dec, sumDec, sqrtDec, absUnc, absUnc2 };
 }
 function pctFromDec(dec, decimals){
   if(!isFinite(dec)) return '';
   return (dec*100).toFixed(decimals) + '%';
 }
-function pctFromPctInput(pct, decimals){
-  if(!isFinite(pct)) return '';
-  return Number(pct).toFixed(decimals) + '%';
-}
 function renderUncertainty(){
   ensureUncertaintyArray();
   const tbody = document.getElementById('uncBody');
+  if(!tbody) return;
   tbody.innerHTML = '';
 
   if(!state.uncertaintyRows.length){
@@ -1202,37 +2030,25 @@ function renderUncertainty(){
 
   state.uncertaintyRows.forEach((r)=>{
     const c = computeUncRow(r);
-    const tr = document.createElement('tr');
 
-    // Display like the example:
-    // Ua2 and Uef2 as percent values (e.g., 0.01% and 0.25000%)
     const ua2Pct = pctFromDec(c.ua2Dec, 5);
     const uef2Pct = pctFromDec(c.uef2Dec, 5);
     const sumPct = pctFromDec(c.sumDec, 5);
     const sqrtPct = pctFromDec(c.sqrtDec, 2);
 
+    const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>
-        <input data-unc-id="${r.id}" data-unc-field="activity" placeholder="(manual)" value="${escapeHTML(r.activity||'')}" />
-      </td>
-      <td class="right">
-        <input data-unc-id="${r.id}" data-unc-field="emissions" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.emissions||'')}" />
-      </td>
-      <td class="right">
-        <input data-unc-id="${r.id}" data-unc-field="ua" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.ua||'')}" />
-      </td>
-      <td class="right">
-        <input data-unc-id="${r.id}" data-unc-field="uef" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.uef||'')}" />
-      </td>
+      <td><input data-unc-id="${r.id}" data-unc-field="activity" placeholder="(manual)" value="${escapeHTML(r.activity||'')}" /></td>
+      <td class="right"><input data-unc-id="${r.id}" data-unc-field="emissions" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.emissions||'')}" /></td>
+      <td class="right"><input data-unc-id="${r.id}" data-unc-field="ua" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.ua||'')}" /></td>
+      <td class="right"><input data-unc-id="${r.id}" data-unc-field="uef" type="number" step="any" placeholder="(manual)" value="${escapeHTML(r.uef||'')}" /></td>
       <td class="right">${ua2Pct}</td>
       <td class="right">${uef2Pct}</td>
       <td class="right">${sumPct}</td>
       <td class="right">${sqrtPct}</td>
       <td class="right">${isFinite(c.absUnc) ? fmt(c.absUnc, 3) : ''}</td>
       <td class="right">${isFinite(c.absUnc2) ? fmt(c.absUnc2, 1) : ''}</td>
-      <td class="right no-print">
-        <button class="danger" type="button" data-unc-del="${r.id}">Delete</button>
-      </td>
+      <td class="right no-print"><button class="btn danger small" type="button" data-unc-del="${r.id}">Delete</button></td>
     `;
     tbody.appendChild(tr);
   });
@@ -1245,8 +2061,9 @@ function updateUncertaintyTotals(){
   let sumAbs2 = 0;
 
   state.uncertaintyRows.forEach(r=>{
+    const emissions = Number(r.emissions);
     const c = computeUncRow(r);
-    if(isFinite(c.emissions)) totalEm += c.emissions;
+    if(isFinite(emissions)) totalEm += emissions;
     if(isFinite(c.absUnc2)) sumAbs2 += c.absUnc2;
   });
 
@@ -1288,50 +2105,109 @@ function getTotalsSnapshot(){
   return { scope1: get('1'), scope2: get('2'), scope3: get('3') };
 }
 
-/* ========= Helpers ========= */
-function setText(id, txt){ const el = document.getElementById(id); if(el) el.textContent = txt; }
-function setVal(id, val){ const el = document.getElementById(id); if(el) el.value = val; }
-function getVal(id){ const el = document.getElementById(id); return el ? el.value : ''; }
-function csvCell(x){
-  if(x===null||x===undefined) return '';
-  const s = String(x);
-  if(/[",\n]/.test(s)) return `"${s.replace(/"/g,'""')}"`;
-  return s;
-}
-function download(filename, content){
-  const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
-}
-function escapeHTML(s=''){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
-function toast(msg){
-  const el = document.createElement('div');
-  el.textContent = msg;
-  Object.assign(el.style,{position:'fixed',bottom:'18px',left:'50%',transform:'translateX(-50%)',background:'#1a2447',border:'1px solid #223055',padding:'10px 14px',borderRadius:'10px',color:'#e9f0ff',zIndex:9999});
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(),1600);
-}
-
-/* ========= Factor→form autofill & gas→GWP helper ========= */
-function onFactorSelectChange(){
-  const id = getVal('factorSelect'); const efInput = document.getElementById('ef');
-  if(!id){ efInput.value=''; return; }
-  const f = state.factors.find(x=>x.id===id); if(!f) return;
-  efInput.value = f.value;
-  setVal('unit', f.unit);
-  if(f.gas){ setVal('gas', f.gas); }
-  const gwpNum = Number(f.gwp); if(isFinite(gwpNum) && gwpNum>0){ setVal('gwp', String(gwpNum)); }
-}
-function onGasChange(){
-  const gas = (getVal('gas')||'').toUpperCase();
-  if(defaultGWP[gas] && !getVal('gwp')){
-    setVal('gwp', String(defaultGWP[gas]));
+/* ========= Inventory JSON Import (robust) ========= */
+function sanitizeJSONText(raw){
+  let t = String(raw || "");
+  t = t.replace(/^\uFEFF/, "").trim();
+  if (t.startsWith("```")) {
+    t = t.replace(/^```[a-zA-Z]*\s*/, "");
+    t = t.replace(/\s*```$/, "");
+    t = t.trim();
   }
+  t = t.replace(/^\s*```$/gm, "").trim();
+  return t;
+}
+async function importInventoryFile(file){
+  const raw = await file.text();
+  const obj = JSON.parse(sanitizeJSONText(raw));
+  state = normalizeImportedState(obj, { keepUI:true });
+  save();
+  renderAll();
+  if (state.ui.activeTab === 'tab-dash') redrawDashboardCharts();
+  toast('Imported inventory JSON ✔️');
 }
 
-/* ========= Print snapshot (for clear black-text report) ========= */
+function normalizeImportedState(obj, opts={ keepUI:false }){
+  const next = {
+    ui: { activeTab: state?.ui?.activeTab || 'tab-front' },
+    meta: {...state.meta},
+    checklist: {...state.checklist},
+    items: [],
+    factors: defaultFactors.map(f=>({ ...f })),
+    uncertaintyRows: []
+  };
+
+  const src = (obj && typeof obj === 'object') ? obj : {};
+  const srcMeta = src.meta && typeof src.meta === 'object' ? src.meta : (src.state?.meta || null);
+  const srcChk  = src.checklist && typeof src.checklist === 'object' ? src.checklist : (src.state?.checklist || null);
+  const srcItems = Array.isArray(src.items) ? src.items : (Array.isArray(src.state?.items) ? src.state.items : []);
+  const srcFactors = Array.isArray(src.factors) ? src.factors : (Array.isArray(src.state?.factors) ? src.state.factors : []);
+  const srcUnc = Array.isArray(src.uncertaintyRows) ? src.uncertaintyRows : (Array.isArray(src.state?.uncertaintyRows) ? src.state.uncertaintyRows : []);
+  const srcUI = src.ui && typeof src.ui === 'object' ? src.ui : null;
+
+  if(srcMeta) next.meta = { ...next.meta, ...srcMeta };
+  if(srcChk) next.checklist = { ...next.checklist, ...srcChk };
+
+  if(srcFactors.length){
+    next.factors = srcFactors.map(f => ({
+      id: (f.id || uid()),
+      name: String(f.name ?? f.Description ?? f.description ?? 'Unnamed factor').trim() || 'Unnamed factor',
+      unit: String(f.unit ?? f.Unit ?? 'unit').trim() || 'unit',
+      value: ensureNumber(f.value ?? f['Emission factor'] ?? f.emission_factor ?? 0),
+      gas:  String(f.gas ?? f.Gas ?? ''),
+      gwp:  String(f.gwp ?? f.GWP ?? ''),
+      source: String(f.source ?? f['EF-Source'] ?? f.Source ?? ''),
+      year: String(f.year ?? f.Year ?? '')
+    })).filter(x => isFinite(x.value) && x.value >= 0);
+    if(!next.factors.length) next.factors = defaultFactors.map(f=>({ ...f }));
+  }
+
+  next.items = srcItems.map(it => normalizeItem(it)).filter(Boolean);
+  next.uncertaintyRows = srcUnc.map(r => ({
+    id: r.id || uid(),
+    itemId: r.itemId || '',
+    activity: r.activity || '',
+    emissions: r.emissions ?? '',
+    ua: r.ua ?? '',
+    uef: r.uef ?? ''
+  }));
+
+  const allowedTabs = new Set(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io']);
+  if(opts.keepUI && srcUI && allowedTabs.has(srcUI.activeTab)) next.ui.activeTab = srcUI.activeTab;
+  if(opts.keepUI && state?.ui?.activeTab && allowedTabs.has(state.ui.activeTab)) next.ui.activeTab = state.ui.activeTab;
+  if(!opts.keepUI && srcUI && allowedTabs.has(srcUI.activeTab)) next.ui.activeTab = srcUI.activeTab;
+
+  return next;
+}
+function normalizeItem(it){
+  if(!it || typeof it !== 'object') return null;
+  const scope = String(it.scope ?? '').trim();
+  if(!['1','2','3'].includes(scope)) return null;
+
+  const activity = ensureNumber(it.activity);
+  const ef = ensureNumber(it.ef ?? it.efEffective ?? 0);
+  const efBase = ensureNumber(it.efBase ?? (it.ef && it.gwp ? (Number(it.gwp)>0 ? (it.ef/Number(it.gwp)) : it.ef) : 0));
+  const emissionsKg = isFinite(Number(it.emissionsKg)) ? ensureNumber(it.emissionsKg) : (activity * ef);
+
+  return {
+    id: it.id || uid(),
+    scope,
+    category: String(it.category ?? '').trim(),
+    activity,
+    unit: String(it.unit ?? '').trim(),
+    efBase,
+    ef,
+    efName: String(it.efName ?? it.source ?? 'Imported').trim(),
+    emissionsKg,
+    gas: String(it.gas ?? '').trim(),
+    gwp: String(it.gwp ?? '').trim(),
+    year: String(it.year ?? '').trim(),
+    source: String(it.source ?? '').trim(),
+    notes: String(it.notes ?? '').trim()
+  };
+}
+
+/* ========= Print snapshot (clean PDF) ========= */
 function buildPrintSnapshot(){
   const get = id => (document.getElementById(id)?.value || '').toString();
   const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
@@ -1347,10 +2223,30 @@ function buildPrintSnapshot(){
   set('p_method', get('method'));
 }
 
-/* ========= Init ========= */
+/* ========= DOM helpers ========= */
+function setText(id, txt){ const el = document.getElementById(id); if(el) el.textContent = txt; }
+function setVal(id, val){ const el = document.getElementById(id); if(el) el.value = val; }
+function getVal(id){ const el = document.getElementById(id); return el ? el.value : ''; }
+
+/* ========= Events ========= */
 function attachEvents(){
+  // Tabs
+  navBtns.forEach(btn => btn.addEventListener('click', ()=>setActiveTab(btn.getAttribute('data-tab'))));
+  window.addEventListener('hashchange', ()=>{
+    const h = location.hash.replace('#','');
+    if(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io'].includes(h)){
+      state.ui.activeTab = h; save(); renderTabs();
+      if(h === 'tab-dash') redrawDashboardCharts();
+    }
+  });
+
+  // Forms
   document.getElementById('itemForm').addEventListener('submit', addItem);
   document.getElementById('resetForm').addEventListener('click', ()=>document.getElementById('itemForm').reset());
+  document.getElementById('factorForm').addEventListener('submit', addFactor);
+  document.getElementById('btnClearFactorForm').addEventListener('click', clearFactorForm);
+
+  // Header actions
   document.getElementById('clearAll').addEventListener('click', resetAll);
   document.getElementById('exportCSV').addEventListener('click', exportCSV);
   document.getElementById('exportJSON').addEventListener('click', exportJSON);
@@ -1359,15 +2255,42 @@ function attachEvents(){
     window.print();
   });
 
-  document.getElementById('factorForm').addEventListener('submit', addFactor);
+  // IO tab actions (mirrors header)
+  document.getElementById('btnExportCSV2').addEventListener('click', exportCSV);
+  document.getElementById('btnExportJSON2').addEventListener('click', exportJSON);
+  document.getElementById('btnPrint2').addEventListener('click', ()=>{
+    buildPrintSnapshot();
+    window.print();
+  });
+  document.getElementById('btnClear2').addEventListener('click', resetAll);
+
+  // Inventory import
+  const importInput = document.getElementById('importInventory');
+  const openImport = () => importInput.click();
+
+  document.getElementById('btnImportInventory').addEventListener('click', openImport);
+  document.getElementById('btnImportInventory2').addEventListener('click', openImport);
+
+  importInput.addEventListener('change', async (e)=>{
+    const file = e.target.files?.[0];
+    if(!file) return;
+    try{
+      await importInventoryFile(file);
+    }catch(err){
+      console.error("IMPORT ERROR:", err);
+      alert("Import failed:\n" + (err?.message || String(err)));
+    }finally{
+      e.target.value = '';
+    }
+  });
+
+  // Factors tools
   document.getElementById('exportFactors').addEventListener('click', exportFactors);
   document.getElementById('importFactors').addEventListener('change', importFactorsFile);
 
+  // Factor to form
   document.getElementById('factorSelect').addEventListener('change', onFactorSelectChange);
   document.getElementById('gas').addEventListener('change', onGasChange);
-
-  setupLogoUpload();
-  setupReportImagesUpload();
 
   // Uncertainty
   document.getElementById('uncSync').addEventListener('click', syncUncertaintyFromItems);
@@ -1390,18 +2313,47 @@ function attachEvents(){
     if(!btn) return;
     removeUncertaintyRow(btn.getAttribute('data-unc-del'));
   });
+
+  // Logo + report images
+  setupLogoUpload();
+  setupReportImagesUpload();
+
+  // Quick nav
+  document.getElementById('btnGoTotals').addEventListener('click', ()=>setActiveTab('tab-dash'));
 }
-function render(){
-  bindMeta();
-  bindChecklist();
+
+/* ========= Render ========= */
+function renderAll(){
+  bindMetaOnce();
+  bindChecklistOnce();
+  renderTabs();
   renderLogo();
   renderReportImages();
-  renderItems();
+  renderFactorSelect();
   renderFactors();
-  totals();
+  renderItems();
+  totals(); // draws charts only on dashboard
   renderUncertainty();
 }
-(function boot(){ load(); attachEvents(); render(); })();
+
+window.addEventListener('resize', () => {
+  if (state?.ui?.activeTab === 'tab-dash') redrawDashboardCharts();
+});
+
+/* ========= Boot ========= */
+(function boot(){
+  load();
+
+  const h = location.hash.replace('#','');
+  if(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io'].includes(h)){
+    state.ui.activeTab = h;
+  }
+
+  attachEvents();
+  renderAll();
+  if(state.ui.activeTab === 'tab-dash') redrawDashboardCharts();
+})();
 </script>
+
 </body>
 </html>
