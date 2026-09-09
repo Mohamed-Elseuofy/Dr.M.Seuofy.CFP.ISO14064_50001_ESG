@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>ISO 14064 Carbon Footprint Calculator & Reporting Platform — Dr. Mohamed Abd Elsalam El Seuofy</title>
+<title>ISO 14064 Carbon Footprint Calculator & Reporting Platform & ISO 50001 & ESG Sustainability — Dr. Mohamed Abd Elsalam El Seuofy</title>
 <meta name="description" content="ISO 14064 carbon footprint calculator (Scopes 1–3) with emission factor library, uncertainty assessment, JSON import/export, and reporting." />
 
 <style>
@@ -570,6 +570,134 @@ body.auth-ready .auth-screen {
   }
 }
 
+
+
+/* =========================================
+   SUSTAINABILITY REPORTING MODULE - ADDED
+   ISO 50001 MODULE - ADDED
+   Non-destructive UI extensions
+========================================= */
+.added-module .sectionTitle h2{font-size:17px}
+.module-toolbar{
+  display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
+  margin:0 0 12px;
+}
+.module-legend{
+  display:flex; gap:8px; flex-wrap:wrap; margin:0 0 14px;
+}
+.data-tag{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 8px; border-radius:999px; font-size:10px; font-weight:900;
+  letter-spacing:.04em; border:1px solid rgba(34,48,85,.85);
+}
+.data-tag.auto{color:var(--pri2);background:rgba(78,168,255,.10);border-color:rgba(78,168,255,.30)}
+.data-tag.calc{color:var(--ok);background:rgba(53,211,160,.10);border-color:rgba(53,211,160,.30)}
+.data-tag.manual{color:var(--warn);background:rgba(255,204,102,.10);border-color:rgba(255,204,102,.30)}
+.data-tag.missing{color:var(--danger);background:rgba(255,107,107,.10);border-color:rgba(255,107,107,.30)}
+.source-note{margin-top:5px;color:var(--muted);font-size:10px;line-height:1.35}
+.auto-field{
+  padding:10px 12px; min-height:43px; border-radius:12px;
+  border:1px solid rgba(78,168,255,.28); background:rgba(78,168,255,.07);
+  color:var(--text); font-weight:800;
+}
+.module-section{
+  border:1px solid rgba(34,48,85,.85); border-radius:16px;
+  background:rgba(255,255,255,.025); margin:12px 0; overflow:hidden;
+}
+.module-section > summary{
+  cursor:pointer; list-style:none; padding:12px 14px; font-weight:900;
+  background:rgba(255,255,255,.045); border-bottom:1px solid rgba(34,48,85,.65);
+}
+.module-section > summary::-webkit-details-marker{display:none}
+.module-section > summary:after{content:'＋';float:right;color:var(--pri2)}
+.module-section[open] > summary:after{content:'−'}
+.module-section-body{padding:14px}
+.module-note{
+  padding:10px 12px; border-radius:12px; border:1px solid rgba(34,48,85,.85);
+  background:rgba(255,255,255,.035); color:var(--text2); font-size:12px;
+}
+.validation-box{
+  padding:12px 14px; border-radius:14px; border:1px solid rgba(34,48,85,.85);
+  background:rgba(255,255,255,.035); margin-top:12px;
+}
+.validation-box.ok{border-color:rgba(53,211,160,.35);background:rgba(53,211,160,.07)}
+.validation-box.warn{border-color:rgba(255,204,102,.35);background:rgba(255,204,102,.07)}
+.validation-box.bad{border-color:rgba(255,107,107,.35);background:rgba(255,107,107,.07)}
+.validation-box ul{margin:8px 0 0 18px;padding:0}
+.validation-box li{margin:4px 0}
+.module-table table{min-width:1100px}
+.module-table.compact table{min-width:760px}
+.module-table input,.module-table select,.module-table textarea{min-width:120px;padding:8px 9px;font-size:12px}
+.module-table textarea{min-height:58px}
+.module-table .delete-cell{width:74px;white-space:nowrap}
+.module-kpi-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0;
+}
+@media(max-width:1100px){.module-kpi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.module-kpi-grid{grid-template-columns:1fr}}
+.module-kpi{
+  padding:12px;border:1px solid rgba(34,48,85,.85);border-radius:14px;
+  background:linear-gradient(180deg,rgba(13,21,51,.78),rgba(255,255,255,.025));
+}
+.module-kpi .k{font-size:11px;color:var(--muted)}
+.module-kpi .v{font-weight:900;font-size:19px;margin-top:5px}
+.module-kpi .s{font-size:10px;color:var(--text2);margin-top:3px}
+.generated-report{
+  margin-top:16px; padding:18px; border:1px solid rgba(34,48,85,.85);
+  border-radius:16px; background:#fff; color:#111; box-shadow:var(--shadow);
+}
+.generated-report.empty{background:rgba(255,255,255,.03);color:var(--muted);text-align:center}
+.generated-report h1,.generated-report h2,.generated-report h3{color:#111}
+.generated-report h1{font-size:28px;margin:0 0 8px}
+.generated-report h2{font-size:20px;margin:26px 0 10px;padding-bottom:6px;border-bottom:2px solid #dfe6ee}
+.generated-report h3{font-size:15px;margin:18px 0 8px}
+.generated-report p,.generated-report li{color:#222;line-height:1.55}
+.generated-report table{min-width:0;width:100%;border-collapse:collapse;margin:10px 0 18px}
+.generated-report th,.generated-report td{border:1px solid #cfd7e3;padding:7px 8px;color:#111;font-size:12px}
+.generated-report th{background:#edf3f8}
+.report-cover{
+  min-height:420px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;border:2px solid #dce5ef;padding:34px;margin-bottom:24px;
+}
+.report-cover .report-badge{font-size:12px;letter-spacing:.12em;font-weight:900;color:#275d80;margin-bottom:12px}
+.report-footnote{font-size:11px;color:#555;border-top:1px solid #ccd4df;padding-top:10px;margin-top:20px}
+.status-chip{display:inline-block;padding:3px 7px;border-radius:999px;font-size:10px;font-weight:900;background:#eef3f8;color:#333;border:1px solid #d5dde7}
+.status-chip.good{background:#e9f8f2;color:#12684c;border-color:#bfe7d7}
+.status-chip.warn{background:#fff7df;color:#76540a;border-color:#f1d88c}
+.status-chip.bad{background:#ffecec;color:#932929;border-color:#efb9b9}
+.subnav-inline{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.subnav-inline button{box-shadow:none}
+.readonly-note{font-size:11px;color:var(--muted);margin-top:4px}
+.field-help{font-size:10px;color:var(--muted);margin-top:4px}
+.checkbox-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(max-width:700px){.checkbox-grid{grid-template-columns:1fr}}
+.checkbox-card{padding:9px 10px;border:1px solid rgba(34,48,85,.80);border-radius:12px;background:rgba(255,255,255,.025)}
+.checkbox-card label{display:flex;gap:8px;align-items:flex-start}
+.checkbox-card input[type=checkbox]{width:auto;margin-top:2px}
+
+/* Print isolation: preserve the legacy ISO 14064 Print/PDF behavior. */
+@media print{
+  body.print-iso14064 #tab-sustainability,
+  body.print-iso14064 #tab-iso50001{display:none !important;}
+
+  body.print-sustainability .tab{display:none !important;}
+  body.print-sustainability #tab-sustainability{display:block !important;}
+  body.print-sustainability #tab-sustainability .sus-ui-only{display:none !important;}
+  body.print-sustainability #susReportPreview{display:block !important;border:none !important;box-shadow:none !important;padding:0 !important;}
+
+  body.print-enms .tab{display:none !important;}
+  body.print-enms #tab-iso50001{display:block !important;}
+  body.print-enms #tab-iso50001 .enms-ui-only{display:none !important;}
+  body.print-enms #enmsReportPreview{display:block !important;border:none !important;box-shadow:none !important;padding:0 !important;}
+
+  .generated-report{color:#000 !important;background:#fff !important;}
+  .generated-report *{color:#000 !important;}
+  .generated-report table{page-break-inside:auto;}
+  .generated-report tr{page-break-inside:avoid;page-break-after:auto;}
+  .generated-report h2{page-break-after:avoid;}
+  .report-cover{page-break-after:always;}
+}
+
 </style>
 </head>
 
@@ -680,6 +808,23 @@ body.auth-ready .auth-screen {
     <button class="navBtn" data-tab="tab-io">
       <div><strong>07_Import_Export</strong><div class="tiny">Files + backups</div></div>
       <span>📦</span>
+    </button>
+
+
+    <!-- =========================================
+         SUSTAINABILITY REPORTING MODULE - ADDED
+         ========================================= -->
+    <button class="navBtn" data-tab="tab-sustainability">
+      <div><strong>08_Sustainability_Report</strong><div class="tiny">ESG data + report generation</div></div>
+      <span>🌱</span>
+    </button>
+
+    <!-- =========================================
+         ISO 50001 MODULE - ADDED
+         ========================================= -->
+    <button class="navBtn" data-tab="tab-iso50001">
+      <div><strong>09_ISO_50001_EnMS</strong><div class="tiny">Energy management framework</div></div>
+      <span>⚡</span>
     </button>
 
     <div class="navTitle" style="margin-top:14px;">Flow (VIP)</div>
@@ -1321,6 +1466,26 @@ GHG Emissions = Σ (Activity Data × Emission Factor × GWP)</div>
         </section>
       </div>
 
+
+      <!-- =========================================
+           FULL PLATFORM BACKUP - ADDED
+           Existing ISO 14064 import/export remains unchanged.
+           ========================================= -->
+      <section class="card no-print" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;">
+        <div class="sectionTitle">
+          <h2 style="font-size:14px;margin:0;">Full Platform Backup</h2>
+          <div class="hint">ISO 14064 + shared company + Sustainability + ISO 50001</div>
+        </div>
+        <div class="inline" style="gap:8px;">
+          <button class="btn primary" id="btnExportFullPlatform" type="button">Export Full Platform JSON</button>
+          <button class="btn" id="btnImportFullPlatform" type="button">Import Full Platform JSON</button>
+          <input id="fullPlatformImport" type="file" accept="application/json,.json" class="sr-only" />
+        </div>
+        <div class="tiny" style="margin-top:10px;">
+          This is a new backup option. The original Inventory JSON import/export above is preserved exactly for backward compatibility.
+        </div>
+      </section>
+
       <section class="card" style="box-shadow:none;background:rgba(255,255,255,.03); margin-top:14px;">
         <div class="sectionTitle">
           <h2 style="font-size:14px;margin:0;">Notes</h2>
@@ -1332,6 +1497,62 @@ Use Export JSON for a full backup.
 Use Import JSON to restore the full project state.
         </div>
       </section>
+    </section>
+
+
+    <!-- =========================================
+         SUSTAINABILITY REPORTING MODULE - ADDED
+         ========================================= -->
+    <section id="tab-sustainability" class="tab card added-module" aria-label="Sustainability Reporting">
+      <div class="sectionTitle sus-ui-only">
+        <h2>08_Sustainability_Report</h2>
+        <div class="hint">Minimum ESG framework • linked to existing ISO 14064 results</div>
+      </div>
+
+      <div class="module-toolbar sus-ui-only no-print">
+        <button class="btn" id="btnSusRefresh" type="button">Refresh Auto-Linked Data</button>
+        <button class="btn" id="btnSusValidate" type="button">Validate Data</button>
+        <button class="btn primary" id="btnSusGenerate" type="button">Generate Sustainability Report</button>
+        <button class="btn warn" id="btnSusPrint" type="button">Print Sustainability Report</button>
+        <button class="btn danger" id="btnSusReset" type="button">Reset Sustainability Inputs</button>
+      </div>
+
+      <div class="module-legend sus-ui-only">
+        <span class="data-tag auto">AUTO-LINKED</span>
+        <span class="data-tag calc">CALCULATED</span>
+        <span class="data-tag manual">MANUAL INPUT</span>
+        <span class="data-tag missing">MISSING / REVIEW</span>
+      </div>
+
+      <div id="sustainabilityWorkspace" class="sus-ui-only"></div>
+      <div id="susReportPreview" class="generated-report empty">Generate the Sustainability Report to preview it here.</div>
+    </section>
+
+    <!-- =========================================
+         ISO 50001 MODULE - ADDED
+         ========================================= -->
+    <section id="tab-iso50001" class="tab card added-module" aria-label="ISO 50001 Energy Management Framework">
+      <div class="sectionTitle enms-ui-only">
+        <h2>09_ISO_50001_EnMS</h2>
+        <div class="hint">EnMS framework • linked to existing company and energy activity data</div>
+      </div>
+
+      <div class="module-toolbar enms-ui-only no-print">
+        <button class="btn" id="btnEnmsRefresh" type="button">Refresh Linked Energy Data</button>
+        <button class="btn" id="btnEnmsValidate" type="button">Validate EnMS</button>
+        <button class="btn primary" id="btnEnmsGenerate" type="button">Generate EnMS Evidence Report</button>
+        <button class="btn warn" id="btnEnmsPrint" type="button">Print EnMS Evidence Report</button>
+        <button class="btn danger" id="btnEnmsReset" type="button">Reset ISO 50001 Inputs</button>
+      </div>
+
+      <div class="module-legend enms-ui-only">
+        <span class="data-tag auto">AUTO-LINKED FROM ISO 14064 / COMPANY</span>
+        <span class="data-tag calc">CALCULATED / STATUS</span>
+        <span class="data-tag manual">MANUAL EnMS INPUT</span>
+      </div>
+
+      <div id="enmsWorkspace" class="enms-ui-only"></div>
+      <div id="enmsReportPreview" class="generated-report empty">Generate the EnMS Summary &amp; Evidence Report to preview it here.</div>
     </section>
 
     <footer class="tiny" style="margin:16px 0 30px; color:rgba(197,210,244,.70);">
@@ -1575,6 +1796,7 @@ function setActiveTab(id){
   save();
   renderTabs();
   if (id === 'tab-dash') redrawDashboardCharts();
+  if (id === 'tab-sustainability' || id === 'tab-iso50001') renderAddedModules();
 }
 function renderTabs(){
   tabs.forEach(t => t.classList.toggle('active', t.id === state.ui.activeTab));
@@ -2461,7 +2683,7 @@ function normalizeImportedState(obj, opts={ keepUI:false }){
     uef: r.uef ?? ''
   }));
 
-  const allowedTabs = new Set(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io']);
+  const allowedTabs = new Set(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io','tab-sustainability','tab-iso50001']);
   if(opts.keepUI && srcUI && allowedTabs.has(srcUI.activeTab)) next.ui.activeTab = srcUI.activeTab;
   if(opts.keepUI && state?.ui?.activeTab && allowedTabs.has(state.ui.activeTab)) next.ui.activeTab = state.ui.activeTab;
   if(!opts.keepUI && srcUI && allowedTabs.has(srcUI.activeTab)) next.ui.activeTab = srcUI.activeTab;
@@ -2517,15 +2739,1060 @@ function setText(id, txt){ const el = document.getElementById(id); if(el) el.tex
 function setVal(id, val){ const el = document.getElementById(id); if(el) el.value = val; }
 function getVal(id){ const el = document.getElementById(id); return el ? el.value : ''; }
 
+
+/* =========================================
+   SUSTAINABILITY REPORTING MODULE - ADDED
+   ISO 50001 MODULE - ADDED
+   Shared read-only mapping layer + separate module persistence.
+   Existing ISO 14064 calculation engine is NOT modified.
+========================================= */
+
+const sharedCompanyStorageKey = 'iso14064_shared_company_v1';
+const sustainabilityStorageKey = 'iso14064_sustainability_v1';
+const enmsStorageKey = 'iso14064_iso50001_v1';
+
+const EMPTY_COMPANY = '[COMPANY TO COMPLETE]';
+const DATA_NOT_AVAILABLE = '[DATA NOT AVAILABLE]';
+const CALCULATED = '[CALCULATED]';
+const PROPOSED_TARGET = '[PROPOSED – COMPANY TO APPROVE]';
+
+let sharedCompany = {
+  industry:'', country:'', activities:'', employeeCount:'', locations:''
+};
+
+function defaultSusGoals(){
+  return [
+    {area:'Environmental',goal:'Reduce electricity consumption',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Environmental',goal:'Reduce GHG emissions',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Environmental',goal:'Increase recycling',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Environmental',goal:'Reduce water consumption',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Social',goal:'Improve workplace safety',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Social',goal:'Increase employee training',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Social',goal:'Improve gender diversity',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'},
+    {area:'Governance',goal:'Maintain / achieve zero confirmed corruption incidents',baseline:'',target:PROPOSED_TARGET,targetYear:'',approval:'Proposed',status:'Proposed'}
+  ];
+}
+
+function defaultSustainabilityState(){
+  return {
+    esg:{priorities:'',risks:'',opportunities:'',responsibleBody:'',stakeholders:[],otherStakeholder:''},
+    environment:{manualElectricity:'',manualRenewableElectricity:'',manualWater:'',manualWasteTotal:'',manualWasteUnit:'tonne',manualWasteRecycled:'',manualWasteRecycledUnit:'tonne',manualFuels:[]},
+    social:{femaleEmployees:'',femaleManagers:'',fatalities:'',injuries:'',trainingHours:'',turnover:''},
+    governance:{boardTotal:'',boardIndependent:'',boardFemale:'',whistleblowing:'',corruptionIncidents:''},
+    policies:{environmental:'NO',healthSafety:'NO',humanRights:'NO',codeConduct:'NO',antiCorruption:'NO'},
+    goals:defaultSusGoals(),
+    gri:{},
+    report:{executiveSummary:'',methodologyNotes:'',assumptions:'',assurance:'',otherDisclosures:''}
+  };
+}
+
+let sustainabilityState = defaultSustainabilityState();
+
+function defaultEnmsState(){
+  return {
+    context:{internalIssues:'',externalIssues:'',interestedParties:[],legalRequirements:[],scopeStatement:'',physicalBoundaries:'',activitiesIncluded:'',sitesIncluded:'',energyTypes:''},
+    leadership:{topManagement:'',energyTeam:'',rolesAssigned:'NO',rolesCommunicated:'NO'},
+    policy:{text:'',documentReference:'',fileName:'',fileDataUrl:'',checks:{}},
+    risks:[],
+    targets:[],
+    energy:{manualSources:[]},
+    review:{seuCriteria:'',seus:[],opportunities:[],futureConsumption:[]},
+    performance:{enpis:[],enbs:[],monitoring:[],deviations:[]},
+    measurement:{dataPlan:[],devices:[]},
+    support:{competence:[],awareness:{},communication:[]},
+    documents:[],
+    operation:{seuControls:[],designApplicable:'NO',designs:[],procurementApplicable:'NO',procurements:[]},
+    compliance:{evaluations:[]},
+    audit:{frequency:'',method:'',responsible:'',reportingMethod:'',audits:[]},
+    management:{reviewDate:'',notes:'',decisions:{}},
+    correctiveActions:[],
+    improvement:[]
+  };
+}
+
+let enmsState = defaultEnmsState();
+
+function parseStoredJSON(key, fallback){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+    const obj = JSON.parse(raw);
+    return obj && typeof obj === 'object' ? obj : fallback;
+  }catch(e){ return fallback; }
+}
+
+function loadAddedModuleStates(){
+  const sc = parseStoredJSON(sharedCompanyStorageKey, sharedCompany);
+  sharedCompany = { ...sharedCompany, ...sc };
+
+  const sus = parseStoredJSON(sustainabilityStorageKey, sustainabilityState);
+  const susDefaults = defaultSustainabilityState();
+  sustainabilityState = {
+    ...susDefaults,
+    ...sus,
+    esg:{...susDefaults.esg,...(sus.esg||{})},
+    environment:{...susDefaults.environment,...(sus.environment||{})},
+    social:{...susDefaults.social,...(sus.social||{})},
+    governance:{...susDefaults.governance,...(sus.governance||{})},
+    policies:{...susDefaults.policies,...(sus.policies||{})},
+    report:{...susDefaults.report,...(sus.report||{})},
+    goals:Array.isArray(sus.goals) ? sus.goals.slice(0,8) : susDefaults.goals,
+    gri:(sus.gri && typeof sus.gri==='object') ? sus.gri : {}
+  };
+
+  const en = parseStoredJSON(enmsStorageKey, enmsState);
+  const enDefaults = defaultEnmsState();
+  enmsState = {
+    ...enDefaults,
+    ...en,
+    context:{...enDefaults.context,...(en.context||{})},
+    leadership:{...enDefaults.leadership,...(en.leadership||{})},
+    policy:{...enDefaults.policy,...(en.policy||{}),checks:{...(en.policy?.checks||{})}},
+    energy:{...enDefaults.energy,...(en.energy||{}),manualSources:Array.isArray(en.energy?.manualSources)?en.energy.manualSources:[]},
+    review:{...enDefaults.review,...(en.review||{}),seus:Array.isArray(en.review?.seus)?en.review.seus:[],opportunities:Array.isArray(en.review?.opportunities)?en.review.opportunities:[],futureConsumption:Array.isArray(en.review?.futureConsumption)?en.review.futureConsumption:[]},
+    performance:{...enDefaults.performance,...(en.performance||{}),enpis:Array.isArray(en.performance?.enpis)?en.performance.enpis:[],enbs:Array.isArray(en.performance?.enbs)?en.performance.enbs:[],monitoring:Array.isArray(en.performance?.monitoring)?en.performance.monitoring:[],deviations:Array.isArray(en.performance?.deviations)?en.performance.deviations:[]},
+    measurement:{...enDefaults.measurement,...(en.measurement||{}),dataPlan:Array.isArray(en.measurement?.dataPlan)?en.measurement.dataPlan:[],devices:Array.isArray(en.measurement?.devices)?en.measurement.devices:[]},
+    support:{...enDefaults.support,...(en.support||{}),awareness:{...(en.support?.awareness||{})},competence:Array.isArray(en.support?.competence)?en.support.competence:[],communication:Array.isArray(en.support?.communication)?en.support.communication:[]},
+    operation:{...enDefaults.operation,...(en.operation||{}),seuControls:Array.isArray(en.operation?.seuControls)?en.operation.seuControls:[],designs:Array.isArray(en.operation?.designs)?en.operation.designs:[],procurements:Array.isArray(en.operation?.procurements)?en.operation.procurements:[]},
+    compliance:{...enDefaults.compliance,...(en.compliance||{}),evaluations:Array.isArray(en.compliance?.evaluations)?en.compliance.evaluations:[]},
+    audit:{...enDefaults.audit,...(en.audit||{}),audits:Array.isArray(en.audit?.audits)?en.audit.audits:[]},
+    management:{...enDefaults.management,...(en.management||{}),decisions:{...(en.management?.decisions||{})}},
+    risks:Array.isArray(en.risks)?en.risks:[],
+    targets:Array.isArray(en.targets)?en.targets:[],
+    documents:Array.isArray(en.documents)?en.documents:[],
+    correctiveActions:Array.isArray(en.correctiveActions)?en.correctiveActions:[],
+    improvement:Array.isArray(en.improvement)?en.improvement:[]
+  };
+}
+
+function saveSharedCompany(){ localStorage.setItem(sharedCompanyStorageKey, JSON.stringify(sharedCompany)); }
+function saveSustainability(){ localStorage.setItem(sustainabilityStorageKey, JSON.stringify(sustainabilityState)); }
+function saveEnms(){ localStorage.setItem(enmsStorageKey, JSON.stringify(enmsState)); }
+
+function getNested(obj, path){
+  return String(path||'').split('.').filter(Boolean).reduce((cur,k)=>cur==null?undefined:cur[k], obj);
+}
+function setNested(obj, path, value){
+  const parts = String(path||'').split('.').filter(Boolean);
+  if(!parts.length) return;
+  let cur = obj;
+  for(let i=0;i<parts.length-1;i++){
+    const k = parts[i];
+    if(!cur[k] || typeof cur[k] !== 'object') cur[k] = {};
+    cur = cur[k];
+  }
+  cur[parts[parts.length-1]] = value;
+}
+function asText(v){ return (v===null||v===undefined) ? '' : String(v); }
+function hasValue(v){ return v!==null && v!==undefined && String(v).trim()!==''; }
+function positiveOrZero(v){ const n=Number(v); return hasValue(v)&&isFinite(n)&&n>=0?n:null; }
+function positive(v){ const n=Number(v); return hasValue(v)&&isFinite(n)&&n>0?n:null; }
+function splitList(v){ return String(v||'').split(/\r?\n|;/).map(x=>x.trim()).filter(Boolean); }
+function humanOrMissing(v, required=false){ return hasValue(v) ? escapeHTML(v) : (required ? EMPTY_COMPANY : DATA_NOT_AVAILABLE); }
+function formatMaybe(v,d=2){ return (v===null||v===undefined||!isFinite(Number(v))) ? DATA_NOT_AVAILABLE : fmt(Number(v),d); }
+function safePct(num, den){
+  const a=Number(num), b=Number(den);
+  if(!isFinite(a)||!isFinite(b)||b<=0) return null;
+  return a/b*100;
+}
+function wasteToKg(value, unit){
+  const n=positiveOrZero(value); if(n===null) return null;
+  return String(unit||'').toLowerCase()==='tonne' ? n*1000 : n;
+}
+function kwhFromActivity(activity, unit){
+  const n=Number(activity); if(!isFinite(n)) return null;
+  const u=String(unit||'').toLowerCase();
+  if(u==='kwh') return n;
+  if(u==='mwh') return n*1000;
+  return null;
+}
+function reportingYearFromExisting(){
+  const period = String(state.meta.period||'');
+  const years = period.match(/(?:19|20)\d{2}/g);
+  if(years && years.length) return years[years.length-1];
+  const itemYears = state.items.map(x=>Number(x.year)).filter(x=>isFinite(x)&&x>=1900&&x<=2100);
+  if(itemYears.length) return String(Math.max(...itemYears));
+  return state.meta.baseYear ? String(state.meta.baseYear) : '';
+}
+function boundaryLabel(){
+  const map={equity:'Equity share','control-financial':'Control – Financial','control-operational':'Control – Operational'};
+  return map[state.meta.boundary] || state.meta.boundary || '';
+}
+
+/* ---------- Shared read-only mapping layer ---------- */
+function getSharedCompanyData(){
+  return {
+    name:state.meta.orgName||'',
+    description:state.meta.orgDesc||'',
+    industry:sharedCompany.industry||'',
+    country:sharedCompany.country||'',
+    activities:sharedCompany.activities||'',
+    employeeCount:sharedCompany.employeeCount||'',
+    reportingPeriod:state.meta.period||'',
+    reportingYear:reportingYearFromExisting(),
+    locations:sharedCompany.locations||'',
+    boundary:boundaryLabel(),
+    preparedBy:state.meta.preparedBy||'',
+    methodology:state.meta.method||''
+  };
+}
+
+function getISO14064ScopeTotals(){
+  const snap = getTotalsSnapshot();
+  const has1=state.items.some(x=>x.scope==='1');
+  const has2=state.items.some(x=>x.scope==='2');
+  const has3=state.items.some(x=>x.scope==='3');
+  return {
+    scope1:has1?snap.scope1:null,
+    scope2:has2?snap.scope2:null,
+    scope3:has3?snap.scope3:null,
+    total:(has1||has2||has3)?snap.scope1+snap.scope2+snap.scope3:null,
+    has1,has2,has3
+  };
+}
+
+function isElectricityItem(it){
+  const c=String(it.category||'').toLowerCase();
+  return /(electric|grid power|purchased power)/.test(c) && ['kwh','mwh'].includes(String(it.unit||'').toLowerCase());
+}
+function isRenewableElectricityItem(it){
+  const c=String(it.category||'').toLowerCase();
+  return isElectricityItem(it) && /(renewable|solar|wind|green power|green electricity|pv)/.test(c);
+}
+function isWaterItem(it){ return /water/.test(String(it.category||'').toLowerCase()) && String(it.unit||'').toLowerCase()==='m3'; }
+function isWasteItem(it){ return /waste/.test(String(it.category||'').toLowerCase()) && ['kg','tonne'].includes(String(it.unit||'').toLowerCase()); }
+function isFuelEnergyItem(it){
+  const c=String(it.category||'').toLowerCase();
+  const u=String(it.unit||'').toLowerCase();
+  const keyword=/(natural gas|diesel|gasoline|petrol|lpg|fuel oil|heating oil|kerosene|coal|biomass|fuel|boiler|furnace|generator|steam)/.test(c);
+  return keyword && ['mmbtu','litre','gallon','kg','tonne','m3','kwh','mwh','unit'].includes(u) && !isElectricityItem(it);
+}
+
+function aggregateRows(items){
+  const map=new Map();
+  items.forEach(it=>{
+    const key=`${String(it.category||'').trim()}||${String(it.unit||'').trim()}`;
+    if(!map.has(key)) map.set(key,{type:String(it.category||'').trim()||'Energy',quantity:0,unit:String(it.unit||'').trim(),sources:new Set(),years:new Set(),scopeSet:new Set()});
+    const r=map.get(key);
+    r.quantity+=Number(it.activity)||0;
+    if(it.source) r.sources.add(it.source);
+    if(it.year) r.years.add(it.year);
+    if(it.scope) r.scopeSet.add(it.scope);
+  });
+  return [...map.values()].map(r=>({...r,sources:[...r.sources].join('; '),years:[...r.years].join(', '),scopes:[...r.scopeSet].map(x=>'Scope '+x).join(', ')}));
+}
+
+function getLinkedEnvironmentalData(){
+  const electricityItems=state.items.filter(isElectricityItem);
+  const renewableItems=state.items.filter(isRenewableElectricityItem);
+  const waterItems=state.items.filter(isWaterItem);
+  const wasteItems=state.items.filter(isWasteItem);
+  const fuelItems=state.items.filter(isFuelEnergyItem);
+
+  const electricityKwh=electricityItems.length?electricityItems.reduce((s,it)=>s+(kwhFromActivity(it.activity,it.unit)||0),0):null;
+  const renewableKwh=renewableItems.length?renewableItems.reduce((s,it)=>s+(kwhFromActivity(it.activity,it.unit)||0),0):null;
+  const waterM3=waterItems.length?waterItems.reduce((s,it)=>s+(Number(it.activity)||0),0):null;
+
+  const recycled=wasteItems.filter(it=>{const c=String(it.category||'').toLowerCase();return /recycl/.test(c)&&!/non[-\s]?recycl/.test(c);});
+  const nonRecycled=wasteItems.filter(it=>/non[-\s]?recycl/.test(String(it.category||'').toLowerCase()));
+  const explicitTotal=wasteItems.filter(it=>/(total waste|waste generated|generated waste)/.test(String(it.category||'').toLowerCase()));
+  const genericWaste=wasteItems.filter(it=>!recycled.includes(it)&&!nonRecycled.includes(it)&&!explicitTotal.includes(it));
+  const toKg=it=>String(it.unit||'').toLowerCase()==='tonne'?(Number(it.activity)||0)*1000:(Number(it.activity)||0);
+  const wasteRecycledKg=recycled.length?recycled.reduce((s,it)=>s+toKg(it),0):null;
+  let wasteTotalKg=null;
+  if(explicitTotal.length) wasteTotalKg=explicitTotal.reduce((s,it)=>s+toKg(it),0);
+  else if(recycled.length&&nonRecycled.length) wasteTotalKg=recycled.reduce((s,it)=>s+toKg(it),0)+nonRecycled.reduce((s,it)=>s+toKg(it),0);
+  else if(genericWaste.length) wasteTotalKg=genericWaste.reduce((s,it)=>s+toKg(it),0);
+
+  return {
+    electricityKwh,renewableKwh,waterM3,wasteTotalKg,wasteRecycledKg,
+    fuels:aggregateRows(fuelItems),
+    electricityItems,renewableItems,waterItems,wasteItems
+  };
+}
+
+function effectiveSustainabilityEnvironmental(){
+  const linked=getLinkedEnvironmentalData();
+  const e=sustainabilityState.environment;
+  const manualElec=positiveOrZero(e.manualElectricity);
+  const manualRen=positiveOrZero(e.manualRenewableElectricity);
+  const manualWater=positiveOrZero(e.manualWater);
+  const manualWaste=wasteToKg(e.manualWasteTotal,e.manualWasteUnit);
+  const manualRecycled=wasteToKg(e.manualWasteRecycled,e.manualWasteRecycledUnit);
+  return {
+    electricityKwh:linked.electricityKwh!==null?linked.electricityKwh:manualElec,
+    electricitySource:linked.electricityKwh!==null?'ISO 14064 → Electricity Activity Lines':'Sustainability manual fallback',
+    renewableKwh:linked.renewableKwh!==null?linked.renewableKwh:manualRen,
+    renewableSource:linked.renewableKwh!==null?'ISO 14064 → Renewable Electricity Activity Lines':'Sustainability manual input',
+    waterM3:linked.waterM3!==null?linked.waterM3:manualWater,
+    waterSource:linked.waterM3!==null?'ISO 14064 → Water Activity Lines':'Sustainability manual fallback',
+    wasteTotalKg:linked.wasteTotalKg!==null?linked.wasteTotalKg:manualWaste,
+    wasteSource:linked.wasteTotalKg!==null?'ISO 14064 → Waste Activity Lines':'Sustainability manual fallback',
+    wasteRecycledKg:linked.wasteRecycledKg!==null?linked.wasteRecycledKg:manualRecycled,
+    recycledSource:linked.wasteRecycledKg!==null?'ISO 14064 → Recycled Waste Activity Lines':'Sustainability manual fallback',
+    fuels:[...linked.fuels,...(Array.isArray(e.manualFuels)?e.manualFuels.map(x=>({...x,sources:'Sustainability manual input',years:'',scopes:''})):[])],
+    linked
+  };
+}
+
+function getLinkedEnergyRows(){
+  const rows=state.items.filter(it=>isElectricityItem(it)||isFuelEnergyItem(it));
+  return aggregateRows(rows).map(r=>({
+    energyType:r.type,current:r.quantity,unit:r.unit,dataSource:r.sources||'ISO 14064 Activity Lines',scope:r.scopes,year:r.years
+  }));
+}
+
+function autoBox(value, source, unit=''){
+  const shown=hasValue(value)?`${escapeHTML(value)}${unit?' '+escapeHTML(unit):''}`:DATA_NOT_AVAILABLE;
+  return `<div class="auto-field">${shown}</div><div class="source-note">Source: ${escapeHTML(source)}</div>`;
+}
+function inputHTML(label, value, attrs=''){
+  return `<div><label>${escapeHTML(label)}</label><input ${attrs} value="${escapeHTML(asText(value))}" /></div>`;
+}
+function textareaHTML(label,value,attrs=''){
+  return `<div><label>${escapeHTML(label)}</label><textarea ${attrs}>${escapeHTML(asText(value))}</textarea></div>`;
+}
+function selectHTML(label,value,options,attrs=''){
+  return `<div><label>${escapeHTML(label)}</label><select ${attrs}>${options.map(o=>`<option value="${escapeHTML(o)}" ${String(o)===String(value)?'selected':''}>${escapeHTML(o)}</option>`).join('')}</select></div>`;
+}
+function numericInput(label,value,attrs=''){
+  return `<div><label>${escapeHTML(label)}</label><input type="number" step="any" min="0" ${attrs} value="${escapeHTML(asText(value))}" /></div>`;
+}
+
+/* ---------- Sustainability validation / KPI logic ---------- */
+function sustainabilityKPIs(){
+  const company=getSharedCompanyData();
+  const env=effectiveSustainabilityEnvironmental();
+  const social=sustainabilityState.social;
+  const gov=sustainabilityState.governance;
+  const employees=positive(company.employeeCount);
+  const female=positiveOrZero(social.femaleEmployees);
+  const training=positiveOrZero(social.trainingHours);
+  const board=positive(gov.boardTotal);
+  const boardFemale=positiveOrZero(gov.boardFemale);
+  const boardIndependent=positiveOrZero(gov.boardIndependent);
+  return {
+    renewablePct:safePct(env.renewableKwh,env.electricityKwh),
+    recyclingPct:safePct(env.wasteRecycledKg,env.wasteTotalKg),
+    femaleEmployeePct:safePct(female,employees),
+    trainingPerEmployee:(training!==null&&employees)?training/employees:null,
+    femaleBoardPct:safePct(boardFemale,board),
+    independentBoardPct:safePct(boardIndependent,board)
+  };
+}
+
+function validateSustainability(){
+  const company=getSharedCompanyData();
+  const env=effectiveSustainabilityEnvironmental();
+  const s=sustainabilityState;
+  const errors=[]; const warnings=[];
+  ['name','industry','country','activities','employeeCount','reportingYear','locations'].forEach(k=>{if(!hasValue(company[k])) errors.push(`Company profile missing: ${k}.`);});
+  const employees=positive(company.employeeCount);
+  const female=positiveOrZero(s.social.femaleEmployees);
+  if(employees&&female!==null&&female>employees) errors.push('Female employees cannot exceed total employees.');
+  const board=positive(s.governance.boardTotal);
+  const bf=positiveOrZero(s.governance.boardFemale);
+  const bi=positiveOrZero(s.governance.boardIndependent);
+  if(board&&bf!==null&&bf>board) errors.push('Female board members cannot exceed total board members.');
+  if(board&&bi!==null&&bi>board) errors.push('Independent board members cannot exceed total board members.');
+  if(env.electricityKwh!==null&&env.renewableKwh!==null&&env.renewableKwh>env.electricityKwh) errors.push('Renewable electricity cannot exceed total electricity consumption.');
+  if(env.wasteTotalKg!==null&&env.wasteRecycledKg!==null&&env.wasteRecycledKg>env.wasteTotalKg) errors.push('Waste recycled cannot exceed total waste generated.');
+  if(!hasValue(s.esg.priorities)||!hasValue(s.esg.responsibleBody)||!Array.isArray(s.esg.stakeholders)||!s.esg.stakeholders.length) warnings.push('Insufficient sustainability governance/context information for a credible minimum report.');
+  const scopes=getISO14064ScopeTotals();
+  if(env.electricityKwh===null && !env.fuels.length && scopes.scope1===null && scopes.scope2===null) warnings.push('Environmental performance cannot be meaningfully assessed.');
+  if(!employees && !hasValue(s.social.injuries) && !hasValue(s.social.fatalities)) warnings.push('Social performance section is materially incomplete.');
+  const anyPolicy=Object.values(s.policies).some(v=>v==='YES'||v==='PLANNED');
+  if(!hasValue(s.esg.responsibleBody)&&!anyPolicy&&!hasValue(s.governance.corruptionIncidents)) warnings.push('Governance section is materially incomplete.');
+  return {errors,warnings};
+}
+
+const GRI_ROWS = [
+  ['company_identity','Company identity and locations','GRI 2-1'],['activities','Activities / products','GRI 2-6'],['employees','Employees','GRI 2-7'],
+  ['governance','Governance structure','GRI 2-9'],['oversight','ESG oversight / responsibility','GRI 2-12 / 2-13'],['policies','Policy commitments','GRI 2-23'],
+  ['whistle','Whistleblowing / raising concerns','GRI 2-26'],['stakeholders','Stakeholder engagement','GRI 2-29'],['priorities','Sustainability / material priorities','GRI 3-1 / 3-2 / 3-3'],
+  ['energy','Energy consumption','GRI 302-1*'],['scope1','Scope 1 GHG emissions','GRI 305-1*'],['scope2','Scope 2 GHG emissions','GRI 305-2*'],
+  ['water','Water consumption','GRI 303-5'],['waste','Waste generated','GRI 306-3'],['recycled','Waste recycled / diverted','GRI 306-4'],
+  ['turnover','Employee turnover','GRI 401-1'],['injuries','Work-related injuries','GRI 403-9'],['training','Training','GRI 404-1'],
+  ['gender','Gender diversity','GRI 405-1'],['corruption','Corruption incidents','GRI 205-3']
+];
+function suggestedGriStatus(key){
+  const c=getSharedCompanyData(), e=effectiveSustainabilityEnvironmental(), s=sustainabilityState, sc=getISO14064ScopeTotals();
+  const available={
+    company_identity:hasValue(c.name)&&hasValue(c.locations),activities:hasValue(c.activities),employees:hasValue(c.employeeCount),
+    governance:hasValue(s.governance.boardTotal),oversight:hasValue(s.esg.responsibleBody),policies:Object.values(s.policies).some(v=>v==='YES'||v==='PLANNED'),
+    whistle:hasValue(s.governance.whistleblowing),stakeholders:s.esg.stakeholders.length>0,priorities:hasValue(s.esg.priorities),energy:e.electricityKwh!==null||e.fuels.length>0,
+    scope1:sc.scope1!==null,scope2:sc.scope2!==null,water:e.waterM3!==null,waste:e.wasteTotalKg!==null,recycled:e.wasteRecycledKg!==null,
+    turnover:hasValue(s.social.turnover),injuries:hasValue(s.social.injuries),training:hasValue(s.social.trainingHours),gender:hasValue(s.social.femaleEmployees),corruption:hasValue(s.governance.corruptionIncidents)
+  };
+  return available[key] ? 'PARTIAL' : 'DATA NOT AVAILABLE';
+}
+function effectiveGriStatus(key){ return sustainabilityState.gri[key] || suggestedGriStatus(key); }
+
+function sustainabilityValidationHTML(){
+  const v=validateSustainability();
+  if(!v.errors.length&&!v.warnings.length) return `<div class="validation-box ok"><b>Data validation:</b> No blocking errors detected.</div>`;
+  const cls=v.errors.length?'bad':'warn';
+  return `<div class="validation-box ${cls}"><b>Data validation:</b>${v.errors.length?`<div class="tiny" style="color:var(--danger);margin-top:6px">${v.errors.length} error(s)</div>`:''}${v.errors.length?`<ul>${v.errors.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:''}${v.warnings.length?`<div class="tiny" style="color:var(--warn);margin-top:8px">${v.warnings.length} warning(s)</div><ul>${v.warnings.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:''}</div>`;
+}
+
+function renderFuelRows(){
+  const env=effectiveSustainabilityEnvironmental();
+  const linked=env.linked.fuels;
+  const manual=sustainabilityState.environment.manualFuels||[];
+  return `
+    <div class="tableWrap module-table compact" style="margin-top:10px"><table><thead><tr><th>Fuel / Energy Type</th><th>Quantity</th><th>Unit</th><th>Source</th><th class="no-print">Action</th></tr></thead><tbody>
+      ${linked.map(r=>`<tr><td>${escapeHTML(r.type)}</td><td>${fmt(r.quantity,3)}</td><td>${escapeHTML(r.unit)}</td><td><span class="data-tag auto">AUTO</span><div class="source-note">ISO 14064 Activity Lines${r.scopes?' • '+escapeHTML(r.scopes):''}</div></td><td></td></tr>`).join('')}
+      ${manual.map((r,i)=>`<tr><td><input data-sus-array="manualFuels" data-row="${i}" data-field="type" value="${escapeHTML(r.type||'')}"></td><td><input type="number" min="0" step="any" data-sus-array="manualFuels" data-row="${i}" data-field="quantity" value="${escapeHTML(asText(r.quantity))}"></td><td><select data-sus-array="manualFuels" data-row="${i}" data-field="unit">${['litre','kg','Nm³','m3','MMBtu','tonne','kWh','MWh','other'].map(o=>`<option ${o===(r.unit||'litre')?'selected':''}>${o}</option>`).join('')}</select></td><td><span class="data-tag manual">MANUAL</span></td><td class="no-print"><button class="btn danger small" data-sus-del="manualFuels" data-row="${i}" type="button">Delete</button></td></tr>`).join('')}
+      ${(!linked.length&&!manual.length)?`<tr><td colspan="5">${DATA_NOT_AVAILABLE}</td></tr>`:''}
+    </tbody></table></div>
+    <div class="no-print" style="margin-top:8px"><button class="btn small" data-sus-add="manualFuels" type="button">+ Add Fuel</button></div>`;
+}
+
+function renderSustainabilityModule(){
+  const root=document.getElementById('sustainabilityWorkspace'); if(!root) return;
+  const c=getSharedCompanyData(), sc=getISO14064ScopeTotals(), env=effectiveSustainabilityEnvironmental(), k=sustainabilityKPIs(), s=sustainabilityState;
+  const stakeholders=['Employees','Customers','Suppliers / Contractors','Shareholders / Owners','Government / Regulators','Local Communities','Banks / Investors'];
+  const effElec=env.electricityKwh, effRen=env.renewableKwh, effWater=env.waterM3, effWaste=env.wasteTotalKg, effRecycled=env.wasteRecycledKg;
+
+  root.innerHTML = `
+    <details class="module-section" open><summary>1. Company Information</summary><div class="module-section-body">
+      <div class="grid grid-3">
+        <div><label>Company Name</label>${autoBox(c.name||DATA_NOT_AVAILABLE,'ISO 14064 → Organization Metadata')}</div>
+        ${inputHTML('Industry',sharedCompany.industry,'data-shared-field="industry" placeholder="Industry"')}
+        ${inputHTML('Country',sharedCompany.country,'data-shared-field="country" placeholder="Country"')}
+        ${textareaHTML('Main Activities / Products',sharedCompany.activities,'data-shared-field="activities" placeholder="Main activities/products"')}
+        ${numericInput('Number of Employees',sharedCompany.employeeCount,'data-shared-field="employeeCount" step="1"')}
+        <div><label>Reporting Year</label>${autoBox(c.reportingYear||DATA_NOT_AVAILABLE,'ISO 14064 → Reporting Period / Activity Year')}</div>
+        ${textareaHTML('Main Locations',sharedCompany.locations,'data-shared-field="locations" placeholder="One location per line"')}
+        <div><label>Reporting Period</label>${autoBox(c.reportingPeriod||DATA_NOT_AVAILABLE,'ISO 14064 → Metadata')}</div>
+        <div><label>Organizational Boundary</label>${autoBox(c.boundary||DATA_NOT_AVAILABLE,'ISO 14064 → Metadata')}</div>
+      </div>
+    </div></details>
+
+    <details class="module-section" open><summary>2. Sustainability / ESG Approach</summary><div class="module-section-body">
+      <div class="grid grid-2">
+        ${textareaHTML('Main Sustainability Priorities (normally 3–5)',s.esg.priorities,'data-sus-path="esg.priorities" placeholder="One priority per line"')}
+        ${textareaHTML('Main ESG Risks (max recommended 5)',s.esg.risks,'data-sus-path="esg.risks" placeholder="One risk per line"')}
+        ${textareaHTML('Main ESG Opportunities (max recommended 5)',s.esg.opportunities,'data-sus-path="esg.opportunities" placeholder="One opportunity per line"')}
+        ${inputHTML('ESG Responsible Person / Position / Committee',s.esg.responsibleBody,'data-sus-path="esg.responsibleBody" placeholder="Responsible body"')}
+      </div>
+      <h3 style="font-size:13px;margin:14px 0 8px">Main Stakeholders</h3>
+      <div class="checkbox-grid">${stakeholders.map(x=>`<div class="checkbox-card"><label><input type="checkbox" data-sus-stakeholder="${escapeHTML(x)}" ${s.esg.stakeholders.includes(x)?'checked':''}> ${escapeHTML(x)}</label></div>`).join('')}</div>
+      <div style="margin-top:10px">${inputHTML('Other Stakeholder',s.esg.otherStakeholder,'data-sus-path="esg.otherStakeholder"')}</div>
+      <div class="module-note" style="margin-top:12px">This simplified priority list supports a basic material-topic view, but does not replace a full GRI materiality assessment.</div>
+    </div></details>
+
+    <details class="module-section" open><summary>3. Environmental Performance & GHG Linkage</summary><div class="module-section-body">
+      <div class="module-kpi-grid">
+        <div class="module-kpi"><div class="k">Scope 1 GHG</div><div class="v">${sc.scope1===null?DATA_NOT_AVAILABLE:fmt(sc.scope1,3)+' tCO₂e'}</div><div class="s">AUTO • ISO 14064 final result</div></div>
+        <div class="module-kpi"><div class="k">Scope 2 GHG</div><div class="v">${sc.scope2===null?DATA_NOT_AVAILABLE:fmt(sc.scope2,3)+' tCO₂e'}</div><div class="s">AUTO • ISO 14064 final result</div></div>
+        <div class="module-kpi"><div class="k">Scope 3 GHG</div><div class="v">${sc.scope3===null?DATA_NOT_AVAILABLE:fmt(sc.scope3,3)+' tCO₂e'}</div><div class="s">AUTO • Optional in minimum ESG framework</div></div>
+        <div class="module-kpi"><div class="k">Total GHG</div><div class="v">${sc.total===null?DATA_NOT_AVAILABLE:fmt(sc.total,3)+' tCO₂e'}</div><div class="s">CALCULATED • Scope 1+2+3</div></div>
+      </div>
+      <div class="grid grid-2">
+        <div><label>Electricity Consumption</label>${autoBox(effElec===null?'':fmt(effElec,3),env.electricitySource,effElec===null?'':'kWh')}${env.linked.electricityKwh===null?numericInput('Manual fallback (kWh)',s.environment.manualElectricity,'data-sus-path="environment.manualElectricity"'):''}</div>
+        <div><label>Renewable Electricity</label>${autoBox(effRen===null?'':fmt(effRen,3),env.renewableSource,effRen===null?'':'kWh')}${env.linked.renewableKwh===null?numericInput('Manual renewable electricity (kWh)',s.environment.manualRenewableElectricity,'data-sus-path="environment.manualRenewableElectricity"'):''}</div>
+        <div><label>Water Consumption</label>${autoBox(effWater===null?'':fmt(effWater,3),env.waterSource,effWater===null?'':'m³')}${env.linked.waterM3===null?numericInput('Manual fallback (m³)',s.environment.manualWater,'data-sus-path="environment.manualWater"'):''}</div>
+        <div><label>Total Waste Generated</label>${autoBox(effWaste===null?'':fmt(effWaste/1000,3),env.wasteSource,effWaste===null?'':'tonnes')}${env.linked.wasteTotalKg===null?`<div class="row">${numericInput('Manual waste quantity',s.environment.manualWasteTotal,'data-sus-path="environment.manualWasteTotal"')}${selectHTML('Unit',s.environment.manualWasteUnit,['kg','tonne'],'data-sus-path="environment.manualWasteUnit"')}</div>`:''}</div>
+        <div><label>Waste Recycled</label>${autoBox(effRecycled===null?'':fmt(effRecycled/1000,3),env.recycledSource,effRecycled===null?'':'tonnes')}${env.linked.wasteRecycledKg===null?`<div class="row">${numericInput('Manual recycled quantity',s.environment.manualWasteRecycled,'data-sus-path="environment.manualWasteRecycled"')}${selectHTML('Unit',s.environment.manualWasteRecycledUnit,['kg','tonne'],'data-sus-path="environment.manualWasteRecycledUnit"')}</div>`:''}</div>
+      </div>
+      <h3 style="font-size:13px;margin:16px 0 8px">Fuel / Energy Entries</h3>${renderFuelRows()}
+      <div class="module-kpi-grid">
+        <div class="module-kpi"><div class="k">Renewable Electricity %</div><div class="v">${k.renewablePct===null?DATA_NOT_AVAILABLE:fmt(k.renewablePct,2)+'%'}</div><div class="s">CALCULATED</div></div>
+        <div class="module-kpi"><div class="k">Recycling Rate</div><div class="v">${k.recyclingPct===null?DATA_NOT_AVAILABLE:fmt(k.recyclingPct,2)+'%'}</div><div class="s">CALCULATED</div></div>
+      </div>
+    </div></details>
+
+    <details class="module-section" open><summary>4. Social Performance</summary><div class="module-section-body">
+      <div class="grid grid-3">
+        <div><label>Total Employees</label>${autoBox(c.employeeCount||DATA_NOT_AVAILABLE,'Shared Company Profile')}</div>
+        ${numericInput('Female Employees',s.social.femaleEmployees,'data-sus-path="social.femaleEmployees" step="1"')}
+        ${numericInput('Female Managers',s.social.femaleManagers,'data-sus-path="social.femaleManagers" step="1"')}
+        ${numericInput('Employee Fatalities',s.social.fatalities,'data-sus-path="social.fatalities" step="1"')}
+        ${numericInput('Work-Related Injuries',s.social.injuries,'data-sus-path="social.injuries" step="1"')}
+        ${numericInput('Total Training Hours',s.social.trainingHours,'data-sus-path="social.trainingHours"')}
+        ${inputHTML('Employee Turnover (number or %)',s.social.turnover,'data-sus-path="social.turnover"')}
+      </div>
+      <div class="module-kpi-grid">
+        <div class="module-kpi"><div class="k">Female Employees %</div><div class="v">${k.femaleEmployeePct===null?DATA_NOT_AVAILABLE:fmt(k.femaleEmployeePct,2)+'%'}</div><div class="s">CALCULATED</div></div>
+        <div class="module-kpi"><div class="k">Training Hours / Employee</div><div class="v">${k.trainingPerEmployee===null?DATA_NOT_AVAILABLE:fmt(k.trainingPerEmployee,2)}</div><div class="s">hours/employee/year • CALCULATED</div></div>
+      </div>
+    </div></details>
+
+    <details class="module-section"><summary>5. Governance, Ethics & Policies</summary><div class="module-section-body">
+      <div class="grid grid-3">
+        ${numericInput('Number of Board Members',s.governance.boardTotal,'data-sus-path="governance.boardTotal" step="1"')}
+        ${numericInput('Independent Board Members',s.governance.boardIndependent,'data-sus-path="governance.boardIndependent" step="1"')}
+        ${numericInput('Female Board Members',s.governance.boardFemale,'data-sus-path="governance.boardFemale" step="1"')}
+        ${selectHTML('Whistleblowing Mechanism',s.governance.whistleblowing,['','Yes','No'],'data-sus-path="governance.whistleblowing"')}
+        ${numericInput('Confirmed Corruption Incidents',s.governance.corruptionIncidents,'data-sus-path="governance.corruptionIncidents" step="1"')}
+        <div><label>ESG Responsible Body</label>${autoBox(s.esg.responsibleBody||DATA_NOT_AVAILABLE,'Sustainability Approach')}</div>
+      </div>
+      <h3 style="font-size:13px;margin:16px 0 8px">Policy Checklist</h3>
+      <div class="grid grid-3">
+        ${selectHTML('Environmental Policy',s.policies.environmental,['YES','NO','PLANNED'],'data-sus-path="policies.environmental"')}
+        ${selectHTML('Health & Safety Policy',s.policies.healthSafety,['YES','NO','PLANNED'],'data-sus-path="policies.healthSafety"')}
+        ${selectHTML('Human Rights / Employee Policy',s.policies.humanRights,['YES','NO','PLANNED'],'data-sus-path="policies.humanRights"')}
+        ${selectHTML('Code of Conduct',s.policies.codeConduct,['YES','NO','PLANNED'],'data-sus-path="policies.codeConduct"')}
+        ${selectHTML('Anti-Corruption Policy',s.policies.antiCorruption,['YES','NO','PLANNED'],'data-sus-path="policies.antiCorruption"')}
+      </div>
+      <div class="module-kpi-grid">
+        <div class="module-kpi"><div class="k">Female Board %</div><div class="v">${k.femaleBoardPct===null?DATA_NOT_AVAILABLE:fmt(k.femaleBoardPct,2)+'%'}</div><div class="s">CALCULATED</div></div>
+        <div class="module-kpi"><div class="k">Independent Board %</div><div class="v">${k.independentBoardPct===null?DATA_NOT_AVAILABLE:fmt(k.independentBoardPct,2)+'%'}</div><div class="s">CALCULATED</div></div>
+      </div>
+    </div></details>
+
+    <details class="module-section"><summary>6. Sustainability Goals — Approval Controlled</summary><div class="module-section-body">
+      <div class="module-note">Suggested goals remain <b>${PROPOSED_TARGET}</b> until the company explicitly approves or modifies and approves them. Maximum recommended: 8 goals.</div>
+      <div class="tableWrap module-table" style="margin-top:10px"><table><thead><tr><th>ESG Area</th><th>Goal</th><th>Baseline</th><th>Target</th><th>Target Year</th><th>Approval</th><th>Status</th></tr></thead><tbody>
+        ${s.goals.map((g,i)=>`<tr><td><select data-sus-goal="${i}" data-field="area">${['Environmental','Social','Governance'].map(o=>`<option ${o===g.area?'selected':''}>${o}</option>`).join('')}</select></td><td><input data-sus-goal="${i}" data-field="goal" value="${escapeHTML(g.goal||'')}"></td><td><input data-sus-goal="${i}" data-field="baseline" value="${escapeHTML(g.baseline||'')}"></td><td><input data-sus-goal="${i}" data-field="target" value="${escapeHTML(g.target||'')}"></td><td><input data-sus-goal="${i}" data-field="targetYear" value="${escapeHTML(g.targetYear||'')}"></td><td><select data-sus-goal="${i}" data-field="approval">${['Proposed','Approved','Rejected'].map(o=>`<option ${o===g.approval?'selected':''}>${o}</option>`).join('')}</select></td><td><select data-sus-goal="${i}" data-field="status">${['Proposed','Approved','In Progress','Achieved','Delayed','Not Started'].map(o=>`<option ${o===g.status?'selected':''}>${o}</option>`).join('')}</select></td></tr>`).join('')}
+      </tbody></table></div>
+    </div></details>
+
+    <details class="module-section"><summary>7. Minimum GRI Reference Table</summary><div class="module-section-body">
+      <div class="module-note">A populated metric does not automatically satisfy the full GRI disclosure. The system never auto-assigns FULL.</div>
+      <div class="tableWrap module-table compact" style="margin-top:10px"><table><thead><tr><th>Report Area</th><th>Relevant GRI Reference</th><th>Information Status</th></tr></thead><tbody>
+        ${GRI_ROWS.map(([key,label,ref])=>`<tr><td>${escapeHTML(label)}</td><td>${escapeHTML(ref)}</td><td><select data-sus-gri="${key}">${['FULL','PARTIAL','DATA NOT AVAILABLE','NOT APPLICABLE'].map(o=>`<option ${o===effectiveGriStatus(key)?'selected':''}>${o}</option>`).join('')}</select><div class="source-note">Suggested status: ${escapeHTML(suggestedGriStatus(key))}</div></td></tr>`).join('')}
+      </tbody></table></div>
+    </div></details>
+
+    <details class="module-section"><summary>8. Report Narrative, Methodology & Assurance</summary><div class="module-section-body">
+      <div class="grid grid-2">
+        ${textareaHTML('Executive Summary (optional company-approved narrative)',s.report.executiveSummary,'data-sus-path="report.executiveSummary"')}
+        ${textareaHTML('Additional Methodology Notes',s.report.methodologyNotes,'data-sus-path="report.methodologyNotes"')}
+        ${textareaHTML('Assumptions / Limitations',s.report.assumptions,'data-sus-path="report.assumptions"')}
+        ${textareaHTML('Verification / Assurance Information',s.report.assurance,'data-sus-path="report.assurance"')}
+        ${textareaHTML('Other Notes / Disclosures',s.report.otherDisclosures,'data-sus-path="report.otherDisclosures"')}
+      </div>
+    </div></details>
+
+    ${sustainabilityValidationHTML()}
+  `;
+}
+
+function susTableRow(label,value,unit=''){
+  const shown=(value===null||value===undefined||value==='')?DATA_NOT_AVAILABLE:(typeof value==='number'?fmt(value,3):escapeHTML(value));
+  return `<tr><td>${escapeHTML(label)}</td><td>${shown}</td><td>${escapeHTML(unit)}</td></tr>`;
+}
+function reportTable(headers,rows){
+  return `<table><thead><tr>${headers.map(h=>`<th>${escapeHTML(h)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${r.map(c=>`<td>${c===null||c===undefined||c===''?DATA_NOT_AVAILABLE:escapeHTML(String(c))}</td>`).join('')}</tr>`).join(''):`<tr><td colspan="${headers.length}">${DATA_NOT_AVAILABLE}</td></tr>`}</tbody></table>`;
+}
+
+function generateSustainabilityReport(){
+  const preview=document.getElementById('susReportPreview'); if(!preview) return;
+  const c=getSharedCompanyData(), sc=getISO14064ScopeTotals(), env=effectiveSustainabilityEnvironmental(), k=sustainabilityKPIs(), s=sustainabilityState;
+  const approved=s.goals.filter(g=>g.approval==='Approved');
+  const priorities=splitList(s.esg.priorities), risks=splitList(s.esg.risks), opp=splitList(s.esg.opportunities);
+  const stakeholders=[...(s.esg.stakeholders||[])]; if(s.esg.otherStakeholder) stakeholders.push(s.esg.otherStakeholder);
+  const companyNarrative=(hasValue(c.name)&&hasValue(c.industry)&&hasValue(c.country))
+    ? `${escapeHTML(c.name)} operates in the ${escapeHTML(c.industry)} sector in ${escapeHTML(c.country)}.${hasValue(c.activities)?' The company’s main activities include '+escapeHTML(c.activities)+'.':''}${hasValue(c.employeeCount)?' During '+escapeHTML(c.reportingYear||'the reporting period')+', the company employed approximately '+escapeHTML(c.employeeCount)+' employees.':''}`
+    : 'Company profile information is incomplete and requires company completion.';
+  const envNarr=[];
+  if(env.electricityKwh!==null) envNarr.push(`electricity consumption was ${fmt(env.electricityKwh,3)} kWh`);
+  if(env.waterM3!==null) envNarr.push(`water consumption was ${fmt(env.waterM3,3)} m³`);
+  if(env.wasteTotalKg!==null) envNarr.push(`total waste generated was ${fmt(env.wasteTotalKg/1000,3)} tonnes`);
+  const envNarrative=envNarr.length?`During ${escapeHTML(c.reportingYear||'the reporting period')}, ${envNarr.join(', ')}.`:'Environmental activity data was not sufficiently available for a complete overview.';
+  const femalePct=k.femaleEmployeePct;
+  const workforce=(hasValue(c.employeeCount)&&hasValue(s.social.femaleEmployees)&&femalePct!==null)
+    ? `At the end of the reporting period, ${escapeHTML(c.name||'the company')} employed ${escapeHTML(c.employeeCount)} people, of whom ${escapeHTML(s.social.femaleEmployees)} were female, representing ${fmt(femalePct,2)}%.`
+    : 'Workforce gender data was not fully available for the reporting period.';
+  const griRows=GRI_ROWS.map(([key,label,ref])=>[label,ref,effectiveGriStatus(key)]);
+  const fuelRows=env.fuels.map(f=>[f.type,formatMaybe(f.quantity,3),f.unit,f.sources||DATA_NOT_AVAILABLE]);
+
+  preview.classList.remove('empty');
+  preview.innerHTML=`
+    <div class="report-cover"><div class="report-badge">ESG & SUSTAINABILITY REPORT</div><h1>${humanOrMissing(c.name,true)}</h1><h2 style="border:0;margin:4px 0">ESG & Sustainability Report</h2><p><b>Reporting Year:</b> ${humanOrMissing(c.reportingYear,true)}</p><p>${humanOrMissing(c.country,true)} • ${humanOrMissing(c.industry,true)}</p></div>
+    <h2>1. About the Company</h2><p>${companyNarrative}</p>
+    ${reportTable(['Company Profile Field','Value'],[['Company',c.name||EMPTY_COMPANY],['Industry',c.industry||EMPTY_COMPANY],['Country',c.country||EMPTY_COMPANY],['Main Activities / Products',c.activities||EMPTY_COMPANY],['Employees',c.employeeCount||EMPTY_COMPANY],['Main Locations',c.locations||EMPTY_COMPANY]])}
+
+    <h2>2. About This Report</h2>
+    <p>This ESG & Sustainability Report presents selected environmental, social and governance information for ${escapeHTML(c.name||'[Company Name]')} for the reporting year ${escapeHTML(c.reportingYear||'[Year]')}.</p>
+    <p>The report has been developed using a simplified reporting framework informed by selected principles, topics and disclosures from the GRI Standards where relevant to the information available. This report does not claim full conformity with the GRI Standards unless a separate assessment has confirmed that all applicable requirements have been satisfied.</p>
+    <p><b>Reporting Period:</b> ${humanOrMissing(c.reportingPeriod,true)}<br><b>Reporting Scope / Main Locations:</b> ${humanOrMissing(c.locations,true)}<br><b>Organizational Boundary:</b> ${humanOrMissing(c.boundary,false)}</p>
+
+    <h2>3. Sustainability Approach</h2>
+    <h3>Sustainability Priorities</h3>${priorities.length?`<ul>${priorities.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:`<p>${EMPTY_COMPANY}</p>`}
+    <h3>Main ESG Risks</h3>${risks.length?`<ul>${risks.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:`<p>${DATA_NOT_AVAILABLE}</p>`}
+    <h3>Main ESG Opportunities</h3>${opp.length?`<ul>${opp.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:`<p>${DATA_NOT_AVAILABLE}</p>`}
+    <p><b>ESG Responsibility:</b> ${humanOrMissing(s.esg.responsibleBody,true)}<br><b>Main Stakeholders:</b> ${stakeholders.length?stakeholders.map(escapeHTML).join(', '):EMPTY_COMPANY}</p>
+
+    <h2>4. Environmental Performance</h2><p>${envNarrative}</p>
+    <table><thead><tr><th>KPI</th><th>Result</th><th>Unit</th></tr></thead><tbody>
+      ${susTableRow('Electricity Consumption',env.electricityKwh,'kWh')}
+      ${susTableRow('Renewable Electricity',env.renewableKwh,'kWh')}
+      ${susTableRow('Renewable Electricity %',k.renewablePct,'%')}
+      ${susTableRow('Scope 1 GHG Emissions',sc.scope1,'tCO₂e')}
+      ${susTableRow('Scope 2 GHG Emissions',sc.scope2,'tCO₂e')}
+      ${susTableRow('Scope 3 GHG Emissions',sc.scope3,'tCO₂e')}
+      ${susTableRow('Total GHG Emissions',sc.total,'tCO₂e')}
+      ${susTableRow('Water Consumption',env.waterM3,'m³')}
+      ${susTableRow('Waste Generated',env.wasteTotalKg===null?null:env.wasteTotalKg/1000,'tonnes')}
+      ${susTableRow('Waste Recycled',env.wasteRecycledKg===null?null:env.wasteRecycledKg/1000,'tonnes')}
+      ${susTableRow('Recycling Rate',k.recyclingPct,'%')}
+    </tbody></table>
+    <h3>Fuel / Energy Activity</h3>${reportTable(['Fuel / Energy Type','Quantity','Unit','Source'],fuelRows)}
+    <p class="report-footnote">GHG totals are linked directly to the existing ISO 14064 calculation engine. No alternative carbon calculation is performed by the Sustainability module.</p>
+
+    <h2>5. Employees and Social Performance</h2><p>${workforce}</p>
+    ${reportTable(['KPI','Result'],[['Total Employees',c.employeeCount||DATA_NOT_AVAILABLE],['Female Employees',s.social.femaleEmployees||DATA_NOT_AVAILABLE],['Female Employees %',k.femaleEmployeePct===null?DATA_NOT_AVAILABLE:fmt(k.femaleEmployeePct,2)+'%'],['Female Managers',s.social.femaleManagers||DATA_NOT_AVAILABLE],['Employee Fatalities',s.social.fatalities||DATA_NOT_AVAILABLE],['Work-Related Injuries',s.social.injuries||DATA_NOT_AVAILABLE],['Total Training Hours',s.social.trainingHours||DATA_NOT_AVAILABLE],['Training Hours per Employee',k.trainingPerEmployee===null?DATA_NOT_AVAILABLE:fmt(k.trainingPerEmployee,2)],['Employee Turnover',s.social.turnover||DATA_NOT_AVAILABLE]])}
+
+    <h2>6. Governance and Ethics</h2>
+    ${reportTable(['KPI','Result'],[['Board Members',s.governance.boardTotal||DATA_NOT_AVAILABLE],['Independent Board Members',s.governance.boardIndependent||DATA_NOT_AVAILABLE],['Female Board Members',s.governance.boardFemale||DATA_NOT_AVAILABLE],['Female Board Representation',k.femaleBoardPct===null?DATA_NOT_AVAILABLE:fmt(k.femaleBoardPct,2)+'%'],['Independent Board Representation',k.independentBoardPct===null?DATA_NOT_AVAILABLE:fmt(k.independentBoardPct,2)+'%'],['Whistleblowing Mechanism',s.governance.whistleblowing||DATA_NOT_AVAILABLE],['Confirmed Corruption Incidents',s.governance.corruptionIncidents||DATA_NOT_AVAILABLE],['ESG Responsible Body',s.esg.responsibleBody||DATA_NOT_AVAILABLE]])}
+    ${reportTable(['Policy','Status'],[['Environmental Policy',s.policies.environmental],['Health & Safety Policy',s.policies.healthSafety],['Human Rights / Employee Policy',s.policies.humanRights],['Code of Conduct',s.policies.codeConduct],['Anti-Corruption Policy',s.policies.antiCorruption]])}
+
+    <h2>7. Sustainability Goals</h2>
+    ${approved.length?reportTable(['ESG Area','Goal','Baseline','Approved Target','Target Year','Status'],approved.map(g=>[g.area,g.goal,g.baseline||DATA_NOT_AVAILABLE,g.target||DATA_NOT_AVAILABLE,g.targetYear||DATA_NOT_AVAILABLE,g.status])):`<p>No proposed goals have yet been explicitly approved as company commitments. Unapproved suggestions remain ${PROPOSED_TARGET}.</p>`}
+
+    <h2>8. ESG Performance Summary</h2>
+    ${reportTable(['Area','Indicator','Result'],[['Environmental','Electricity',env.electricityKwh===null?DATA_NOT_AVAILABLE:fmt(env.electricityKwh,3)+' kWh'],['Environmental','Scope 1',sc.scope1===null?DATA_NOT_AVAILABLE:fmt(sc.scope1,3)+' tCO₂e'],['Environmental','Scope 2',sc.scope2===null?DATA_NOT_AVAILABLE:fmt(sc.scope2,3)+' tCO₂e'],['Environmental','Water',env.waterM3===null?DATA_NOT_AVAILABLE:fmt(env.waterM3,3)+' m³'],['Environmental','Recycling',k.recyclingPct===null?DATA_NOT_AVAILABLE:fmt(k.recyclingPct,2)+'%'],['Social','Employees',c.employeeCount||DATA_NOT_AVAILABLE],['Social','Female Employees',k.femaleEmployeePct===null?DATA_NOT_AVAILABLE:fmt(k.femaleEmployeePct,2)+'%'],['Social','Fatalities',s.social.fatalities||DATA_NOT_AVAILABLE],['Social','Training',k.trainingPerEmployee===null?DATA_NOT_AVAILABLE:fmt(k.trainingPerEmployee,2)+' hours/employee'],['Governance','Female Board Representation',k.femaleBoardPct===null?DATA_NOT_AVAILABLE:fmt(k.femaleBoardPct,2)+'%'],['Governance','Independent Board Representation',k.independentBoardPct===null?DATA_NOT_AVAILABLE:fmt(k.independentBoardPct,2)+'%'],['Governance','Code of Conduct',s.policies.codeConduct],['Governance','Confirmed Corruption Incidents',s.governance.corruptionIncidents||DATA_NOT_AVAILABLE]])}
+
+    <h2>9. GRI Reference Table</h2>${reportTable(['Report Area','Relevant GRI Topic / Disclosure','Information Status'],griRows)}
+
+    ${hasValue(s.report.executiveSummary)?`<h2>Executive Summary / Company Narrative</h2><p>${escapeHTML(s.report.executiveSummary).replace(/\n/g,'<br>')}</p>`:''}
+    <h2>Methodology, Assumptions & Assurance</h2>
+    <p><b>Existing ISO 14064 methodology notes:</b> ${humanOrMissing(c.methodology,false)}</p>
+    <p><b>Additional sustainability methodology:</b> ${humanOrMissing(s.report.methodologyNotes,false)}</p>
+    <p><b>Assumptions / Limitations:</b> ${humanOrMissing(s.report.assumptions,false)}</p>
+    <p><b>Verification / Assurance:</b> ${humanOrMissing(s.report.assurance,false)}</p>
+    <p><b>Other Notes / Disclosures:</b> ${humanOrMissing(s.report.otherDisclosures,false)}</p>
+
+    <div class="report-footnote"><b>System footnote:</b> This simplified ESG & Sustainability Report is intended to support practical sustainability disclosure, particularly for organizations beginning ESG reporting. It does not automatically constitute a report prepared in accordance with the GRI Standards. Additional assessment may be necessary depending on material topics, applicable GRI Sector Standards, organization size and complexity, stakeholder expectations, legislation, stock-exchange requirements, investor requirements, and other mandatory reporting requirements.</div>
+  `;
+  toast('Sustainability report generated');
+}
+
+/* ---------- Sustainability delegated events ---------- */
+function handleSustainabilityInput(e){
+  const t=e.target;
+  if(t.dataset.sharedField){ sharedCompany[t.dataset.sharedField]=t.value; saveSharedCompany(); return; }
+  if(t.dataset.susPath){ setNested(sustainabilityState,t.dataset.susPath,t.type==='checkbox'?t.checked:t.value); saveSustainability(); return; }
+  if(t.dataset.susStakeholder){
+    const name=t.dataset.susStakeholder; const list=new Set(sustainabilityState.esg.stakeholders||[]);
+    t.checked?list.add(name):list.delete(name); sustainabilityState.esg.stakeholders=[...list]; saveSustainability(); return;
+  }
+  if(t.dataset.susArray){
+    const arr=sustainabilityState.environment[t.dataset.susArray]; const i=Number(t.dataset.row); if(arr&&arr[i]){arr[i][t.dataset.field]=t.value;saveSustainability();} return;
+  }
+  if(t.dataset.susGoal!==undefined){ const i=Number(t.dataset.susGoal); if(sustainabilityState.goals[i]){sustainabilityState.goals[i][t.dataset.field]=t.value;saveSustainability();} return; }
+  if(t.dataset.susGri){ sustainabilityState.gri[t.dataset.susGri]=t.value;saveSustainability();return; }
+}
+function handleSustainabilityClick(e){
+  const add=e.target.closest('[data-sus-add]');
+  if(add){
+    const key=add.dataset.susAdd;
+    if(key==='manualFuels'){ sustainabilityState.environment.manualFuels.push({type:'',quantity:'',unit:'litre'}); saveSustainability(); renderSustainabilityModule(); }
+    return;
+  }
+  const del=e.target.closest('[data-sus-del]');
+  if(del){
+    const key=del.dataset.susDel, i=Number(del.dataset.row);
+    if(key==='manualFuels'){ sustainabilityState.environment.manualFuels.splice(i,1);saveSustainability();renderSustainabilityModule(); }
+  }
+}
+
+/* ========================= ISO 50001 ========================= */
+const ENMS_POLICY_CHECKS = [
+  ['purpose','Appropriate to organization purpose'],['objectives','Supports objectives and energy targets'],['resources','Commitment to resources and information'],
+  ['requirements','Commitment to applicable legal/other requirements'],['energyImprovement','Commitment to continual improvement of energy performance'],['enmsImprovement','Commitment to continual improvement of EnMS'],
+  ['procurement','Supports energy-efficient procurement'],['design','Supports energy-performance consideration in design'],['communicated','Communicated internally'],['interestedParties','Available to interested parties as appropriate'],['reviewed','Periodically reviewed']
+];
+const ENMS_AWARENESS = [
+  ['policy','Energy policy awareness'],['contribution','Contribution to EnMS/objectives'],['benefits','Benefits of improved energy performance'],['behaviour','Impact of activities/behaviour'],['nonconformity','Consequences of nonconformity']
+];
+
+const ENMS_SCHEMAS = {
+  interestedParties:[['party','Interested Party'],['requirement','Relevant Requirement'],['addressed','Addressed by EnMS?','select',['','Yes','No']]],
+  legalRequirements:[['requirement','Requirement'],['source','Source','select',['Law','Regulation','Contract','Other']],['applicable','Applicable?','select',['','Yes','No']],['reviewFrequency','Review Frequency']],
+  risks:[['type','Type','select',['Risk','Opportunity']],['description','Risk / Opportunity'],['action','Required Action'],['responsible','Responsible'],['effectiveness','Effectiveness','select',['Pending','Effective','Not Effective']]],
+  targets:[['objective','Objective'],['target','Energy Target'],['enpi','EnPI'],['baseline','Baseline'],['targetDate','Target Date','date'],['status','Status','select',['Not Started','In Progress','Achieved']],['what','What will be done'],['responsible','Responsible Person'],['resources','Required Resources'],['completionDate','Completion Date','date'],['evaluationMethod','Method to evaluate results'],['verificationMethod','Method to verify energy-performance improvement']],
+  manualSources:[['energyType','Energy Type'],['previous','Previous Period','number'],['current','Current Period','number'],['unit','Unit'],['dataSource','Data Source']],
+  seus:[['seu','SEU'],['energyType','Energy Type'],['consumption','Consumption','number'],['variables','Relevant Variable(s)'],['performance','Current Energy Performance'],['influencers','Person(s) Influencing SEU']],
+  opportunities:[['opportunity','Opportunity'],['seu','Related SEU'],['priority','Priority','select',['High','Medium','Low']],['estimatedSaving','Estimated Saving (optional)'],['selected','Selected for Action?','select',['','Yes','No']]],
+  futureConsumption:[['energy','Energy / SEU'],['estimated','Estimated Future Consumption','number'],['unit','Unit']],
+  enpis:[['name','EnPI Name'],['related','Related Site / SEU'],['method','Formula / Method'],['unit','Unit'],['direction','Improvement Direction','select',['Lower is Better','Higher is Better','Custom']],['current','Current Value','number']],
+  enbs:[['enpiName','EnPI'],['period','Baseline Period'],['value','Baseline Value','number'],['variables','Relevant Variables'],['staticFactors','Static Factors'],['normalizationRequired','Normalization Required?','select',['NO','YES']],['normalizationMethod','Normalization Method']],
+  dataPlan:[['data','Data'],['related','Related Site / SEU'],['source','Source / Meter'],['unit','Unit'],['frequency','Frequency','select',['Daily','Weekly','Monthly','Quarterly','Annual','Other']],['responsible','Responsible']],
+  devices:[['device','Measuring Device / Source'],['id','ID'],['evidence','Accuracy / Repeatability Evidence'],['status','Status','select',['Valid','Review Required']]],
+  competence:[['role','Role'],['required','Required Competence'],['existing','Existing Competence'],['gap','Gap?','select',['Yes','No']],['action','Action'],['evidence','Evidence / Reference']],
+  communication:[['what','What'],['when','When'],['withWhom','With Whom'],['how','How'],['responsible','Responsible']],
+  documents:[['title','Document / Record'],['documentId','Document ID'],['version','Version'],['owner','Owner'],['approvalDate','Approval Date','date'],['reviewDate','Review Date','date'],['status','Status'],['retention','Retention Period'],['fileReference','File Reference']],
+  seuControls:[['seu','SEU'],['operatingCriteria','Operating Criteria'],['maintenanceCriteria','Maintenance Criteria'],['responsible','Responsible'],['communicated','Criteria Communicated?','select',['','Yes','No']]],
+  designs:[['project','Project / Design'],['significantImpact','Significant Energy Impact?','select',['Yes','No']],['considered','Energy Performance Considered?','select',['Yes','No']],['incorporated','Result Incorporated?','select',['Yes','No']],['evidence','Evidence / Reference']],
+  procurements:[['procurement','Procurement'],['criteria','Energy Evaluation Criteria'],['supplierInformed','Supplier Informed?','select',['Yes','No']],['specification','Energy Specification']],
+  monitoring:[['item','Monitoring Item'],['method','Method'],['frequency','Frequency'],['expected','Expected'],['actual','Actual'],['evaluation','Evaluation']],
+  deviations:[['significant','Significant?','select',['No','Yes']],['description','Deviation Description'],['investigation','Investigation'],['cause','Cause'],['action','Response / Action'],['date','Date','date'],['responsible','Responsible']],
+  evaluations:[['requirement','Legal / Other Requirement'],['date','Evaluation Date','date'],['status','Status','select',['Compliant','Non-Compliant']],['action','Action Required'],['responsible','Responsible']],
+  audits:[['date','Date','date'],['scope','Scope'],['criteria','Criteria'],['auditor','Auditor'],['findings','Findings'],['result','Result'],['action','Action']],
+  correctiveActions:[['description','Nonconformity'],['correction','Immediate Correction'],['consequences','Consequences'],['rootCause','Root Cause'],['similarRisk','Similar NC Possible?','select',['Yes','No']],['correctiveAction','Corrective Action'],['owner','Responsible'],['dueDate','Due Date','date'],['effectiveness','Effectiveness Review'],['enmsChange','EnMS Change Required?','select',['Yes','No']]],
+  improvement:[['enpi','EnPI'],['baseline','Baseline','number'],['current','Current','number'],['normalization','Normalization','select',['Yes','No','N/A']],['change','Change'],['demonstrated','Improvement Demonstrated?','select',['Yes','No']]]
+};
+
+function enmsArrayRef(key){
+  const map={
+    interestedParties:enmsState.context.interestedParties,legalRequirements:enmsState.context.legalRequirements,risks:enmsState.risks,targets:enmsState.targets,
+    manualSources:enmsState.energy.manualSources,seus:enmsState.review.seus,opportunities:enmsState.review.opportunities,futureConsumption:enmsState.review.futureConsumption,
+    enpis:enmsState.performance.enpis,enbs:enmsState.performance.enbs,dataPlan:enmsState.measurement.dataPlan,devices:enmsState.measurement.devices,
+    competence:enmsState.support.competence,communication:enmsState.support.communication,documents:enmsState.documents,seuControls:enmsState.operation.seuControls,
+    designs:enmsState.operation.designs,procurements:enmsState.operation.procurements,monitoring:enmsState.performance.monitoring,deviations:enmsState.performance.deviations,
+    evaluations:enmsState.compliance.evaluations,audits:enmsState.audit.audits,correctiveActions:enmsState.correctiveActions,improvement:enmsState.improvement
+  };
+  return map[key];
+}
+function blankEnmsRow(key){
+  const row={}; (ENMS_SCHEMAS[key]||[]).forEach(([f])=>row[f]=''); return row;
+}
+function renderEnmsArrayTable(key,addLabel){
+  const schema=ENMS_SCHEMAS[key]||[], rows=enmsArrayRef(key)||[];
+  return `<div class="tableWrap module-table" style="margin-top:10px"><table><thead><tr>${schema.map(c=>`<th>${escapeHTML(c[1])}</th>`).join('')}<th class="no-print">Action</th></tr></thead><tbody>
+    ${rows.map((r,i)=>`<tr>${schema.map(([field,label,type='text',opts=[]])=>{const val=r[field]??'';if(type==='select')return `<td><select data-enms-array="${key}" data-row="${i}" data-field="${field}">${opts.map(o=>`<option value="${escapeHTML(o)}" ${String(o)===String(val)?'selected':''}>${escapeHTML(o)}</option>`).join('')}</select></td>`;return `<td><input type="${type==='number'?'number':type==='date'?'date':'text'}" ${type==='number'?'min="0" step="any"':''} data-enms-array="${key}" data-row="${i}" data-field="${field}" value="${escapeHTML(asText(val))}"></td>`;}).join('')}<td class="no-print delete-cell"><button class="btn danger small" data-enms-del="${key}" data-row="${i}" type="button">Delete</button></td></tr>`).join('')}
+    ${!rows.length?`<tr><td colspan="${schema.length+1}">${DATA_NOT_AVAILABLE}</td></tr>`:''}
+  </tbody></table></div><div class="no-print" style="margin-top:8px"><button class="btn small" data-enms-add="${key}" type="button">+ ${escapeHTML(addLabel)}</button></div>`;
+}
+
+function enmsPathInput(label,path,type='text',options=null,help=''){
+  const val=getNested(enmsState,path)??'';
+  let control='';
+  if(type==='textarea') control=`<textarea data-enms-path="${path}">${escapeHTML(asText(val))}</textarea>`;
+  else if(type==='select') control=`<select data-enms-path="${path}">${(options||[]).map(o=>`<option value="${escapeHTML(o)}" ${String(o)===String(val)?'selected':''}>${escapeHTML(o)}</option>`).join('')}</select>`;
+  else control=`<input type="${type}" ${type==='number'?'min="0" step="any"':''} data-enms-path="${path}" value="${escapeHTML(asText(val))}">`;
+  return `<div><label>${escapeHTML(label)}</label>${control}${help?`<div class="field-help">${escapeHTML(help)}</div>`:''}</div>`;
+}
+
+function renderLinkedEnergyTable(){
+  const rows=getLinkedEnergyRows();
+  return `<div class="tableWrap module-table compact"><table><thead><tr><th>Energy Type</th><th>Current Period</th><th>Unit</th><th>Data Source</th><th>Scope / Year</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${escapeHTML(r.energyType)}</td><td>${fmt(r.current,3)}</td><td>${escapeHTML(r.unit)}</td><td><span class="data-tag auto">AUTO</span> ${escapeHTML(r.dataSource||'ISO 14064')}</td><td>${escapeHTML([r.scope,r.year].filter(Boolean).join(' • '))}</td></tr>`).join(''):`<tr><td colspan="5">${DATA_NOT_AVAILABLE}</td></tr>`}</tbody></table></div>`;
+}
+
+function enpiPerformanceRows(){
+  return enmsState.performance.enpis.map(p=>{
+    const b=enmsState.performance.enbs.find(x=>String(x.enpiName||'').trim()===String(p.name||'').trim());
+    let improvement=null, note='';
+    if(!b){note='Baseline not linked';}
+    else if(b.normalizationRequired==='YES'){note='Normalization required — no raw auto-comparison';}
+    else if(p.direction!=='Lower is Better'){note='Auto improvement % only for Lower is Better EnPI';}
+    else{
+      const base=positive(b.value), cur=positiveOrZero(p.current);
+      if(base&&cur!==null) improvement=(base-cur)/base*100; else note='Baseline/current value missing';
+    }
+    return {name:p.name||'',baseline:b?.value??'',current:p.current??'',direction:p.direction||'',improvement,note};
+  });
+}
+
+
+function enmsAutomaticCalculations(){
+  const energyChanges=(enmsState.energy.manualSources||[]).map(r=>{
+    const prev=positive(r.previous), cur=positiveOrZero(r.current);
+    return {energyType:r.energyType||'',unit:r.unit||'',previous:r.previous??'',current:r.current??'',changePct:(prev&&cur!==null)?(cur-prev)/prev*100:null};
+  });
+  const enpiChanges=enpiPerformanceRows().map(r=>{
+    const base=positive(r.baseline),cur=positiveOrZero(r.current);
+    return {...r,enpiChange:(base&&cur!==null)?cur-base:null};
+  });
+  const monitoringVariance=(enmsState.performance.monitoring||[]).map(r=>{
+    const exp=positive(r.expected),act=positiveOrZero(r.actual);
+    return {item:r.item||'',expected:r.expected??'',actual:r.actual??'',variancePct:(exp&&act!==null)?(act-exp)/exp*100:null};
+  });
+  return {energyChanges,enpiChanges,monitoringVariance};
+}
+
+function enmsDocumentMatrix(){
+  const e=enmsState;
+  const has=(v)=>hasValue(v);
+  const rules=[
+    ['4.3','EnMS Scope & Boundaries','Maintain',has(e.context.scopeStatement)&&has(e.context.physicalBoundaries)],
+    ['5.2','Energy Policy','Maintain',has(e.policy.text)||has(e.policy.documentReference)],
+    ['6.2','Objectives & Energy Targets','Retain',e.targets.length>0],['6.2','Action Plans','Retain',e.targets.length>0&&e.targets.every(t=>has(t.what)&&has(t.responsible)&&has(t.resources)&&has(t.completionDate)&&has(t.evaluationMethod)&&has(t.verificationMethod))],
+    ['6.3','Energy Review Method & Criteria','Maintain',has(e.review.seuCriteria)],['6.3','Energy Review Results','Retain',e.review.seus.length>0],
+    ['6.4','EnPI Determination / Updating Method','Maintain',e.performance.enpis.length>0&&e.performance.enpis.every(x=>has(x.method))],['6.4','EnPI Values','Retain',e.performance.enpis.length>0&&e.performance.enpis.every(x=>has(x.current))],
+    ['6.5','EnBs, Relevant Variables and EnB Changes','Retain',e.performance.enbs.length>0],['6.6','Energy Data','Retain',getLinkedEnergyRows().length>0||e.energy.manualSources.length>0],
+    ['6.6','Measurement Accuracy / Repeatability Evidence','Retain',e.measurement.devices.length>0],['7.2','Competence Evidence','Retain',e.support.competence.length>0],
+    ['8.1','Operational Control Evidence, as necessary','Keep',e.operation.seuControls.length>0],['8.2','Relevant Design Evidence','Retain',e.operation.designApplicable==='NO'||e.operation.designs.length>0],
+    ['9.1','Monitoring & Measurement Results','Retain',e.performance.monitoring.length>0],['9.1','Significant Deviation Investigation / Response','Retain',!e.performance.deviations.some(d=>d.significant==='Yes')||e.performance.deviations.every(d=>d.significant!=='Yes'||(has(d.investigation)&&has(d.action)))],
+    ['9.1.2','Compliance Evaluation Results / Actions','Retain',e.compliance.evaluations.length>0],['9.2','Internal Audit Programme & Results','Retain',has(e.audit.frequency)&&e.audit.audits.length>0],
+    ['9.3','Management Review Results','Retain',has(e.management.reviewDate)],['10.1','Nonconformities & Corrective Actions','Retain',e.correctiveActions.length>0||true]
+  ];
+  return rules.map(r=>({clause:r[0],item:r[1],type:r[2],complete:!!r[3]}));
+}
+
+function validateEnms(){
+  const c=getSharedCompanyData(), e=enmsState, errors=[],warnings=[];
+  ['name','industry','country','activities','locations','employeeCount'].forEach(k=>{if(!hasValue(c[k])) errors.push(`Company / EnMS setup missing: ${k}.`);});
+  if(!hasValue(e.context.scopeStatement)) errors.push('Missing EnMS scope statement.');
+  if(!hasValue(e.context.physicalBoundaries)) errors.push('Missing EnMS physical boundaries.');
+  if(getLinkedEnergyRows().length && !hasValue(e.context.energyTypes)) warnings.push('Energy activity exists in ISO 14064, but Energy Types Within Boundary has not been documented in the EnMS scope.');
+  e.targets.forEach((t,i)=>{
+    if(!hasValue(t.target)) errors.push(`Energy target row ${i+1}: target is missing.`);
+    if(!hasValue(t.what)||!hasValue(t.responsible)||!hasValue(t.resources)||!hasValue(t.completionDate)||!hasValue(t.evaluationMethod)||!hasValue(t.verificationMethod)) errors.push(`Energy target row ${i+1}: mandatory action plan information is incomplete.`);
+  });
+  e.performance.enpis.forEach((p,i)=>{if(!hasValue(p.method)) errors.push(`EnPI row ${i+1}: calculation / determination method is required.`);});
+  e.performance.enbs.forEach((b,i)=>{if(!hasValue(b.period)||positive(b.value)===null) errors.push(`EnB row ${i+1}: baseline period and positive baseline value are required.`);if(b.normalizationRequired==='YES'&&!hasValue(b.normalizationMethod)) errors.push(`EnB row ${i+1}: normalization method is required.`);});
+  if(e.operation.designApplicable==='YES'&&!e.operation.designs.length) errors.push('Design is applicable: design energy-performance evaluation is required.');
+  if(e.operation.procurementApplicable==='YES'&&!e.operation.procurements.length) errors.push('Significant procurement is applicable: energy evaluation criteria are required.');
+  e.performance.deviations.forEach((d,i)=>{if(d.significant==='Yes'&&(!hasValue(d.investigation)||!hasValue(d.cause)||!hasValue(d.action)||!hasValue(d.date)||!hasValue(d.responsible))) errors.push(`Significant deviation row ${i+1}: investigation, cause, response, date and responsible person are required.`);});
+  if(e.context.legalRequirements.length&&!e.compliance.evaluations.length) warnings.push('Compliance requirements exist but no compliance evaluation is recorded.');
+  if(!hasValue(e.audit.frequency)||!e.audit.audits.length) warnings.push('Internal audit programme/results are incomplete.');
+  if(!hasValue(e.management.reviewDate)) warnings.push('Management review has not been recorded.');
+  if(!e.improvement.some(x=>x.demonstrated==='Yes')) warnings.push('Energy performance improvement has not yet been demonstrated in the improvement register.');
+  return {errors,warnings};
+}
+function enmsCompleteness(){
+  const matrix=enmsDocumentMatrix(); const complete=matrix.filter(x=>x.complete).length; return matrix.length?complete/matrix.length*100:0;
+}
+function enmsValidationHTML(){
+  const v=validateEnms(), pct=enmsCompleteness();
+  const cls=v.errors.length?'bad':v.warnings.length?'warn':'ok';
+  return `<div class="validation-box ${cls}"><b>EnMS Documentation Completeness: ${fmt(pct,1)}%</b><div class="tiny">Documentation completeness does not constitute ISO 50001 certification or confirmation of conformity.</div>${v.errors.length?`<div class="tiny" style="color:var(--danger);margin-top:8px">${v.errors.length} blocking issue(s)</div><ul>${v.errors.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:''}${v.warnings.length?`<div class="tiny" style="color:var(--warn);margin-top:8px">${v.warnings.length} warning(s)</div><ul>${v.warnings.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:''}</div>`;
+}
+
+function renderEnmsModule(){
+  const root=document.getElementById('enmsWorkspace'); if(!root) return;
+  const c=getSharedCompanyData(), e=enmsState, perf=enpiPerformanceRows(), matrix=enmsDocumentMatrix(), calcs=enmsAutomaticCalculations();
+  const policyChecks=ENMS_POLICY_CHECKS.map(([k,label])=>`<div class="checkbox-card"><label><input type="checkbox" data-enms-policy="${k}" ${e.policy.checks[k]?'checked':''}> ${escapeHTML(label)}</label></div>`).join('');
+  const awareness=ENMS_AWARENESS.map(([k,label])=>`<div class="checkbox-card"><label><input type="checkbox" data-enms-awareness="${k}" ${e.support.awareness[k]?'checked':''}> ${escapeHTML(label)}</label></div>`).join('');
+  const mgmtAuto=[
+    ['Previous / Current Context',`${splitList(e.context.internalIssues).length} internal issue(s); ${splitList(e.context.externalIssues).length} external issue(s)`],
+    ['Risks & Opportunities',`${e.risks.length} record(s)`],['Nonconformities',`${e.correctiveActions.length} corrective-action record(s)`],['Monitoring Results',`${e.performance.monitoring.length} record(s)`],
+    ['Audit Results',`${e.audit.audits.length} audit record(s)`],['Legal Compliance',`${e.compliance.evaluations.length} evaluation(s)`],['Energy Policy',hasValue(e.policy.text)||hasValue(e.policy.documentReference)?'Available':'Missing'],
+    ['Objectives / Targets',`${e.targets.length} target(s)`],['EnPIs / Energy Performance',`${e.performance.enpis.length} EnPI(s)`],['Action Plans',`${e.targets.filter(t=>hasValue(t.what)).length}/${e.targets.length} target(s) with action content`]
+  ];
+
+  root.innerHTML=`
+    <details class="module-section" open><summary>1–2. Organization, Context, Interested Parties & EnMS Scope</summary><div class="module-section-body">
+      <div class="grid grid-3">
+        <div><label>Company Name</label>${autoBox(c.name||DATA_NOT_AVAILABLE,'ISO 14064 → Organization Metadata')}</div>
+        ${inputHTML('Industry',sharedCompany.industry,'data-shared-field="industry" placeholder="Shared with Sustainability"')}
+        ${inputHTML('Country',sharedCompany.country,'data-shared-field="country" placeholder="Shared with Sustainability"')}
+        ${textareaHTML('Main Activities',sharedCompany.activities,'data-shared-field="activities" placeholder="Shared with Sustainability"')}
+        ${textareaHTML('Main Locations',sharedCompany.locations,'data-shared-field="locations" placeholder="Shared with Sustainability"')}
+        ${numericInput('Number of Employees',sharedCompany.employeeCount,'data-shared-field="employeeCount" step="1"')}
+        <div><label>EnMS Reporting / Review Year</label>${autoBox(c.reportingYear||DATA_NOT_AVAILABLE,'ISO 14064 → Reporting Period')}</div>
+      </div>
+      <div class="grid grid-2" style="margin-top:12px">${enmsPathInput('Relevant Internal Issues','context.internalIssues','textarea')}${enmsPathInput('Relevant External Issues','context.externalIssues','textarea')}</div>
+      <h3 style="font-size:13px">Interested Parties</h3>${renderEnmsArrayTable('interestedParties','Add Interested Party')}
+      <h3 style="font-size:13px">Legal and Other Requirements</h3>${renderEnmsArrayTable('legalRequirements','Add Requirement')}
+      <h3 style="font-size:13px">EnMS Scope and Boundaries</h3><div class="grid grid-2">${enmsPathInput('EnMS Scope Statement','context.scopeStatement','textarea')}${enmsPathInput('Physical Boundaries','context.physicalBoundaries','textarea')}${enmsPathInput('Activities Included','context.activitiesIncluded','textarea')}${enmsPathInput('Facilities / Sites Included','context.sitesIncluded','textarea')}${enmsPathInput('Energy Types Within Boundary','context.energyTypes','textarea')}</div>
+    </div></details>
+
+    <details class="module-section" open><summary>3–4. Leadership & Energy Policy</summary><div class="module-section-body">
+      <div class="grid grid-2">${enmsPathInput('Top Management Responsible','leadership.topManagement')}${enmsPathInput('Energy Management Team / Responsible Person','leadership.energyTeam')}${enmsPathInput('Roles Assigned','leadership.rolesAssigned','select',['YES','NO'])}${enmsPathInput('Responsibilities Communicated','leadership.rolesCommunicated','select',['YES','NO'])}${enmsPathInput('Energy Policy Text','policy.text','textarea')}${enmsPathInput('Energy Policy Document Reference','policy.documentReference')}</div>
+      <div class="card no-print" style="box-shadow:none;background:rgba(255,255,255,.02);margin-top:12px"><label>Energy Policy File (PDF/DOC/DOCX, optional local attachment)</label><input type="file" data-enms-policy-file accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div class="source-note">${e.policy.fileName?'Stored attachment: '+escapeHTML(e.policy.fileName):'No policy file stored. Files larger than 1.5 MB are not embedded in localStorage; use the Document Reference field instead.'}</div></div>
+      <h3 style="font-size:13px">Energy Policy Minimum Validation</h3><div class="checkbox-grid">${policyChecks}</div>
+    </div></details>
+
+    <details class="module-section"><summary>5–6. Risks, Opportunities, Objectives, Targets & Action Plans</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Risks and Opportunities</h3>${renderEnmsArrayTable('risks','Add Risk / Opportunity')}
+      <h3 style="font-size:13px">Energy Objectives, Targets and Mandatory Action Plans</h3><div class="module-note">If an energy target is created, the action-plan fields are mandatory: what, responsible person, resources, completion date, result-evaluation method and energy-performance verification method.</div>${renderEnmsArrayTable('targets','Add Energy Target + Action Plan')}
+    </div></details>
+
+    <details class="module-section" open><summary>7. Energy Sources & Consumption — ISO 14064 Link</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Auto-Linked Current Period Energy Activity</h3>${renderLinkedEnergyTable()}
+      <div class="source-note">Source mapping is read-only and does not modify Scope 1/2/3 calculations. Electricity and recognized fuel/energy activity rows are aggregated only where category and unit match.</div>
+      <h3 style="font-size:13px;margin-top:16px">Additional / Previous-Period Energy Data</h3>${renderEnmsArrayTable('manualSources','Add Energy Source Row')}
+      <h3 style="font-size:13px;margin-top:16px">Automatic Energy Consumption Change</h3>${reportTable(['Energy Type','Previous','Current','Unit','Change %'],calcs.energyChanges.map(r=>[r.energyType,r.previous,r.current,r.unit,r.changePct===null?DATA_NOT_AVAILABLE:fmt(r.changePct,2)+'%']))}
+    </div></details>
+
+    <details class="module-section"><summary>8–10. Energy Review — SEUs, Opportunities & Future Consumption</summary><div class="module-section-body">
+      ${enmsPathInput('SEU Identification Criteria','review.seuCriteria','textarea','', 'Company-defined significance criteria; examples should be treated only as guidance.')}
+      <h3 style="font-size:13px">Significant Energy Uses (SEUs)</h3>${renderEnmsArrayTable('seus','Add SEU')}
+      <h3 style="font-size:13px">Energy Improvement Opportunities</h3>${renderEnmsArrayTable('opportunities','Add Opportunity')}
+      <h3 style="font-size:13px">Future Energy Consumption</h3>${renderEnmsArrayTable('futureConsumption','Add Future Consumption Estimate')}
+    </div></details>
+
+    <details class="module-section" open><summary>11–13. EnPIs, Energy Baselines & Performance Calculation</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Energy Performance Indicators (EnPIs)</h3>${renderEnmsArrayTable('enpis','Add EnPI')}
+      <h3 style="font-size:13px">Energy Baselines (EnBs)</h3>${renderEnmsArrayTable('enbs','Add Energy Baseline')}
+      <h3 style="font-size:13px">Automatic Energy Performance View</h3>
+      <div class="tableWrap module-table compact"><table><thead><tr><th>EnPI</th><th>Baseline</th><th>Current</th><th>Direction</th><th>EnPI Change</th><th>Improvement %</th><th>Rule / Note</th></tr></thead><tbody>${calcs.enpiChanges.length?calcs.enpiChanges.map(r=>`<tr><td>${escapeHTML(r.name)}</td><td>${escapeHTML(asText(r.baseline))}</td><td>${escapeHTML(asText(r.current))}</td><td>${escapeHTML(r.direction)}</td><td>${r.enpiChange===null?DATA_NOT_AVAILABLE:fmt(r.enpiChange,3)}</td><td>${r.improvement===null?DATA_NOT_AVAILABLE:fmt(r.improvement,2)+'%'}</td><td>${escapeHTML(r.note||'CALCULATED')}</td></tr>`).join(''):`<tr><td colspan="7">${DATA_NOT_AVAILABLE}</td></tr>`}</tbody></table></div>
+      <div class="module-note" style="margin-top:10px">Automatic improvement % is applied only when the company selected “Lower is Better” and normalization is not required. Raw values are never used when normalization is required.</div>
+    </div></details>
+
+    <details class="module-section"><summary>14. Energy Data Collection Plan & Measurement Accuracy</summary><div class="module-section-body"><h3 style="font-size:13px">Data Collection Plan</h3>${renderEnmsArrayTable('dataPlan','Add Data Plan Row')}<h3 style="font-size:13px">Measurement Accuracy / Repeatability</h3>${renderEnmsArrayTable('devices','Add Measuring Device')}</div></details>
+
+    <details class="module-section"><summary>15–18. Support — Competence, Awareness, Communication & Document Control</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Competence</h3>${renderEnmsArrayTable('competence','Add Competence Record')}
+      <h3 style="font-size:13px">Awareness</h3><div class="checkbox-grid">${awareness}</div>
+      <h3 style="font-size:13px">Communication</h3>${renderEnmsArrayTable('communication','Add Communication Record')}
+      <h3 style="font-size:13px">Documented Information Register</h3>${renderEnmsArrayTable('documents','Add Document / Record')}
+    </div></details>
+
+    <details class="module-section"><summary>19–21. Operation — SEU Controls, Design & Procurement</summary><div class="module-section-body">
+      <h3 style="font-size:13px">SEU Operational Controls</h3>${renderEnmsArrayTable('seuControls','Add Operational Control')}
+      <div class="grid grid-2" style="margin-top:14px">${enmsPathInput('Design / Significant Modification Applicable?','operation.designApplicable','select',['NO','YES'])}${enmsPathInput('Significant Energy-Affecting Procurement Applicable?','operation.procurementApplicable','select',['NO','YES'])}</div>
+      ${e.operation.designApplicable==='YES'?`<h3 style="font-size:13px">Design Evaluations</h3>${renderEnmsArrayTable('designs','Add Design Evaluation')}`:`<div class="module-note" style="margin-top:10px">Design detail: ${'[NOT APPLICABLE]'}</div>`}
+      ${e.operation.procurementApplicable==='YES'?`<h3 style="font-size:13px">Procurement Energy Evaluations</h3>${renderEnmsArrayTable('procurements','Add Procurement Evaluation')}`:`<div class="module-note" style="margin-top:10px">Procurement detail: ${'[NOT APPLICABLE]'}</div>`}
+    </div></details>
+
+    <details class="module-section"><summary>22–24. Monitoring, Deviations & Compliance Evaluation</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Monitoring & Measurement</h3>${renderEnmsArrayTable('monitoring','Add Monitoring Record')}
+      <h3 style="font-size:13px">Automatic Actual vs Expected Variance</h3>${reportTable(['Monitoring Item','Expected','Actual','Variance %'],calcs.monitoringVariance.map(r=>[r.item,r.expected,r.actual,r.variancePct===null?DATA_NOT_AVAILABLE:fmt(r.variancePct,2)+'%']))}
+      <h3 style="font-size:13px">Significant Energy Performance Deviations</h3>${renderEnmsArrayTable('deviations','Add Deviation Record')}
+      <h3 style="font-size:13px">Compliance Evaluation</h3>${renderEnmsArrayTable('evaluations','Add Compliance Evaluation')}
+    </div></details>
+
+    <details class="module-section"><summary>25. Internal Audit Programme & Results</summary><div class="module-section-body">
+      <div class="grid grid-2">${enmsPathInput('Audit Frequency','audit.frequency')}${enmsPathInput('Audit Method','audit.method')}${enmsPathInput('Responsible','audit.responsible')}${enmsPathInput('Reporting Method','audit.reportingMethod')}</div>
+      ${renderEnmsArrayTable('audits','Add Internal Audit')}
+    </div></details>
+
+    <details class="module-section"><summary>26. Management Review</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Automatically Brought into Review</h3>${reportTable(['Management Review Input','Current System Source Summary'],mgmtAuto)}
+      <div class="grid grid-2">${enmsPathInput('Management Review Date','management.reviewDate','date')}${enmsPathInput('Review Notes','management.notes','textarea')}</div>
+      <h3 style="font-size:13px">Management Decisions / Actions</h3><div class="grid grid-2">
+        ${enmsPathInput('Energy Performance Improvement','management.decisions.energyPerformance','textarea')}${enmsPathInput('Energy Policy','management.decisions.energyPolicy','textarea')}${enmsPathInput('EnPI / EnB','management.decisions.enpiEnb','textarea')}${enmsPathInput('Objectives / Targets / Action Plans','management.decisions.targets','textarea')}${enmsPathInput('Resources','management.decisions.resources','textarea')}${enmsPathInput('Integration with Business Processes','management.decisions.integration','textarea')}${enmsPathInput('Competence / Awareness / Communication','management.decisions.competence','textarea')}
+      </div>
+    </div></details>
+
+    <details class="module-section"><summary>27–28. Nonconformity, Corrective Action & Continual Improvement</summary><div class="module-section-body">
+      <h3 style="font-size:13px">Corrective Action Register</h3>${renderEnmsArrayTable('correctiveActions','Add Corrective Action')}
+      <h3 style="font-size:13px">Energy Performance Improvement Summary</h3>${renderEnmsArrayTable('improvement','Add Improvement Record')}
+    </div></details>
+
+    <details class="module-section" open><summary>Mandatory Document / Record Matrix & Completeness</summary><div class="module-section-body">
+      <div class="tableWrap module-table compact"><table><thead><tr><th>ISO Clause</th><th>Mandatory Information / Evidence</th><th>Type</th><th>System Status</th></tr></thead><tbody>${matrix.map(m=>`<tr><td>${escapeHTML(m.clause)}</td><td>${escapeHTML(m.item)}</td><td>${escapeHTML(m.type)}</td><td><span class="status-chip ${m.complete?'good':'bad'}">${m.complete?'Complete':'Incomplete'}</span></td></tr>`).join('')}</tbody></table></div>
+      ${enmsValidationHTML()}
+    </div></details>
+  `;
+}
+
+function renderEnmsReportTableFromArray(key, title){
+  const schema=ENMS_SCHEMAS[key]||[], rows=enmsArrayRef(key)||[];
+  return `<h3>${escapeHTML(title)}</h3>${reportTable(schema.map(c=>c[1]),rows.map(r=>schema.map(c=>r[c[0]]||DATA_NOT_AVAILABLE)))}`;
+}
+
+function generateEnmsReport(){
+  const preview=document.getElementById('enmsReportPreview'); if(!preview) return;
+  const c=getSharedCompanyData(), e=enmsState, linked=getLinkedEnergyRows(), perf=enpiPerformanceRows(), matrix=enmsDocumentMatrix(), val=validateEnms(), calcs=enmsAutomaticCalculations();
+  const matrixRows=matrix.map(m=>[m.clause,m.item,m.type,m.complete?'Complete':'Incomplete']);
+  const energyRows=linked.map(r=>[r.energyType,DATA_NOT_AVAILABLE,fmt(r.current,3),r.unit,r.dataSource]);
+  e.energy.manualSources.forEach(r=>energyRows.push([r.energyType||DATA_NOT_AVAILABLE,r.previous||DATA_NOT_AVAILABLE,r.current||DATA_NOT_AVAILABLE,r.unit||DATA_NOT_AVAILABLE,r.dataSource||DATA_NOT_AVAILABLE]));
+  const policyYes=ENMS_POLICY_CHECKS.map(([k,label])=>[label,e.policy.checks[k]?'Yes':'No']);
+  const awarenessRows=ENMS_AWARENESS.map(([k,label])=>[label,e.support.awareness[k]?'Yes':'No']);
+
+  preview.classList.remove('empty');
+  preview.innerHTML=`
+    <div class="report-cover"><div class="report-badge">ISO 50001 ENERGY MANAGEMENT SYSTEM</div><h1>${humanOrMissing(c.name,true)}</h1><h2 style="border:0;margin:4px 0">EnMS Summary & Evidence Report</h2><p><b>Review Year:</b> ${humanOrMissing(c.reportingYear,true)}</p><p>Documentation Completeness: ${fmt(enmsCompleteness(),1)}%</p></div>
+    <h2>1. Organization & EnMS Scope</h2>${reportTable(['Field','Value'],[['Company',c.name||EMPTY_COMPANY],['Industry',c.industry||EMPTY_COMPANY],['Country',c.country||EMPTY_COMPANY],['Main Activities',c.activities||EMPTY_COMPANY],['Main Locations',c.locations||EMPTY_COMPANY],['Employees',c.employeeCount||EMPTY_COMPANY],['EnMS Scope Statement',e.context.scopeStatement||'[MISSING – ACTION REQUIRED]'],['Physical Boundaries',e.context.physicalBoundaries||'[MISSING – ACTION REQUIRED]'],['Activities Included',e.context.activitiesIncluded||DATA_NOT_AVAILABLE],['Sites Included',e.context.sitesIncluded||DATA_NOT_AVAILABLE],['Energy Types Within Boundary',e.context.energyTypes||DATA_NOT_AVAILABLE]])}
+    ${renderEnmsReportTableFromArray('interestedParties','Interested Parties')}${renderEnmsReportTableFromArray('legalRequirements','Legal and Other Requirements')}
+
+    <h2>2. Leadership & Energy Policy</h2>${reportTable(['Field','Value'],[['Top Management Responsible',e.leadership.topManagement||DATA_NOT_AVAILABLE],['Energy Management Team / Responsible Person',e.leadership.energyTeam||DATA_NOT_AVAILABLE],['Roles Assigned',e.leadership.rolesAssigned],['Responsibilities Communicated',e.leadership.rolesCommunicated],['Energy Policy',e.policy.text||e.policy.documentReference||e.policy.fileName||'[DOCUMENT REQUIRED]']])}${reportTable(['Energy Policy Requirement','Status'],policyYes)}
+
+    <h2>3. Risks and Opportunities</h2>${renderEnmsReportTableFromArray('risks','Risk / Opportunity Register')}
+    <h2>4. Objectives, Targets & Action Plans</h2>${renderEnmsReportTableFromArray('targets','Energy Targets and Action Plans')}
+
+    <h2>5. Energy Review</h2><h3>Energy Sources & Consumption</h3>${reportTable(['Energy Type','Previous Period','Current Period','Unit','Data Source'],energyRows)}${reportTable(['Energy Type','Previous','Current','Unit','Consumption Change %'],calcs.energyChanges.map(r=>[r.energyType,r.previous,r.current,r.unit,r.changePct===null?DATA_NOT_AVAILABLE:fmt(r.changePct,2)+'%']))}${renderEnmsReportTableFromArray('seus','Significant Energy Uses (SEUs)')}${renderEnmsReportTableFromArray('opportunities','Energy Improvement Opportunities')}${renderEnmsReportTableFromArray('futureConsumption','Future Energy Consumption')}
+
+    <h2>6. SEUs, EnPIs & EnBs</h2>${renderEnmsReportTableFromArray('enpis','Energy Performance Indicators')}${renderEnmsReportTableFromArray('enbs','Energy Baselines')}${reportTable(['EnPI','Baseline','Current','Direction','EnPI Change','Automatic Improvement %','Note'],calcs.enpiChanges.map(r=>[r.name,r.baseline,r.current,r.direction,r.enpiChange===null?DATA_NOT_AVAILABLE:fmt(r.enpiChange,3),r.improvement===null?DATA_NOT_AVAILABLE:fmt(r.improvement,2)+'%',r.note||CALCULATED]))}
+
+    <h2>7. Energy Data Collection</h2>${renderEnmsReportTableFromArray('dataPlan','Energy Data Collection Plan')}${renderEnmsReportTableFromArray('devices','Measurement Accuracy / Repeatability')}
+    <h2>8. Competence & Communication</h2>${renderEnmsReportTableFromArray('competence','Competence Records')}${reportTable(['Awareness Requirement','Status'],awarenessRows)}${renderEnmsReportTableFromArray('communication','Communication Register')}
+    <h2>9. Operational Controls</h2>${renderEnmsReportTableFromArray('seuControls','SEU Operational Controls')}${e.operation.designApplicable==='YES'?renderEnmsReportTableFromArray('designs','Design Evaluations'):'<p>Design: [NOT APPLICABLE]</p>'}${e.operation.procurementApplicable==='YES'?renderEnmsReportTableFromArray('procurements','Procurement Energy Evaluations'):'<p>Procurement detail: [NOT APPLICABLE]</p>'}
+    <h2>10. Energy Performance</h2>${renderEnmsReportTableFromArray('monitoring','Monitoring & Measurement')}${reportTable(['Monitoring Item','Expected','Actual','Variance %'],calcs.monitoringVariance.map(r=>[r.item,r.expected,r.actual,r.variancePct===null?DATA_NOT_AVAILABLE:fmt(r.variancePct,2)+'%']))}${renderEnmsReportTableFromArray('deviations','Significant Energy Performance Deviations')}
+    <h2>11. Legal Compliance</h2>${renderEnmsReportTableFromArray('evaluations','Compliance Evaluation')}
+    <h2>12. Internal Audit</h2>${reportTable(['Programme Field','Value'],[['Audit Frequency',e.audit.frequency||DATA_NOT_AVAILABLE],['Audit Method',e.audit.method||DATA_NOT_AVAILABLE],['Responsible',e.audit.responsible||DATA_NOT_AVAILABLE],['Reporting Method',e.audit.reportingMethod||DATA_NOT_AVAILABLE]])}${renderEnmsReportTableFromArray('audits','Internal Audit Results')}
+    <h2>13. Management Review</h2>${reportTable(['Field','Value'],[['Review Date',e.management.reviewDate||DATA_NOT_AVAILABLE],['Review Notes',e.management.notes||DATA_NOT_AVAILABLE],['Energy Performance Improvement Decision',e.management.decisions.energyPerformance||DATA_NOT_AVAILABLE],['Energy Policy Decision',e.management.decisions.energyPolicy||DATA_NOT_AVAILABLE],['EnPI / EnB Decision',e.management.decisions.enpiEnb||DATA_NOT_AVAILABLE],['Objectives / Targets / Action Plans Decision',e.management.decisions.targets||DATA_NOT_AVAILABLE],['Resources Decision',e.management.decisions.resources||DATA_NOT_AVAILABLE],['Business Process Integration',e.management.decisions.integration||DATA_NOT_AVAILABLE],['Competence / Awareness / Communication',e.management.decisions.competence||DATA_NOT_AVAILABLE]])}
+    <h2>14. Nonconformity & Corrective Action</h2>${renderEnmsReportTableFromArray('correctiveActions','Corrective Action Register')}
+    <h2>15. Continual Improvement</h2>${renderEnmsReportTableFromArray('improvement','Energy Performance Improvement Summary')}
+    <h2>16. ISO 50001 Requirement Status Matrix</h2>${reportTable(['ISO Clause','Mandatory Information / Evidence','Type','Status'],matrixRows)}
+    <h3>Validation Summary</h3>${val.errors.length?`<p><b>Blocking issues:</b></p><ul>${val.errors.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:'<p>No blocking validation errors detected.</p>'}${val.warnings.length?`<p><b>Warnings:</b></p><ul>${val.warnings.map(x=>`<li>${escapeHTML(x)}</li>`).join('')}</ul>`:''}
+    <div class="report-footnote"><b>Important:</b> “EnMS Documentation Completeness” is a software completeness indicator only. It does not constitute ISO 50001 certification, a conformity decision, or third-party assurance.</div>
+  `;
+  toast('EnMS evidence report generated');
+}
+
+function handleEnmsInput(e){
+  const t=e.target;
+  if(t.dataset.sharedField){ sharedCompany[t.dataset.sharedField]=t.value; saveSharedCompany(); return; }
+  if(t.dataset.enmsPolicyFile!==undefined){
+    const file=t.files?.[0]; if(!file) return;
+    enmsState.policy.fileName=file.name;
+    if(file.size<=1572864){const reader=new FileReader();reader.onload=()=>{enmsState.policy.fileDataUrl=reader.result;saveEnms();renderEnmsModule();toast('Energy policy attachment stored locally');};reader.readAsDataURL(file);}
+    else{enmsState.policy.fileDataUrl='';saveEnms();renderEnmsModule();toast('Policy filename saved; file too large to embed locally');}
+    return;
+  }
+  if(t.dataset.enmsPath){ setNested(enmsState,t.dataset.enmsPath,t.type==='checkbox'?t.checked:t.value); saveEnms(); if(['operation.designApplicable','operation.procurementApplicable'].includes(t.dataset.enmsPath)) renderEnmsModule(); return; }
+  if(t.dataset.enmsPolicy){ enmsState.policy.checks[t.dataset.enmsPolicy]=t.checked;saveEnms();return; }
+  if(t.dataset.enmsAwareness){ enmsState.support.awareness[t.dataset.enmsAwareness]=t.checked;saveEnms();return; }
+  if(t.dataset.enmsArray){ const arr=enmsArrayRef(t.dataset.enmsArray),i=Number(t.dataset.row);if(arr&&arr[i]){arr[i][t.dataset.field]=t.value;saveEnms();}return; }
+}
+function handleEnmsClick(e){
+  const add=e.target.closest('[data-enms-add]'); if(add){const key=add.dataset.enmsAdd,arr=enmsArrayRef(key);if(arr){arr.push(blankEnmsRow(key));saveEnms();renderEnmsModule();}return;}
+  const del=e.target.closest('[data-enms-del]'); if(del){const key=del.dataset.enmsDel,arr=enmsArrayRef(key),i=Number(del.dataset.row);if(arr){arr.splice(i,1);saveEnms();renderEnmsModule();}return;}
+}
+
+/* ---------- Full platform backup, new and backward-compatible ---------- */
+function exportFullPlatformBackup(){
+  const payload={
+    format:'ISO14064_ESG_ISO50001_FULL_PLATFORM_V1',exportedAt:new Date().toISOString(),
+    iso14064:{meta:state.meta,checklist:state.checklist,items:state.items,factors:state.factors,uncertaintyRows:state.uncertaintyRows,ui:state.ui},
+    sharedCompany,sustainability:sustainabilityState,iso50001:enmsState
+  };
+  download('full_platform_backup.json',JSON.stringify(payload,null,2));
+}
+async function importFullPlatformBackupFile(file){
+  const raw=await file.text(), obj=JSON.parse(sanitizeJSONText(raw));
+  if(!obj||typeof obj!=='object') throw new Error('Invalid full-platform backup.');
+  if(obj.iso14064){ state=normalizeImportedState(obj.iso14064,{keepUI:true}); save(); }
+  if(obj.sharedCompany&&typeof obj.sharedCompany==='object'){sharedCompany={...sharedCompany,...obj.sharedCompany};saveSharedCompany();}
+  if(obj.sustainability&&typeof obj.sustainability==='object'){localStorage.setItem(sustainabilityStorageKey,JSON.stringify(obj.sustainability));}
+  if(obj.iso50001&&typeof obj.iso50001==='object'){localStorage.setItem(enmsStorageKey,JSON.stringify(obj.iso50001));}
+  loadAddedModuleStates(); renderAll(); toast('Full platform backup imported ✔️');
+}
+
+function renderAddedModules(){
+  renderSustainabilityModule();
+  renderEnmsModule();
+}
+
+function clearPrintModes(){ document.body.classList.remove('print-iso14064','print-sustainability','print-enms'); }
+function printSustainabilityReport(){
+  const p=document.getElementById('susReportPreview'); if(!p||p.classList.contains('empty')) generateSustainabilityReport();
+  clearPrintModes(); document.body.classList.add('print-sustainability'); window.print();
+}
+function printEnmsReport(){
+  const p=document.getElementById('enmsReportPreview'); if(!p||p.classList.contains('empty')) generateEnmsReport();
+  clearPrintModes(); document.body.classList.add('print-enms'); window.print();
+}
+
+function attachAddedModuleEvents(){
+  const sus=document.getElementById('tab-sustainability');
+  if(sus){sus.addEventListener('input',handleSustainabilityInput);sus.addEventListener('change',handleSustainabilityInput);sus.addEventListener('click',handleSustainabilityClick);}
+  const enms=document.getElementById('tab-iso50001');
+  if(enms){enms.addEventListener('input',handleEnmsInput);enms.addEventListener('change',handleEnmsInput);enms.addEventListener('click',handleEnmsClick);}
+
+  document.getElementById('btnSusRefresh')?.addEventListener('click',()=>{renderSustainabilityModule();toast('Auto-linked sustainability data refreshed');});
+  document.getElementById('btnSusValidate')?.addEventListener('click',()=>{renderSustainabilityModule();const v=validateSustainability();toast(v.errors.length?`${v.errors.length} validation error(s)`:v.warnings.length?`${v.warnings.length} warning(s)`:'Sustainability data validation OK');});
+  document.getElementById('btnSusGenerate')?.addEventListener('click',generateSustainabilityReport);
+  document.getElementById('btnSusPrint')?.addEventListener('click',printSustainabilityReport);
+  document.getElementById('btnSusReset')?.addEventListener('click',()=>{if(!confirm('Reset only Sustainability manual inputs? ISO 14064 data and authentication will NOT be changed.'))return;sustainabilityState=defaultSustainabilityState();saveSustainability();renderSustainabilityModule();document.getElementById('susReportPreview').className='generated-report empty';document.getElementById('susReportPreview').textContent='Generate the Sustainability Report to preview it here.';toast('Sustainability inputs reset');});
+
+  document.getElementById('btnEnmsRefresh')?.addEventListener('click',()=>{renderEnmsModule();toast('Linked ISO 50001 energy data refreshed');});
+  document.getElementById('btnEnmsValidate')?.addEventListener('click',()=>{renderEnmsModule();const v=validateEnms();toast(v.errors.length?`${v.errors.length} blocking issue(s)`:v.warnings.length?`${v.warnings.length} warning(s)`:'EnMS validation OK');});
+  document.getElementById('btnEnmsGenerate')?.addEventListener('click',generateEnmsReport);
+  document.getElementById('btnEnmsPrint')?.addEventListener('click',printEnmsReport);
+  document.getElementById('btnEnmsReset')?.addEventListener('click',()=>{if(!confirm('Reset only ISO 50001 manual inputs? ISO 14064 data, Sustainability data and authentication will NOT be changed.'))return;enmsState=defaultEnmsState();saveEnms();renderEnmsModule();document.getElementById('enmsReportPreview').className='generated-report empty';document.getElementById('enmsReportPreview').textContent='Generate the EnMS Summary & Evidence Report to preview it here.';toast('ISO 50001 inputs reset');});
+
+  document.getElementById('btnExportFullPlatform')?.addEventListener('click',exportFullPlatformBackup);
+  const fullInput=document.getElementById('fullPlatformImport');
+  document.getElementById('btnImportFullPlatform')?.addEventListener('click',()=>fullInput?.click());
+  fullInput?.addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;try{await importFullPlatformBackupFile(f);}catch(err){console.error(err);alert('Full platform import failed:\n'+(err?.message||String(err)));}finally{e.target.value='';}});
+
+  window.addEventListener('beforeprint',()=>{
+    if(!document.body.classList.contains('print-sustainability')&&!document.body.classList.contains('print-enms')) document.body.classList.add('print-iso14064');
+  });
+  window.addEventListener('afterprint',clearPrintModes);
+}
+
+
 /* ========= Events ========= */
 function attachEvents(){
   // Tabs
   navBtns.forEach(btn => btn.addEventListener('click', ()=>setActiveTab(btn.getAttribute('data-tab'))));
   window.addEventListener('hashchange', ()=>{
     const h = location.hash.replace('#','');
-    if(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io'].includes(h)){
+    if(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io','tab-sustainability','tab-iso50001'].includes(h)){
       state.ui.activeTab = h; save(); renderTabs();
       if(h === 'tab-dash') redrawDashboardCharts();
+      if(h === 'tab-sustainability' || h === 'tab-iso50001') renderAddedModules();
     }
   });
 
@@ -2623,6 +3890,7 @@ function renderAll(){
   renderItems();
   totals(); // draws charts only on dashboard
   renderUncertainty();
+  renderAddedModules();
 }
 
 window.addEventListener('resize', () => {
@@ -2632,13 +3900,15 @@ window.addEventListener('resize', () => {
 /* ========= Boot ========= */
 (function boot(){
   load();
+  loadAddedModuleStates();
 
   const h = location.hash.replace('#','');
-  if(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io'].includes(h)){
+  if(['tab-front','tab-meta','tab-items','tab-dash','tab-unc','tab-ef','tab-io','tab-sustainability','tab-iso50001'].includes(h)){
     state.ui.activeTab = h;
   }
 
   attachEvents();
+  attachAddedModuleEvents();
   renderAll();
   if(state.ui.activeTab === 'tab-dash') redrawDashboardCharts();
 })();
